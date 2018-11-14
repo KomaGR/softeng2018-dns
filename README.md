@@ -1,1 +1,3 @@
-# softeng2018-dns
+# Definitely Not Skroutz
+
+Ορέστης Καπαρουνάκης 03114057
