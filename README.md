@@ -1,3 +1,3 @@
-# softeng2018-dns
+# Definitely Not Skroutz
 
 Μητρόπουλος Βασίλειος - 03114165
