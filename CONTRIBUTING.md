@@ -3,7 +3,6 @@ Here is a short list of guidelines (adapted from [TypeScript Coding Guidelines](
 
 ### General
 * Open pull requests against the `<feature>` branch.
-* If there is no open issue for your PR, open one first for discussion and approval before submitting any code.
 * When appropriate, encapsulate your code in its own class, in its own file.
 
 ### Names
