@@ -18,7 +18,7 @@ Here is a short list of guidelines (adapted from [TypeScript Coding Guidelines](
 ### Commits
 
 * Use only English in commit messages.
-* Use present tense (e.g. "fix error" and not "fixed error")
+* Use present tense (e.g. "Fix error" and not "Fixed error")
 * Use imperative. "Fix", "Add", "Change" instead of "Fixed", "Added", "Changed".
 * Don't end the summary line with a period.
 
