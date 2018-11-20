@@ -7,8 +7,8 @@ Here is a short list of guidelines (adapted from [TypeScript Coding Guidelines](
 
 ### Names
 
-* Use lowercase for branch names.
-* Use lowercase for directories (do not capitalize first).
+* Use lowercase and separate words with an underscore for branch names.
+* Use lowercase for directories (do not capitalize first), unless it's a class specific.
 * Use PascalCase for file names. 
 * Use whole words, not abbreviations, in names.
 * Use PascalCase for type names and public methods.
@@ -17,7 +17,7 @@ Here is a short list of guidelines (adapted from [TypeScript Coding Guidelines](
 ### Commits
 
 * Use only English in commit messages.
-* Use present tense (e.g. "Fix error" and not "Fixed error")
+* Use present tense (e.g. "Fix error" and not "Fixed error").
 * Use imperative. "Fix", "Add", "Change" instead of "Fixes", "Adds", "Changes".
 * Don't end the summary line with a period.
 
