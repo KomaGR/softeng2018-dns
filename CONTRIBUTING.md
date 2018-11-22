@@ -13,7 +13,7 @@ In general (and as stated in the Feature Branch Workflow) when you want to imple
 0. Think about what you want to do.
 1. Sync with the github repository.
 2. Checkout the feature branch. Create it if it does not exist and make sure it exists on github. 
-3. Checkout a branch for the specific part you are going to work on. 
+3. Checkout a branch for the specific part you are going to work on. This part can be skipped, albeit with risks, when you are the sole developer of the feature.
 4. Code.
 5. Test. Jump to 4 accordingly.
 6. When finished, push your code.
