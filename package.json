@@ -1,17 +1,20 @@
 {
-  "name": "softeng-proto",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "softeng-prototype",
+  "version": "0.0.1",
+  "description": "Crowdsource application for price watching",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "dev": "ts-node ./lib/server.ts",
-    "start": "nodemon ./dist/server.js",
+    "dev": "ts-node ./server/server.ts",
+    "start": "nodemon ./server/server.js",
     "prod": "npm run build && npm run start"
   },
   "author": "",
-  "license": "ISC",
+  "license": "GPLv3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KomaGR/softeng2018-dns.git"
+  },
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
