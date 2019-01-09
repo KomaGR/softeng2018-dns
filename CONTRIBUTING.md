@@ -33,7 +33,7 @@ Here is a short list of guidelines (adapted from [TypeScript Coding Guidelines](
 
 * Use lowercase and separate words with an underscore for branch names.
 * Use lowercase for directories (do not capitalize first), unless it's a class specific.
-* Use PascalCase for file names. 
+* Use PascalCase for class file names (otherwise preferably lowercase).
 * Use whole words, not abbreviations, in names.
 * Use PascalCase for type names and public methods.
 * Use camelCase for local variables and private properties.
