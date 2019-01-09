@@ -12,9 +12,10 @@
 
 To run, install node.js and run the following in the cloned directory:
 
-`npm install`
-
-`npm start`
+```
+$ npm install
+$ node server/server.js
+```
 
 Once the app is running it can be accessed at http://localhost:8765.
 
