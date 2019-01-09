@@ -2,9 +2,10 @@
   "name": "softeng-prototype",
   "version": "0.0.1",
   "description": "Crowdsource application for price watching",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "cd server && tsc && cd ..",
     "dev": "ts-node ./server/server.ts",
     "start": "nodemon ./server/server.js",
     "prod": "npm run build && npm run start"
