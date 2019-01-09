@@ -45,3 +45,15 @@ Here is a short list of guidelines (adapted from [TypeScript Coding Guidelines](
 * Use imperative. "Fix", "Add", "Change" instead of "Fixes", "Adds", "Changes".
 * Don't end the summary line with a period.
 
+## Further Instructions
+
+If any of nodemon, typescript and ts-node is not available on the system, install it with 
+```
+$ npm install --global typescript ts-node nodemon
+```
+
+*Note: Look up the difference between --save, --save-dev and --global options in npm to make sure any modules you include are imported correctly into the project.*
+
+Because the gruntfile* is not yet ready, when you make changes in the code you have to run build again ( `npm run build` ). 
+
+**When the grunt job is deployed, any change you make to .ts files will wake a build script that will do the above automatically for you.*
