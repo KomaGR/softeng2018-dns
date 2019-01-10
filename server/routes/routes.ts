@@ -11,12 +11,20 @@ export default function (
 ) {
     app.use('/observatory/api', MainRouter);
     
-    MainRouter.get('/', (req: Request, res: Response) => {
+    MainRouter
+    .get('/', (req: Request, res: Response) => {
         console.log("Hit on /observatory/api");        
-        res.send("No");
+        res.send("NotImplementedError");
     })
-    
-    MainRouter.use('/products', new ProductRouter().router);
+    .get('/login', (req: Request, res: Response) => {
+        console.log("Hit on /observatory/api/login");
+        res.send("NotImplementedError");
+    })
+    .get('logout', (req: Request, res: Response) => {
+        console.log("Hit on /observatory/api/logout");
+        res.send("NotImplementedError");
+    })
+    .use('/products', new ProductRouter().router);
     
     // MainRouter.use('/shops', shopRouter);
     // MainRouter.use('/prices', priceRouter);

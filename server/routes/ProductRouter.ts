@@ -22,19 +22,23 @@ export default class {
         .get('/', (req: Request, res: Response) => {
             console.log("Hit on /observatory/api/products");
             // TODO: Send all products
+            res.send("NotImplementedError");
         })
         .post('/', (req: Request, res: Response) => {
             console.log("Hit on /observatory/api/products");
             // TODO: Register new product
+            res.send("NotImplementedError");
         })
         .get('/:id', (req: Request, res: Response) => {
             console.log('Hit on /observatory/api/products/:id');
             // TODO: Send product with id  
-            res.send(req.params);
+            res.send("NotImplementedError");
+            // res.send(req.params);
         })
         .put('/:id', (req: Request, res: Response) => {
             console.log('Hit on /observatory/api/products/:id');
             // TODO: Update product with id
+            res.send("NotImplementedError");
         })
         
         
