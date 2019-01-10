@@ -14,6 +14,7 @@ To run, install node.js and run the following in the cloned directory:
 
 ```
 $ npm install
+$ npm build
 $ node server/server.js
 ```
 
