@@ -1,0 +1,11 @@
+node_modules/
+*.log
+*.js
+*.js.map
+*.tmp.txt
+.tscache
+.vscode
+.baseDir
+!Gruntfile.js
+!webpack.*.js
+!test/test.js
