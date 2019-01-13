@@ -14,10 +14,10 @@ To run, install node.js and run the following in the cloned directory:
 
 ```
 $ npm install
-$ npm build
+$ npm run build
 $ node server/server.js
 ```
 
 Once the app is running it can be accessed at http://localhost:8765.
 
-Refer to **[CONTRIBUTING.md](https://github.com/KomaGR/softeng2018-dns/blob/master/CONTRIBUTING.md)** for contributing instructions.
+Refer to [CONTRIBUTING.md](https://github.com/KomaGR/softeng2018-dns/blob/master/CONTRIBUTING.md) for contributing instructions.
