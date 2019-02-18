@@ -20,4 +20,6 @@ $ node server/server.js
 
 Once the app is running it can be accessed at http://localhost:8765.
 
+The observatory can be accesssed at http://localhost:8765/obesrvatory/api.
+
 Refer to [CONTRIBUTING.md](https://github.com/KomaGR/softeng2018-dns/blob/master/CONTRIBUTING.md) for contributing instructions.
