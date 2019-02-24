@@ -9,3 +9,4 @@ node_modules/
 !Gruntfile.js
 !webpack.*.js
 !test/test.js
+!front_end/
