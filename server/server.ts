@@ -1,5 +1,5 @@
 import app from "./app";
-import front_end_app from "../front_end/front_end_app";
+import front_end_app from "../client/front_end_app";
 
 const PORT = 8765;
 const PORT_front = 3000;
