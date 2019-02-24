@@ -15,6 +15,7 @@ class Front_end_app {
         this.front_end_app.get("/", function(req, res){
             res.render("../client/homepage.ejs");
         });
+        
     }
 }
 exports.default = new Front_end_app().front_end_app;
