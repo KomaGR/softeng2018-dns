@@ -10,7 +10,7 @@ class App {
 
     constructor() {
         this.app = express();
-        this.mongoSetup();
+        // this.mongoSetup();
         this.config();
     }
 
