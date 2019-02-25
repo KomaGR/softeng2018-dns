@@ -33,8 +33,21 @@ class Front_end_app {
         this.front_end_app.get("/login", function(req, res){
             res.render("../client/pages/login.ejs");
         });
+        this.front_end_app.post("/login", function(req, res){
+            var username = req.body.l_username;
+            var password = req.body.l_password;
+            
+            res.redirect('/');
+        });
         this.front_end_app.get("/sign_up", function(req, res){
             res.render("../client/pages/sign_up.ejs");
+        });
+        this.front_end_app.post("/sign_up", function(req, res){
+            var userEmail = req.body.s_email;
+            var username = req.body.s_username;
+            var userPassword = req.body.s_password;
+            
+            res.redirect('/login');
         });
         this.front_end_app.get("/submit_product", function(req, res){
             res.render("../client/pages/submit_product.ejs");
