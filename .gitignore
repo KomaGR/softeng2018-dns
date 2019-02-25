@@ -9,5 +9,7 @@ node_modules/
 !Gruntfile.js
 !webpack.*.js
 !test/test.js
+!client/*
+!client/
 !notes.md
 server/config/
