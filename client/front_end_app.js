@@ -52,8 +52,24 @@ class Front_end_app {
             var userEmail = req.body.s_email;
             var username = req.body.s_username;
             var userPassword = req.body.s_password;
+
+            var singupdata = {
+                uri: 'test',
+                method: 'POST',
+                json: {
+                    "email": userEmail,
+                    "username": username,
+                    "password": userPassword
+                }
+            };
             
-            res.redirect('/login');
+            request(singupdata, function(error, response, body){
+                if (!error && response.statusCode == 200){
+                    res.redirect('/login');
+                }
+            });
+
+            //res.redirect('/login');
         });
         this.front_end_app.get("/submit_product", function(req, res){
             res.render("../client/pages/submit_product.ejs");
