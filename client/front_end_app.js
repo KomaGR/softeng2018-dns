@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
+const request = require('request');
+const https = require('https');
 const bodyParser = require("body-parser");
 const routes_1 = require("../server/routes/routes");
 class Front_end_app {
@@ -53,23 +55,27 @@ class Front_end_app {
             var username = req.body.s_username;
             var userPassword = req.body.s_password;
 
-            var singupdata = {
-                uri: 'test',
+            const options = {
+                hostname: 'localhost',
+                port: 8765,
+                path: '/observatory/api/signup',
+                rejectUnauthorized: false,
                 method: 'POST',
                 json: {
-                    "email": userEmail,
-                    "username": username,
-                    "password": userPassword
+                    "email": userEmail
                 }
             };
-            
-            request(singupdata, function(error, response, body){
-                if (!error && response.statusCode == 200){
-                    res.redirect('/login');
-                }
-            });
 
-            //res.redirect('/login');
+            const req1 = https.request(options, (res)=> {
+                console.log('statuscode', res.statusCode);
+            });
+            
+            req1.on('error', (e)=> {
+                console.error(e);
+            });
+            req1.end();
+
+            res.redirect('/login');
         });
         this.front_end_app.get("/submit_product", function(req, res){
             res.render("../client/pages/submit_product.ejs");
