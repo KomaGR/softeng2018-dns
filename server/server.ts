@@ -12,5 +12,5 @@ const httpsOptions = {
 const httpsServer = https.createServer(httpsOptions, app);
 
 httpsServer.listen(PORT, () => {
-    console.log(`REST API server listening on port ${PORT}`);
+    console.log(`REST API server is listening on port ${PORT}`);
 });

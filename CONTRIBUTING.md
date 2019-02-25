@@ -47,13 +47,25 @@ Here is a short list of guidelines (adapted from [TypeScript Coding Guidelines](
 
 ## Further Instructions
 
-If any of nodemon, typescript and ts-node is not available on the system, install it with 
+If any of `nodemon`, `typescript` and `ts-node` is not available on the system, install it with 
 ```
 $ npm install --global typescript ts-node nodemon
 ```
+### Developing
+While developing the project it is helpful to rely on the automation tasks to rebuild and restart the server. This will negate the need to compile and run everytime you make a save on a file.
+
+The restart of the server is tasked on `nodemon`. Everytime a JavaScript file is changed it will restart the server.
+
+The automatic compilation of the TypeScript files is tasked on `grunt`. The configuration is inside `Gruntfile.js`.
+
+To start the project with the watchers run:
+```
+npm run prod
+```
+and
+```
+grunt
+```
+on 2 seperate terminals inside the project.
 
 *Note: Look up the difference between --save, --save-dev and --global options in npm to make sure any modules you include are imported correctly into the project.*
-
-Because the gruntfile* is not yet ready, when you make changes in the code you have to run build again ( `npm run build` ). 
-
-**When the grunt job is deployed, any change you make to .ts files will wake a build script that will do the above automatically for you.*
