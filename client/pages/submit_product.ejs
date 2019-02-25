@@ -1,2 +1,12 @@
 <h1>This is the submit product page</h1>
-<h2>please no cheat</h2>
+<form action="/submit_product" method="POST">
+  <div class="form-group">
+    <label for="shop">Shop</label>
+    <input type="text" class="form-control" placeholder="Enter shop name" name="shop" required>
+  </div>
+  <div class="form-group">
+    <label for="price">Price</label>
+    <input type="text" class="form-control" placeholder="Enter price" name="price" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

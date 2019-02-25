@@ -17,7 +17,8 @@ class Front_end_app {
         });
         this.front_end_app.get("/search_results", function(req, res){
             var searchTerm = req.query.search_term;
-            request("https://localhost:8765/observatory/api" + searchTerm, function(error, response, body){
+
+            /*request("https://localhost:8765/observatory/api" + searchTerm, function(error, response, body){
                 if(error){
                     console.log(error);
                 }else{
@@ -25,7 +26,12 @@ class Front_end_app {
                         prodData: JSON.parse(body)
                     });
                 }
-            });
+            });*/
+
+            res.render("../client/pages/search_results.ejs");
+        });
+        this.front_end_app.post("search_results", function(req, res){
+            res.redirect('/product_info');
         });
         this.front_end_app.get("/about", function(req, res){
             res.render("../client/pages/about.ejs");
@@ -51,6 +57,18 @@ class Front_end_app {
         });
         this.front_end_app.get("/submit_product", function(req, res){
             res.render("../client/pages/submit_product.ejs");
+        });
+        this.front_end_app.post("/submit_product", function(req, res){
+            res.redirect("/submit_shop");
+        });
+        this.front_end_app.get("/product_info", function(req, res){
+            res.render("../client/pages/product_info.ejs");
+        });
+        this.front_end_app.get("/submit_shop", function(req, res){
+            res.render("../client/pages/submit_shop.ejs");
+        });
+        this.front_end_app.post("/submit_shop", function(req, res){
+            res.redirect("/submit_product");
         });
     }
 }
