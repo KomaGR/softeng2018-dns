@@ -11,3 +11,5 @@ node_modules/
 !test/test.js
 !client/*
 !client/
+!notes.md
+server/config/
