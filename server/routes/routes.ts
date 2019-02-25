@@ -14,15 +14,15 @@ export default function (
     MainRouter
     .get('/', (req: Request, res: Response) => {
         console.log("Hit on /observatory/api");        
-        res.send("NotImplementedError");
+        res.status(200).send("NotImplementedError");
     })
     .get('/login', (req: Request, res: Response) => {
         console.log("Hit on /observatory/api/login");
-        res.send("NotImplementedError");
+        res.status(200).send("NotImplementedError");
     })
-    .get('logout', (req: Request, res: Response) => {
+    .get('/logout', (req: Request, res: Response) => {
         console.log("Hit on /observatory/api/logout");
-        res.send("NotImplementedError");
+        res.status(200).send("NotImplementedError");
     })
     .use('/products', new ProductRouter().router);
     
