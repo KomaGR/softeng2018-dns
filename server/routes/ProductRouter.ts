@@ -23,7 +23,7 @@ export default class {
     private config(): void {
         this.router
             // Get all products
-            .get('/', this.productController.getProduct)
+            .get('/', this.productController.getMockProduct)
             // .get('/', (req: Request, res: Response) => {
             //     console.log("Hit on /observatory/api/products");
             //     // TODO: Send all products
@@ -38,7 +38,7 @@ export default class {
             //     res.status(200).send("NotImplementedError");
             // })
             // get a specific contact
-            .get('/:id', this.productController.getProductWithID)
+            .get('/:id', this.productController.getMockProductWithID)
             // .get('/:id', (req: Request, res: Response) => {
             //     console.log('Hit on /observatory/api/products/:id');
             //     // TODO: Send product with id  
