@@ -4,17 +4,13 @@ import * as fs from 'fs';
 
 const PORT = 8765;
 
-
-
-// app.listen(PORT, ()=> {
-//     console.log('Express server listening on port ' + PORT);
-// })
-
 const httpsOptions = {
-    key: fs.readFileSync('./config/key.pem'),
-    cert: fs.readFileSync('./config/cert.pem')
-}
+    key: fs.readFileSync('server/config/key.pem', 'utf8'),
+    cert: fs.readFileSync('server/config/cert.pem', 'utf8')
+};
 
-https.createServer(httpsOptions, app).listen(PORT, () => {
-    console.log('Express server listening on port ' + PORT);
-})
+const httpsServer = https.createServer(httpsOptions, app);
+
+httpsServer.listen(PORT, () => {
+    console.log(`REST API server listening on port ${PORT}`);
+});

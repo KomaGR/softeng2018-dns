@@ -4,7 +4,6 @@
         "moduleResolution": "node",
         "pretty": true,
         "sourceMap": true,
-        "outDir": "./dist",
         "target": "es6",
     },
     "exclude": [
