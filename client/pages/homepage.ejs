@@ -10,8 +10,12 @@
 				<ul>
 					<li><a href="/">Home</a></li>
 					<li><a href="/about">About</a></li>
-					<li><a href="/login">Login</a></li>
-					<li><a href="/sign_up">Sign up</a></li>
+                    <% if ( token ) { %>
+                    	<li><a href="/logout">Logout</a></li>
+                    <% } else{ %>
+					    <li><a href="/login">Login</a></li>
+					    <li><a href="/sign_up">Sign up</a></li>
+                    <% } %>
 				</ul>
 			</nav>
         </header>
@@ -24,6 +28,8 @@
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
+<% if ( token ) { %>
 <a href="/submit_product"> Submit a product </a>
     </body>
 </html>
+<% } %>

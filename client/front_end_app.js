@@ -1,11 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-//const request = require('request');
-//var alert = require('alerts');
+const session = require('express-session');
 const https = require('https');
 const bodyParser = require("body-parser");
 const routes_1 = require("../server/routes/routes");
+const TWO_HOURS = 1000 * 60 * 60 * 2;
+const {
+    SESSION_LIFETIME = TWO_HOURS,
+    SESSION_ID = 'X-OBSERVATORY-AUTH'
+} = process.env;
+var SESSION_SECRET = 'cat';
+
 class Front_end_app {
     constructor() {
         this.front_end_app = express();
@@ -16,8 +22,25 @@ class Front_end_app {
         this.front_end_app.use(bodyParser.urlencoded({ extended: false }));
         routes_1.default(this.front_end_app);
 
+        this.front_end_app.use(session({
+            name: SESSION_ID,
+            resave: false,
+            saveUninitialized: false,
+            secret: SESSION_SECRET,
+            cookie: {
+                maxAge: SESSION_LIFETIME,
+                sameSite: true,
+                secure: false
+            }
+        }));
+
         this.front_end_app.get("/", function(req, res){
-            res.render("../client/pages/homepage.ejs");
+            console.log(req.session);
+            const { auth_token } = req.session;
+            console.log(auth_token);
+            res.render("../client/pages/homepage.ejs", {
+                token: auth_token
+            });
         });
 
         this.front_end_app.get("/search_results", function(req, res){
@@ -79,7 +102,8 @@ class Front_end_app {
                 httpsres.on('data', (d) => {
                     var mydata =  JSON.parse(d);
                     if ( mydata.token == 'deadbeef' ){
-                        res.redirect('/');
+                        req.session.auth_token = mydata.token;
+                        return res.redirect('/');
                     }
                 });
             });
@@ -126,6 +150,10 @@ class Front_end_app {
             httpsreq.end();
         });
 
+        this.front_end_app.post("/logout", function(req, res){
+
+        });
+
         this.front_end_app.get("/submit_product", function(req, res){
             res.render("../client/pages/submit_product.ejs");
         });
@@ -158,7 +186,7 @@ class Front_end_app {
             });
             httpsreq.end();
         });
-        
+
         this.front_end_app.get("/submit_shop", function(req, res){
             res.render("../client/pages/submit_shop.ejs");
         });
