@@ -60,12 +60,15 @@ The automatic compilation of the TypeScript files is tasked on `grunt`. The conf
 
 To start the project with the watchers run:
 ```
+npm run database
+```
+```
 npm run prod
 ```
 and
 ```
 grunt
 ```
-on 2 seperate terminals inside the project.
+on **3 seperate terminals** inside the project directory.
 
 *Note: Look up the difference between --save, --save-dev and --global options in npm to make sure any modules you include are imported correctly into the project.*
