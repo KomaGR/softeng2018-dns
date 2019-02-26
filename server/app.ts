@@ -3,29 +3,12 @@ import * as bodyParser from  'body-parser';
 import routes from './routes/routes';
 import * as mongoose from "mongoose";
 
-const Mongod = require('mongod');
-
-const assert = require('assert');
-const MongoClient = require('mongodb').MongoClient;
-
 const PORT_db = 27017;
-
-
-// Simply pass the port that you want a MongoDB server to listen on.
-const server = new Mongod(PORT_db);
-
-// Database Name
-const dbName = 'DNSdb';
-
-
-// Connection URL
-const url = 'mongodb://localhost:27017';
-
 
 class App {
 
     public app: express.Application;
-    public readonly mongoUri: string = 'mongodb://127.0.0.1:27017/DNSdb';
+    public readonly mongoUri: string = 'mongodb://localhost:27017/DNSdb';
 
     // public connection = mongoose.createConnection('mongodb://localhost:27017/DNSdb');
      
@@ -36,7 +19,6 @@ class App {
     }
 
     private mongoSetup(): void {
-
         mongoose.connect(this.mongoUri, { useNewUrlParser: true }, (err: any) => {
             if (err) {
                 console.log(err.message);
