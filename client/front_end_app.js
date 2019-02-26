@@ -135,9 +135,30 @@ class Front_end_app {
         });
 
         this.front_end_app.get("/product_info", function(req, res){
-            res.render("../client/pages/product_info.ejs");
+            var productid = req.query.productID;
+            console.log(productid);
+            const options = {
+                hostname: 'localhost',
+                port: 8765,
+                path: '/observatory/api/products/' + productid,
+                rejectUnauthorized: false,
+                method: 'GET'
+            };
+            const httpsreq = https.request(options, (httpsres)=> {
+                console.log('statuscode', httpsres.statusCode);
+                httpsres.on('data', (d) => {
+                    var mydata =  JSON.parse(d);
+                    res.render("../client/pages/product_info.ejs", {
+                        product: mydata
+                    });
+                });
+            });
+            httpsreq.on('error', (e)=> {
+                console.error(e);
+            });
+            httpsreq.end();
         });
-
+        
         this.front_end_app.get("/submit_shop", function(req, res){
             res.render("../client/pages/submit_shop.ejs");
         });

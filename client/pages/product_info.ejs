@@ -1,1 +1,17 @@
 <h1>this is information about a product</h1>
+
+<p> ID: <%= product.id %> </p>
+<p> Name: <%= product.name %> </p>
+<p> Description: <%= product.description %> </p>
+<p> Category: <%= product.category %> </p>
+
+<p> Tags: <% for(var tag in product.tags){ %>
+    <%= product.tags[tag] %>
+    <% } %>
+</p>
+
+<p> Withdrawn: <%= product.withdrawn %> </p>
+
+<p> ExtraData <% for (var key in product.extraData) { %>
+    <%= key + ' ' + product.extraData[key] %>
+<% } %>
