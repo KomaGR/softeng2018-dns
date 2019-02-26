@@ -19,7 +19,7 @@ class App {
     }
 
     private mongoSetup(): void {
-        mongoose.connect(this.mongoUri, { useNewUrlParser: true }, (err: any) => {
+        mongoose.connect(this.mongoUri, { useNewUrlParser: true, useCreateIndex: true }, (err: any) => {
             if (err) {
                 console.log(err.message);
             } else {
