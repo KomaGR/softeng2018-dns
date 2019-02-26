@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const request = require('request');
+//const request = require('request');
+//var alert = require('alerts');
 const https = require('https');
 const bodyParser = require("body-parser");
 const routes_1 = require("../server/routes/routes");
@@ -19,17 +20,6 @@ class Front_end_app {
         });
         this.front_end_app.get("/search_results", function(req, res){
             var searchTerm = req.query.search_term;
-
-            /*request("https://localhost:8765/observatory/api" + searchTerm, function(error, response, body){
-                if(error){
-                    console.log(error);
-                }else{
-                    res.render("../client/pages/search_results.ejs", {
-                        prodData: JSON.parse(body)
-                    });
-                }
-            });*/
-
             res.render("../client/pages/search_results.ejs");
         });
         this.front_end_app.post("search_results", function(req, res){
@@ -44,8 +34,30 @@ class Front_end_app {
         this.front_end_app.post("/login", function(req, res){
             var username = req.body.l_username;
             var password = req.body.l_password;
-            
-            res.redirect('/');
+            const options = {
+                hostname: 'localhost',
+                port: 8765,
+                path: '/observatory/api/login',
+                rejectUnauthorized: false,
+                method: 'POST',
+                json: {
+                    "username": username,
+                    "password": password
+                }
+            };
+            const httpsreq = https.request(options, (httpsres)=> {
+                console.log('statuscode', httpsres.statusCode);
+                httpsres.on('data', (d) => {
+                    var mydata =  JSON.parse(d);
+                    if ( mydata.token == 'deadbeef' ){
+                        res.redirect('/');
+                    }
+                });
+            });
+            httpsreq.on('error', (e)=> {
+                console.error(e);
+            });
+            httpsreq.end();
         });
         this.front_end_app.get("/sign_up", function(req, res){
             res.render("../client/pages/sign_up.ejs");
@@ -54,7 +66,6 @@ class Front_end_app {
             var userEmail = req.body.s_email;
             var username = req.body.s_username;
             var userPassword = req.body.s_password;
-
             const options = {
                 hostname: 'localhost',
                 port: 8765,
@@ -62,20 +73,26 @@ class Front_end_app {
                 rejectUnauthorized: false,
                 method: 'POST',
                 json: {
-                    "email": userEmail
+                    "email": userEmail,
+                    "username": username,
+                    "password": userPassword
                 }
             };
+            const httpsreq = https.request(options, (httpsres)=> {
+                console.log('statuscode', httpsres.statusCode);
+                httpsres.on('data', (d) => {
+                    var mydata =  JSON.parse(d);
+                    if ( mydata.message == 'OK' ){
+                        res.redirect('/login');
+                    } else{
 
-            const req1 = https.request(options, (res)=> {
-                console.log('statuscode', res.statusCode);
+                    }
+                });
             });
-            
-            req1.on('error', (e)=> {
+            httpsreq.on('error', (e)=> {
                 console.error(e);
             });
-            req1.end();
-
-            res.redirect('/login');
+            httpsreq.end();
         });
         this.front_end_app.get("/submit_product", function(req, res){
             res.render("../client/pages/submit_product.ejs");
