@@ -6,6 +6,18 @@ type Request = express.Request;
 type Response = express.Response;
 
 const Product = mongoose.model('Product', ProductModel.ProductSchema);
+const mockProduct = {
+    id: "123748",
+    name: "AMD i5",
+    description: "Best cpu ever",
+    category: "CPU",
+    tags: ["computing", "hardware"],
+    withdrawn: false,
+    extraData: {
+        speed: "8.33 GHz",
+        cores: "42"
+    }
+}
 
 export class ProductController {
 
@@ -27,6 +39,25 @@ export class ProductController {
             }
             res.json(product);
         });
+    }
+
+    // Mock method
+    public getMockProduct(req: Request, res: Response) {
+        res.status(200).send({
+            start: 0,
+            count: 3,
+            total: 3,
+            products: [
+                mockProduct,
+                mockProduct,
+                mockProduct
+            ]
+        });
+    }
+
+    // Mock method
+    public getMockProductWithID(req: Request, res: Response) {
+        res.status(200).send(mockProduct);
     }
 
     public getProductWithID(req: Request, res: Response) {

@@ -1,12 +1,12 @@
 <h1> You searched something </h1>
 
 <div class="row">
-<% for(var i = 0;i < prodData.length;i++){ %>
-/*<div style="background-color: <%= picData[i].color %>; width: 290px; border: 2px solid red">
-    <img src="<%= picData[i].urls.thumb %>" style="width:286px; height: 180px;" /> 
-    <p>By: <%= picData[i].user.name %> on <%= picData[i].created_at %></p>
-    <p>Dimensions: <%= picData[i].width %>X<%= picData[i].height %></p>
-    <p>Likes: <%= picData[i].likes %></p>
-</div>*/
+<% for(var i = 0;i < myproducts.length;i++){ %>
+<div style="background-color: #E6E6FA; width: 290px; border: 2px solid red"> 
+    <p> Name: <%= myproducts[i].name %> </p>
+    <form action='/product_info' method='GET'>
+        <button type="submit" name='productID' value="<%=myproducts[i].id%>">Learn more</button>
+    </form>
+</div>
 <% } %>
 </div>
