@@ -28,9 +28,8 @@ export const ShopSchema = new Schema({
     withdrawn: {
         type: Boolean
     },
-    created_date: {
+    dateCreated: {
         type: Date,
         default: Date.now
     }
 });
-

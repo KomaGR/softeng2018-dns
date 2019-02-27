@@ -24,9 +24,8 @@ export const ProductSchema = new Schema({
     tags: [{
         type: String
     }],
-    created_date: {
+    dateCreated: {
         type: Date,
         default: Date.now
     }
 });
-
