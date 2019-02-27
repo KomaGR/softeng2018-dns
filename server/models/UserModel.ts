@@ -14,9 +14,8 @@ export const ShopSchema = new Schema({
         type: String,
         required: 'Enter password'
     },
-    created_date: {
+    dateCreated: {
         type: Date,
         default: Date.now
     }
 });
-
