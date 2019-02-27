@@ -10,7 +10,23 @@ const {
     SESSION_LIFETIME = TWO_HOURS,
     SESSION_ID = 'X-OBSERVATORY-AUTH'
 } = process.env;
-var SESSION_SECRET = 'cat';
+var SESSION_SECRET = 'zonk';
+
+const redirectLogin = (req, res, next) => {
+    if ( !req.session.auth_token ){
+        res.redirect('/login');
+    }else{
+        next();
+    }
+};
+
+const redirectHome = (req, res, next) => {
+    if ( req.session.auth_token ){
+        res.redirect('/');
+    }else{
+        next();
+    }
+};
 
 class Front_end_app {
     constructor() {
@@ -30,7 +46,7 @@ class Front_end_app {
             cookie: {
                 maxAge: SESSION_LIFETIME,
                 sameSite: true,
-                secure: false
+                secure: true
             }
         }));
 
@@ -79,11 +95,11 @@ class Front_end_app {
             res.render("../client/pages/about.ejs");
         });
 
-        this.front_end_app.get("/login", function(req, res){
+        this.front_end_app.get("/login", redirectHome, function(req, res){
             res.render("../client/pages/login.ejs");
         });
 
-        this.front_end_app.post("/login", function(req, res){
+        this.front_end_app.post("/login", redirectHome, function(req, res){
             var username = req.body.l_username;
             var password = req.body.l_password;
             const options = {
@@ -113,11 +129,11 @@ class Front_end_app {
             httpsreq.end();
         });
 
-        this.front_end_app.get("/sign_up", function(req, res){
+        this.front_end_app.get("/sign_up", redirectHome, function(req, res){
             res.render("../client/pages/sign_up.ejs");
         });
 
-        this.front_end_app.post("/sign_up", function(req, res){
+        this.front_end_app.post("/sign_up", redirectHome, function(req, res){
             var userEmail = req.body.s_email;
             var username = req.body.s_username;
             var userPassword = req.body.s_password;
@@ -150,15 +166,41 @@ class Front_end_app {
             httpsreq.end();
         });
 
-        this.front_end_app.post("/logout", function(req, res){
-
+        this.front_end_app.get("/logout", redirectLogin,  function(req, res){
+            const options = {
+                hostname: 'localhost',
+                port: 8765,
+                path: '/observatory/api/logout',
+                rejectUnauthorized: false,
+                method: 'POST'
+            };
+            const httpsreq = https.request(options, (httpsres)=> {
+                console.log('statuscode', httpsres.statusCode);
+                httpsres.on('data', (d) => {
+                    var mydata =  JSON.parse(d);
+                    if ( mydata.message == 'OK' ){
+                        req.session.destroy(err =>{
+                            if (err){
+                                return res.redirect('/');
+                            }
+                            res.clearCookie(SESSION_ID);
+                            res.redirect('/');
+                        })
+                    } else{
+                    }
+                });
+            });
+            httpsreq.on('error', (e)=> {
+                console.error(e);
+            });
+            httpsreq.end();
         });
 
-        this.front_end_app.get("/submit_product", function(req, res){
+        this.front_end_app.get("/submit_product", redirectLogin, function(req, res){
             res.render("../client/pages/submit_product.ejs");
         });
 
-        this.front_end_app.post("/submit_product", function(req, res){
+        this.front_end_app.post("/submit_product", redirectLogin, function(req, res){
             res.redirect("/submit_shop");
         });
 
@@ -187,11 +229,11 @@ class Front_end_app {
             httpsreq.end();
         });
 
-        this.front_end_app.get("/submit_shop", function(req, res){
+        this.front_end_app.get("/submit_shop", redirectLogin, function(req, res){
             res.render("../client/pages/submit_shop.ejs");
         });
 
-        this.front_end_app.post("/submit_shop", function(req, res){
+        this.front_end_app.post("/submit_shop", redirectLogin, function(req, res){
             res.redirect("/submit_product");
         });
     }
