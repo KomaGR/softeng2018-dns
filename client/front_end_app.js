@@ -7,6 +7,7 @@ class Front_end_app {
     constructor() {
         this.front_end_app = express();
         this.config();
+        this.staticConfig();
     }
     config() {
         this.front_end_app.use(bodyParser.json());
@@ -52,6 +53,10 @@ class Front_end_app {
         this.front_end_app.get("/submit_product", function(req, res){
             res.render("../client/pages/submit_product.ejs");
         });
+    }
+
+    staticConfig() {
+        this.front_end_app.use('/css', express.static('client/pages/css'));
     }
 }
 exports.default = new Front_end_app().front_end_app;
