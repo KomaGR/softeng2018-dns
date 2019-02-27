@@ -1,37 +1,12 @@
 <h1>This is the submit product page</h1>
-
-<h2>does the product already exist?</h2>
-
-<h2>create a whole new world</h2>
-
 <form action="/submit_product" method="POST">
   <div class="form-group">
-    <label for="productname">Product name</label>
-    <input type="text" placeholder="Enter product name" name="productname" required>
+    <label for="shop">Shop</label>
+    <input type="text" class="form-control" placeholder="Enter shop name" name="shop" required>
   </div>
   <div class="form-group">
     <label for="price">Price</label>
-    <input type="text" placeholder="Enter price" name="productprice" required>
-  </div>
-    <div class="form-group">
-    <label for="productdescription">Product Description</label>
-    <input type="text" placeholder="Enter product description" name="productdescription" required>
-  </div>
-  <div class="form-group">
-    <label for="productcategory">Product Category</label>
-    <input type="text" placeholder="Enter product category" name="productcategory" required>
-  </div>
-  <div class="form-group">
-    <label for="producttags">Product tags</label>
-    <input type="text" placeholder="Enter product tags seperated with comma" name="producttags" required>
-  </div>
-  <div class="form-group">
-    <label for="dateFrom">Date From</label>
-    <input type="date" placeholder="Enter date from" name="datefrom" value="04/24/2019" required>
-  </div>
-  <div class="form-group">
-    <label for="dateTo">Date To</label>
-    <input type="date" placeholder="Enter date To" name="dateto" value="04/24/2019" required>
+    <input type="text" class="form-control" placeholder="Enter price" name="price" required>
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
