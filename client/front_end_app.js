@@ -290,10 +290,36 @@ class Front_end_app {
         });
 
         this.front_end_app.put("/product_info", function(req, res){
-        });
-
-        this.front_end_app.patch("/product_info", function(req, res){
-
+            var productid = req.query.productID;
+            var productName = req.body.productname;
+            var productDescription = req.body.productdescription;
+            var productCategory = req.body.productcategory;
+            var productTags = req.body.producttags;
+            console.log(productid);
+            const options = {
+                hostname: 'localhost',
+                port: 8765,
+                path: '/observatory/api/products/' + productid,
+                rejectUnauthorized: false,
+                method: 'PUT',
+                json: {
+                    "name": productName,
+                    "description": productDescription,
+                    "category": productCategory,
+                    "tags": productTags
+                }
+            };
+            const httpsreq = https.request(options, (httpsres)=> {
+                console.log('statuscode', httpsres.statusCode);
+                httpsres.on('data', (d) => {
+                    var mydata =  JSON.parse(d);
+                    res.render("../client/pages/product_info.ejs");
+                });
+            });
+            httpsreq.on('error', (e)=> {
+                console.error(e);
+            });
+            httpsreq.end();
         });
 
         this.front_end_app.delete("/product_info", function(req, res){
@@ -310,6 +336,7 @@ class Front_end_app {
                 console.log('statuscode', httpsres.statusCode);
                 httpsres.on('data', (d) => {
                     var mydata =  JSON.parse(d);
+                    res.render("../client/pages/product_info.ejs");
                 });
             });
             httpsreq.on('error', (e)=> {
