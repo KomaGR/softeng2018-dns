@@ -1,0 +1,39 @@
+
+.nav-link {
+    font-weight: normal;
+    font-size: 16px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    padding: 20px 0px;
+    margin: 0px 20px;
+    display: inline-block;
+    position: relative;
+    opacity: 0.8;
+  }
+  
+  .nav-link:hover {
+    opacity: 1;
+  }
+  
+  .nav-link::before {
+    transition: 300ms;
+    height: 3px;
+    content: "";
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+  }
+  
+  .nav-link-ltr::before {
+    width: 0%;
+    bottom: 5px;
+  }
+  
+  .nav-link-ltr:hover::before {
+    width: 80%;
+  }
+  
+  
+  
+  /*# sourceMappingURL=styles.css.map */
+  
