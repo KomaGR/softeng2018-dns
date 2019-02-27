@@ -1,29 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html class="no-js" lang="en">
     <head>
-        <title></title>
+        <div class="animated infinate fadeInDown">
+            <% include navbar.ejs %>
+        </div>
+
     </head>
     <body>
-        <header>
-            <input type="checkbox" id="nav-toggle" class="nav-toggle">
-			<nav>
-				<ul>
-					<li><a href="/">Home</a></li>
-					<li><a href="/about">About</a></li>
-					<li><a href="/login">Login</a></li>
-					<li><a href="/sign_up">Sign up</a></li>
-				</ul>
-			</nav>
-        </header>
-        <h1> Welcome to DNS Homepage </h1>
-        <form action="/search_results" method="GET">
-  <div class="form-group">
-    <label for="Search">Search</label>
-    <input type="text" class="form-control" placeholder="Example: Pitatakia" name="search_term">
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+        <div class="container-md animated fadeIn delay-1s">
+                <div class="jumbotron ">
+                    <h1 class="display-4">Welcome to DNS homepage</h1>
+                    <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id cursus enim. In vulputate, libero eget venenatis aliquam, ex purus ornare libero, et iaculis eros ante a metus. Nam consequat luctus velit, quis fringilla neque congue vel. Proin vestibulum ante ex, quis lacinia urna tempus nec. Suspendisse vel faucibus risus. Pellentesque consectetur, dolor ut commodo tempus, eros nisl pretium velit, at tristique elit massa ultricies dui. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+                    
+                    <p class="lead">
+                        <a class="btn btn-primary btn-sm" href="/about" role="button">Learn more</a>
+                    </p>
+                    <div class="row justify-content-center">
+                        <div class="col col-lg-8  mt-5 mb-5 align-items-center">
+                                <form action="/search_results" method="GET">
+                                    <div class="input-group">
+                                        <h3 for="Search"><i class="fas fa-search mr-3 "></i></h3>
+                                        <input type="text" class="form-control mr-2" placeholder="Example: Pitatakia" name="search_term">
+                                        <button type="submit" class="btn btn-outline-success">Search!</button>
+                                    </div>
+                                </form>
+                        </div>
+                    </div>
+                    <div class="row mt-5 justify-content-center">
+                        <h2 class="lead mr-3 ">Wanna submit a product?</h2>
+                        <a type="btn" class="btn btn-primary ml-3" href="/submit_product"> HA! Gotcha! YOU CANT </a>
+                    </div>
+                </div>
 
-<a href="/submit_product"> Submit a product </a>
-    </body>
+
+            <%- include footer.ejs %>
+
+
+    </div>
+</body>
 </html>
