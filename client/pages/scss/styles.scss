@@ -1,5 +1,7 @@
-$bg-color: red; 
+// Variable Overrides 
+$theme-colors: (
+  "primary": #402fd4
+);
 
-body {
-    background: $bg-color;
-}
+//Boostrap Sass Files
+@import"../../../node_modules/bootstrap/scss/bootstrap";

@@ -31,6 +31,14 @@ class Front_end_app {
         this.front_end_app.get("/about", function(req, res){
             res.render("../client/pages/about.ejs");
         });
+        this.front_end_app.get("/navbar", function(req, res){
+            res.render("../client/pages/navbar.ejs");
+        });
+
+        this.front_end_app.get("/footer", function(req, res){
+            res.render("../client/pages/footer.ejs");
+        });
+
         this.front_end_app.get("/login", function(req, res){
             res.render("../client/pages/login.ejs");
         });
@@ -57,6 +65,8 @@ class Front_end_app {
 
     staticConfig() {
         this.front_end_app.use('/css', express.static('client/pages/css'));
+        this.front_end_app.use('/images', express.static('client/pages/images'));
+
     }
 }
 exports.default = new Front_end_app().front_end_app;
