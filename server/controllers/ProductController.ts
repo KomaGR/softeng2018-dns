@@ -61,7 +61,9 @@ export class ProductController {
     }
 
     public getProductWithID(req: Request, res: Response) {
-        Product.findById(req.params.productId, (err, product) => {
+        Product.findById(
+            { _id: req.params.productId }, 
+            (err, product) => {
             if (err) {
                 res.send(err);
             }
@@ -70,7 +72,9 @@ export class ProductController {
     }
 
     public updateProduct(req: Request, res: Response) {
-        Product.findOneAndUpdate({ _id: req.params.productId }, req.body, { new: true }, (err, product) => {
+        Product.findOneAndUpdate(
+            { _id: req.params.productId }, 
+            req.body, { new: true }, (err, product) => {
             if (err) {
                 res.send(err);
             }

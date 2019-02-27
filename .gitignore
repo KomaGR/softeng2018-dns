@@ -13,3 +13,4 @@ data/*
 !client/*
 !client/
 !notes.md
+data/*
