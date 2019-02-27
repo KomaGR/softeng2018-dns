@@ -1,12 +1,3 @@
 <h1> You searched something </h1>
 
-<div class="row">
-<% for(var i = 0;i < myproducts.length;i++){ %>
-<div style="background-color: #E6E6FA; width: 290px; border: 2px solid red"> 
-    <p> Name: <%= myproducts[i].name %> </p>
-    <form action='/product_info' method='GET'>
-        <button type="submit" name='productID' value="<%=myproducts[i].id%>">Learn more</button>
-    </form>
-</div>
-<% } %>
-</div>
+<a href="/product_info" method="POST"> This is a product </a>
