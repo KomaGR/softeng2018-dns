@@ -6,15 +6,16 @@ import * as fs from 'fs';
 const PORT = 8765;
 const PORT_front = 3000;
 
-
-front_end_app.listen(PORT_front, ()=> {
-    console.log('Client is listening on port ' + PORT_front)
-})
-
 const httpsOptions = {
     key: fs.readFileSync('server/config/key.pem', 'utf8'),
     cert: fs.readFileSync('server/config/cert.pem', 'utf8')
 };
+
+const httpsServerFront = https.createServer(httpsOptions, front_end_app);
+
+httpsServerFront.listen(PORT_front, ()=> {
+    console.log('Client is listening on port ' + PORT_front)
+})
 
 const httpsServer = https.createServer(httpsOptions, app);
 
