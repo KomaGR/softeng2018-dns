@@ -201,7 +201,67 @@ class Front_end_app {
         });
 
         this.front_end_app.post("/submit_product", redirectLogin, function(req, res){
-            res.redirect("/submit_shop");
+            var prodid = req.body.prodid;
+            if ( prodid ){
+
+            } else {
+                var productName = req.body.productname;
+                var productDescription = req.body.productdescription;
+                var productCategory = req.body.productcategory;
+                var productTags = req.body.producttags;
+                var productPrice = req.body.productprice;
+                var DateFrom = req.body.datefrom;
+                var DateTo = req.body.dateto;
+                var shopID = req.body.shopID;
+                var withdrawn = false;
+                const options = {
+                    hostname: 'localhost',
+                    port: 8765,
+                    path: '/observatory/api/products',
+                    rejectUnauthorized: false,
+                    method: 'POST',
+                    json: {
+                        "name": productName,
+                        "description": productDescription,
+                        "category": productCategory,
+                        "tags": productTags,
+                        "withdrawn": withdrawn
+                    }
+                };
+                const httpsreq = https.request(options, (httpsres)=> {
+                    console.log('statuscode', httpsres.statusCode);
+                    httpsres.on('data', (d) => {
+                        var mydata =  JSON.parse(d);
+                        const options1 = {
+                            hostname: 'localhost',
+                            port: 8765,
+                            path: '/observatory/api/prices',
+                            rejectUnauthorized: false,
+                            method: 'POST',
+                            json: {
+                                "price": productPrice,
+                                "dateFrom": DateFrom,
+                                "dateTo": DateTo,
+                                "productId": mydata.id,
+                                "shopId": shopID
+                            }
+                        };
+                        const httpsreq1 = https.request(options, (httpsres)=> {
+                            console.log('statuscode', httpsres.statusCode);
+                            httpsres.on('data', (d) => {
+                            });
+                        });
+                        httpsreq1.on('error', (e)=> {
+                            console.error(e);
+                        });
+                        httpsreq1.end();
+                    });
+                });
+                httpsreq.on('error', (e)=> {
+                    console.error(e);
+                });
+                httpsreq.end();
+            }
         });
 
         this.front_end_app.get("/product_info", function(req, res){
@@ -229,12 +289,79 @@ class Front_end_app {
             httpsreq.end();
         });
 
+        this.front_end_app.put("/product_info", function(req, res){
+        });
+
+        this.front_end_app.patch("/product_info", function(req, res){
+
+        });
+
+        this.front_end_app.delete("/product_info", function(req, res){
+            var productid = req.body.productID;
+            console.log(productid);
+            const options = {
+                hostname: 'localhost',
+                port: 8765,
+                path: '/observatory/api/products/' + productid,
+                rejectUnauthorized: false,
+                method: 'DELETE'
+            };
+            const httpsreq = https.request(options, (httpsres)=> {
+                console.log('statuscode', httpsres.statusCode);
+                httpsres.on('data', (d) => {
+                    var mydata =  JSON.parse(d);
+                });
+            });
+            httpsreq.on('error', (e)=> {
+                console.error(e);
+            });
+            httpsreq.end();
+        });
+
         this.front_end_app.get("/submit_shop", redirectLogin, function(req, res){
             res.render("../client/pages/submit_shop.ejs");
         });
 
         this.front_end_app.post("/submit_shop", redirectLogin, function(req, res){
-            res.redirect("/submit_product");
+            var shopid = req.body.shopid;
+            if ( shopid ){
+
+            } else {
+                var shopName = req.body.shopname;
+                var shopAddress = req.body.shopaddress;
+                var shopLng = req.body.shopLng;
+                var shopLat = req.body.shopLat;
+                var shopTags = req.body.shoptags;
+                var withdrawn = false;
+                const options = {
+                    hostname: 'localhost',
+                    port: 8765,
+                    path: '/observatory/api/shops',
+                    rejectUnauthorized: false,
+                    method: 'POST',
+                    json: {
+                        "name": shopName,
+                        "address": shopAddress,
+                        "lng": shopLng,
+                        "lat": shopLat,
+                        "tags": shopTags,
+                        "withdrawn": withdrawn
+                    }
+                };
+                const httpsreq = https.request(options, (httpsres)=> {
+                    console.log('statuscode', httpsres.statusCode);
+                    httpsres.on('data', (d) => {
+                        var mydata =  JSON.parse(d);
+                        res.redirect('/submit_product', {
+                            shopID: mydata.id
+                        });
+                    });
+                });
+                httpsreq.on('error', (e)=> {
+                    console.error(e);
+                });
+                httpsreq.end();
+            }
         });
     }
 }
