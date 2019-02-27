@@ -3,23 +3,30 @@ import * as bodyParser from  'body-parser';
 import routes from './routes/routes';
 import * as mongoose from "mongoose";
 
+const PORT_db = 27017;
+
 class App {
 
     public app: express.Application;
-    public mongoUrl: string = 'mongodb://localhost/DNSdb';
+    public readonly mongoUri: string = 'mongodb://localhost:27017/DNSdb';
 
+    // public connection = mongoose.createConnection('mongodb://localhost:27017/DNSdb');
+     
     constructor() {
         this.app = express();
-        // this.mongoSetup();
+        this.mongoSetup();
         this.config();
     }
 
     private mongoSetup(): void {
-        // mongoose.Promise = global.Promise;
-        mongoose.connect(this.mongoUrl, {useNewUrlParser: true});
+        mongoose.connect(this.mongoUri, { useNewUrlParser: true, useCreateIndex: true }, (err: any) => {
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log(`Database is listening on port ${PORT_db}`);
+            }
+        });
     }
-
-
 
     private config(): void{
         // support application/json type post data
@@ -27,7 +34,7 @@ class App {
         //support application/x-www-form-urlencoded post data
         this.app.use(bodyParser.urlencoded({extended: false}));
         // serving static files 
-        // this.app.use(express.static('public'));
+        this.app.use(express.static('public'));
         routes(this.app);
     }
     
