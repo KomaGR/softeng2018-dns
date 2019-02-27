@@ -15,3 +15,15 @@
 <p> ExtraData <% for (var key in product.extraData) { %>
     <%= key + ' ' + product.extraData[key] %>
 <% } %>
+
+<form action='/product_info' method='PUT'>
+    <button type="submit" name='productID' value="<%=product.id%>">Change all product fields</button>
+</form>
+
+<form action='/product_info' method='PATCH'>
+    <button type="submit" name='productID' value="<%=product.id%>">Change one field</button>
+</form>
+
+<form action='/product_info' method='DELETE'>
+    <button type="submit" name='productID' value="<%=product.id%>">Delete product</button>
+</form>
