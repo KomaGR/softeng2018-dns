@@ -18,14 +18,15 @@ export default class {
         this.config();
     }
 
-    // WARNING: DO NOT HANDLE REQUESTS HERE! DISPATCH THEM
-    //          TO APPROPRIATE FILES.
+    // requests not handled here
+    // dispatched to appropriate files
+
     private config(): void {
         this.router
-            // Get all products
+            // get all products
             .get('/', this.productController.getProduct)
 
-            //Create a new product
+            // create a new product
             .post('/', this.productController.addNewProduct)
 
             // get a specific product
@@ -34,8 +35,10 @@ export default class {
             // update a specific product
             .put('/:id', this.productController.updateProduct)
 
-            // delete a specific product
-            .delete(':id', this.productController.updateProduct)
+            // update only one field of a specific product
+            .put('/:id', this.productController.partialUpdateProduct)
             
+            // delete a specific product
+            .delete(':id', this.productController.deleteProduct)
     }
 }
