@@ -82,6 +82,17 @@ export class ProductController {
         });
     }
 
+    public partialUpdateProduct(req: Request, res: Response) {
+        Product.findOneAndUpdate(
+            { _id: req.params.productId }, 
+            req.body, { new: true }, (err, product) => {
+            if (err) {
+                res.send(err);
+            }
+            res.json(product);
+        });
+    }
+
     public deleteProduct(req: Request, res: Response) {
         Product.remove(
             { _id: req.params.productId }, 

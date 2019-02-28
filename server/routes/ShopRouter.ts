@@ -18,23 +18,26 @@ export default class {
         this.config();
     }
 
-    // WARNING: DO NOT HANDLE REQUESTS HERE! DISPATCH THEM
-    //          TO APPROPRIATE FILES.
     private config(): void {
         this.router
-            // Get all shops
-            .get('/', this.shopController.getShop)
 
-            //Create a new shop
+            // get all shops
+            .get('/', this.shopController.getShop)
+      
+            // create a new shop
             .post('/', this.shopController.addNewShop)
 
-            // get a specific contact
+            // get a specific shop
             .get('/:id', this.shopController.getShopWithID)
 
-            // update a specific contact
+            // update a specific shop
             .put('/:id', this.shopController.updateShop)
 
-            .delete(':id', this.shopController.updateShop)
+            // update only one field of a specific shop
+            .put('/:id', this.shopController.partialUpdateShop)
+            
+            // delete a specific shop
+            .delete(':id', this.shopController.deleteShop)
 
     }
 }
