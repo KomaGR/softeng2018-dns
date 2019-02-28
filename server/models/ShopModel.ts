@@ -3,10 +3,6 @@ import * as mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export const ShopSchema = new Schema({
-    id: {
-        type: String,
-        required: true    
-    },
     name: {
         type: String,
         required: 'Enter name'
