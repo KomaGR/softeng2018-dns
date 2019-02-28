@@ -38,10 +38,10 @@ export default function (
             );
     })
     
-    .use('/products', new ProductRouter().router);
+    .use('/products', new ProductRouter().router)
     
-    .use('/shops', new ShopRouter().router);
+    .use('/shops', new ShopRouter().router)
     
-    .use('/prices', new PriceRouter().router);
+    .use('/prices', new PriceRouter().router)
 
 }
