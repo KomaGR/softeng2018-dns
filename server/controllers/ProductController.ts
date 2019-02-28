@@ -59,9 +59,9 @@ export class ProductController {
     
     // update only one field of a specific product on database
     public partialUpdateProduct(req: Request, res: Response) {
-        Product.findOneAndUpdate(
-            { _id: req.originalUrl.slice(26)}, 
-            req.body, { new: true },
+        Product.update(
+            { _id: req.originalUrl.slice(26)},
+            { $set: {  : req.body } }, { new: true },
             (err, product) => {
             if (err) {
                 res.send(err);
