@@ -18,7 +18,9 @@ export default class {
         this.config();
     }
 
-
+    // requests not handled here
+    // dispatched to appropriate files
+    
     private config(): void {
         this.router
             
