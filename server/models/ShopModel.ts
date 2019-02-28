@@ -33,3 +33,5 @@ export const ShopSchema = new Schema({
         default: Date.now
     }
 });
+
+let Shop = module.exports = mongoose.model('Shop', ShopSchema);

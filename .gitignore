@@ -13,3 +13,4 @@ node_modules/
 !client/
 !notes.md
 data/*
+!package-lock.js
