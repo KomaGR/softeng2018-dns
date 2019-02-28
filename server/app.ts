@@ -26,7 +26,9 @@ class App {
                 console.log(`Database is listening on port ${PORT_db}`);
             }
         });
+        let db = mongoose.connection;
     }
+
 
     private config(): void{
         // support application/json type post data

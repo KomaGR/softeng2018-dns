@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-export const ShopSchema = new Schema({
+export const UserSchema = new Schema({
     id: {
         type: String
     },
@@ -19,3 +19,5 @@ export const ShopSchema = new Schema({
         default: Date.now
     }
 });
+
+let User = module.exports = mongoose.model('User', UserSchema);
