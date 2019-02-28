@@ -10,7 +10,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 
         <link rel="stylesheet" type="text/css" href="css/style.css">
-        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="css/styles.css">
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,800">
@@ -35,17 +34,65 @@
                                 <li class="nav-item">
                                     <a class="nav-link nav-link-ltr" href="/about">About</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link nav-link-ltr" href="/login">Login</a>
-                                </li>
-                                <li class="nav-item">
-                                        <a class="nav-link nav-link-ltr" href="/sign_up">Sign up</a>
-                                </li>
+                                <% if ( token ) { %>
+                                    <a class="nav-link nav-link-ltr" href="/logout">Log out</a>
+                                <% } else{ %>
+                                    <li class="nav-item">
+                                        <a class="nav-link nav-link-ltr"  data-toggle="modal" data-target="#login_modal" >Login</a>
+                                    </li>
+                                    <li class="nav-item">
+                                            <a class="nav-link nav-link-ltr"  data-toggle="modal" data-target="#sign_up_modal" >Sign up</a>
+                                    </li>
+                                <% } %>
+
                             </ul>
                         </div>
                 </nav>
             </header>
+</div>
+
+<!-- Modal -->
+<div id="login_modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">This is the login page</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <%- include login.ejs %>
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+    
         </div>
+    </div>
+
+
+
+
+<!-- Modal -->
+<div id="sign_up_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">This is the sign up page</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <%- include sign_up.ejs %>
+                <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 
          <!-- Optional JavaScript -->
