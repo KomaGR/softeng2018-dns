@@ -23,7 +23,7 @@ export default class {
 
             // get all shops
             .get('/', this.shopController.getShop)
-       
+      
             // create a new shop
             .post('/', this.shopController.addNewShop)
 
@@ -38,8 +38,6 @@ export default class {
             
             // delete a specific shop
             .delete(':id', this.shopController.deleteShop)
-
-
 
     }
 }
