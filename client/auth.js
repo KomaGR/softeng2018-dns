@@ -1,4 +1,24 @@
 const https = require('https');
+const session = require('express-session');
+
+const TWO_HOURS = 1000 * 60 * 60 * 2;
+const {
+    SESSION_LIFETIME = TWO_HOURS,
+    SESSION_ID = 'X-OBSERVATORY-AUTH'
+} = process.env;
+var SESSION_SECRET = 'zonk';
+
+exports.session = session({
+    name: SESSION_ID,
+    resave: false,
+    saveUninitialized: false,
+    secret: SESSION_SECRET,
+    cookie: {
+        maxAge: SESSION_LIFETIME,
+        sameSite: true,
+        secure: true
+    }
+})
 
 function loginRoute(req, res) {
     var username = req.body.l_username;
