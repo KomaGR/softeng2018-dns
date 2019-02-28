@@ -17,25 +17,22 @@ export default class {
         this.router = express.Router();
         this.config();
     }
-
+  
     // WARNING: DO NOT HANDLE REQUESTS HERE! DISPATCH THEM
     //          TO APPROPRIATE FILES.
+
+    // requests not handled here
+    // dispatched to appropriate files
+    
     private config(): void {
         this.router
-            // Get all prices
+            
+            // get all prices
             .get('/', this.priceController.getPrice)
-
-            //Create a new Price
+            
+            // create a new price
             .post('/', this.priceController.addNewPrice)
 
-            // get a specific Price
-            .get('/:id', this.priceController.getPriceWithID)
-
-            // update a specific Price
-            .put('/:id', this.priceController.updatePrice)
-
-            // delete a specific Price
-            .delete(':id', this.priceController.updatePrice)
-
+            
     }
-}
+} 

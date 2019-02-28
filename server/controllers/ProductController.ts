@@ -7,8 +7,10 @@ type Response = express.Response;
 
 const Product = mongoose.model('Product', ProductModel.ProductSchema);
 
+
 export class ProductController {
 
+    // add a new product on database
     public addNewProduct(req: Request, res: Response) {
         let newProduct = new Product(req.body);
 
@@ -20,6 +22,7 @@ export class ProductController {
         });
     }
 
+    // get all products (according to query) from database
     public getProduct(req: Request, res: Response) {
         Product.find({}, (err, product) => {
             if (err) {
@@ -29,9 +32,10 @@ export class ProductController {
         });
     }
 
+    // get a specific product from database
     public getProductWithID(req: Request, res: Response) {
         Product.findById(
-            { _id: req.params.productId }, 
+            { _id: req.originalUrl.slice(26)}, 
             (err, product) => {
             if (err) {
                 res.send(err);
@@ -40,10 +44,25 @@ export class ProductController {
         });
     }
 
+    // update a specific product on database
     public updateProduct(req: Request, res: Response) {
         Product.findOneAndUpdate(
-            { _id: req.params.productId }, 
-            req.body, { new: true }, (err, product) => {
+            { _id: req.originalUrl.slice(26)}, 
+            req.body, { new: true },
+            (err, product) => {
+            if (err) {
+                res.send(err);
+            }
+            res.json(product);
+        });
+    }
+    
+    // update only one field of a specific product on database
+    public partialUpdateProduct(req: Request, res: Response) {
+        Product.findOneAndUpdate(
+            { _id: req.originalUrl.slice(26)}, 
+            req.body, { new: true },
+            (err, product) => {
             if (err) {
                 res.send(err);
             }
@@ -51,13 +70,14 @@ export class ProductController {
         });
     }
 
+    // delete a specific product from database
     public deleteProduct(req: Request, res: Response) {
-        Product.remove(
-            { _id: req.params.productId }, 
+        Product.findOneAndDelete(
+            { _id: req.originalUrl.slice(26)},
             (err:any) => {
-                if (err) {
-                    res.send(err);
-                }
+            if (err) {
+                res.send(err);
+            }
             res.json({ message: 'Successfully deleted product!' });
         });
     }
