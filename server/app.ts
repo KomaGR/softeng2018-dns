@@ -27,14 +27,6 @@ class App {
             }
         });
         let db = mongoose.connection;
-        this.checkdberr(db);
-    }
-
-
-    private checkdberr(db): void {
-        db.on('error', (err:any) => {
-                console.log(err);
-        });
     }
 
 
