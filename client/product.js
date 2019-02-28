@@ -5,15 +5,7 @@ function productSubmitRoute(req, res) {
     if (prodid) {
 
     } else {
-        var productName = req.body.productname;
-        var productDescription = req.body.productdescription;
-        var productCategory = req.body.productcategory;
-        var productTags = req.body.producttags;
-        var productPrice = req.body.productprice;
-        var DateFrom = req.body.datefrom;
-        var DateTo = req.body.dateto;
-        var shopID = req.body.shopID;
-        var withdrawn = false;
+
         const options = {
             hostname: 'localhost',
             port: 8765,
@@ -21,15 +13,18 @@ function productSubmitRoute(req, res) {
             rejectUnauthorized: false,
             method: 'POST',
             json: {
-                "name": productName,
-                "description": productDescription,
-                "category": productCategory,
-                "tags": productTags,
-                "withdrawn": withdrawn
+                "name": req.body.productname,
+                "description": req.body.productdescription,
+                "category": req.body.productcategory,
+                "tags": req.body.producttags,
+                "withdrawn": false
             }
         };
+
         const httpsreq = https.request(options, (httpsres) => {
+
             console.log('statuscode', httpsres.statusCode);
+            
             httpsres.on('data', (d) => {
                 var mydata = JSON.parse(d);
                 const options1 = {
@@ -39,34 +34,41 @@ function productSubmitRoute(req, res) {
                     rejectUnauthorized: false,
                     method: 'POST',
                     json: {
-                        "price": productPrice,
-                        "dateFrom": DateFrom,
-                        "dateTo": DateTo,
+                        "price": req.body.productprice,
+                        "dateFrom": req.body.datefrom,
+                        "dateTo": req.body.dateto,
                         "productId": mydata.id,
-                        "shopId": shopID
+                        "shopId": req.body.shopID
                     }
                 };
+
                 const httpsreq1 = https.request(options, (httpsres) => {
                     console.log('statuscode', httpsres.statusCode);
                     httpsres.on('data', (d) => {
                     });
                 });
+
                 httpsreq1.on('error', (e) => {
                     console.error(e);
                 });
+                
                 httpsreq1.end();
             });
         });
+
         httpsreq.on('error', (e) => {
             console.error(e);
         });
+
         httpsreq.end();
     }
 }
 
 function productGetInfo(req, res) {
+
     var productid = req.query.productID;
     console.log(productid);
+
     const options = {
         hostname: 'localhost',
         port: 8765,
@@ -74,6 +76,7 @@ function productGetInfo(req, res) {
         rejectUnauthorized: false,
         method: 'GET'
     };
+
     const httpsreq = https.request(options, (httpsres) => {
         console.log('statuscode', httpsres.statusCode);
         httpsres.on('data', (d) => {
@@ -83,19 +86,19 @@ function productGetInfo(req, res) {
             });
         });
     });
+
     httpsreq.on('error', (e) => {
         console.error(e);
     });
+
     httpsreq.end();
 }
 
 function productPutInfo(req, res) {
+
     var productid = req.query.productID;
-    var productName = req.body.productname;
-    var productDescription = req.body.productdescription;
-    var productCategory = req.body.productcategory;
-    var productTags = req.body.producttags;
     console.log(productid);
+
     const options = {
         hostname: 'localhost',
         port: 8765,
@@ -103,12 +106,13 @@ function productPutInfo(req, res) {
         rejectUnauthorized: false,
         method: 'PUT',
         json: {
-            "name": productName,
-            "description": productDescription,
-            "category": productCategory,
-            "tags": productTags
+            "name": req.body.productname,
+            "description": req.body.productdescription,
+            "category": req.body.productcategory,
+            "tags": req.body.producttags
         }
     };
+
     const httpsreq = https.request(options, (httpsres) => {
         console.log('statuscode', httpsres.statusCode);
         httpsres.on('data', (d) => {
@@ -116,15 +120,19 @@ function productPutInfo(req, res) {
             res.render("product_info.ejs");
         });
     });
+
     httpsreq.on('error', (e) => {
         console.error(e);
     });
+
     httpsreq.end();
 }
 
 function productDeleteInfo(req, res) {
+
     var productid = req.body.productID;
     console.log(productid);
+
     const options = {
         hostname: 'localhost',
         port: 8765,
@@ -132,6 +140,7 @@ function productDeleteInfo(req, res) {
         rejectUnauthorized: false,
         method: 'DELETE'
     };
+
     const httpsreq = https.request(options, (httpsres) => {
         console.log('statuscode', httpsres.statusCode);
         httpsres.on('data', (d) => {
@@ -139,9 +148,11 @@ function productDeleteInfo(req, res) {
             res.render("product_info.ejs");
         });
     });
+
     httpsreq.on('error', (e) => {
         console.error(e);
     });
+
     httpsreq.end();
 }
 

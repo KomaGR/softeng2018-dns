@@ -5,13 +5,6 @@ const auth = require('./auth');
 const product = require('./product');
 const shop = require('./shop');
 
-const TWO_HOURS = 1000 * 60 * 60 * 2;
-const {
-    SESSION_LIFETIME = TWO_HOURS,
-    SESSION_ID = 'X-OBSERVATORY-AUTH'
-} = process.env;
-var SESSION_SECRET = 'zonk';
-
 
 const redirectLogin = (req, res, next) => {
     if (!req.session.auth_token) {
@@ -31,17 +24,7 @@ const redirectHome = (req, res, next) => {
 
 function routes(app) {
     app
-    .use(session({
-         name: SESSION_ID,
-         resave: false,
-         saveUninitialized: false,
-         secret: SESSION_SECRET,
-         cookie: {
-             maxAge: SESSION_LIFETIME,
-             sameSite: true,
-             secure: true
-         }
-     }))
+    .use(auth.session)
 
     .get("/", function (req, res) {
          console.log(req.session);
@@ -49,8 +32,27 @@ function routes(app) {
          console.log(auth_token);
          res.render("homepage.ejs", {
              token: auth_token
-         });
+         });      
+      
      })
+     .get("/about", function (req, res) {
+        console.log(req.session);
+        const { auth_token } = req.session;
+        console.log(auth_token);
+        res.render("about.ejs", {
+            token: auth_token
+        });      
+     
+    })
+    .get("/login", function (req, res) {
+        console.log(req.session);
+        const { auth_token } = req.session;
+        console.log(auth_token);
+        res.render("login.ejs", {
+            token: auth_token
+        });      
+     
+    })
      
      .get("/search_results", function (req, res) {
         var searchTerm = req.query.search_term;
