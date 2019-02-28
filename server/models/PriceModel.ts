@@ -16,9 +16,9 @@ export const PriceSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    productId: {
+    PriceId: {
         type: String,
-        required: 'Enter productId'
+        required: 'Enter PriceId'
     },
     shopId: {
         type: String,
@@ -29,3 +29,5 @@ export const PriceSchema = new Schema({
         default: Date.now
     }
 });
+
+let Price = module.exports = mongoose.model('Price', PriceSchema);

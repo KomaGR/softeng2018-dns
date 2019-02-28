@@ -29,3 +29,5 @@ export const ProductSchema = new Schema({
         default: Date.now
     }
 });
+
+let Product = module.exports = mongoose.model('Product', ProductSchema);
