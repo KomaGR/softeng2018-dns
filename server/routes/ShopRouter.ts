@@ -24,41 +24,18 @@ export default class {
         this.router
             // Get all shops
             .get('/', this.shopController.getShop)
-            // .get('/', (req: Request, res: Response) => {
-            //     console.log("Hit on /observatory/api/shops");
-            //     // TODO: Send all shops
-            //     res.status(200).send("NotImplementedError");
-            // })
+
             //Create a new shop
             .post('/', this.shopController.addNewShop)
 
-            // .post('/', (req: Request, res: Response) => {
-            //     console.log("Hit on /observatory/api/shops");
-            //     // TODO: Register new shop
-            //     res.status(200).send("NotImplementedError");
-            // })
-            // get a specific contact
+            // get a specific shop
             .get('/:id', this.shopController.getShopWithID)
-            // .get('/:id', (req: Request, res: Response) => {
-            //     console.log('Hit on /observatory/api/shops/:id');
-            //     // TODO: Send shop with id  
-            //     res.status(200).send("NotImplementedError");
-            //     // res.send(req.params);
-            // })
-            // update a specific contact
-            .put('/:id', this.shopController.updateShop)
-            // .put('/:id', (req: Request, res: Response) => {
-            //     console.log('Hit on /observatory/api/shops/:id');
-            //     // TODO: Update shop with id
-            //     res.status(200).send("NotImplementedError");
-            // })
-            .delete(':id', this.shopController.updateShop)
-        // .delete('/:id', (req: Request, res: Response) => {
-        //     console.log('Hit on /observatory/api/shops/:id');
-        //     // TODO: Delete shop with id
-        //     res.status(200).send("NotImplementedError");
-        // })
 
+            // update a specific shop
+            .put('/:id', this.shopController.updateShop)
+
+            // delete a specific shop
+            .delete(':id', this.shopController.updateShop)
 
     }
 }

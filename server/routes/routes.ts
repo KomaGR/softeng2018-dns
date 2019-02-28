@@ -24,9 +24,8 @@ export default function (
         console.log("Hit on /observatory/api/logout");
         res.status(200).send("NotImplementedError");
     })
+
     .use('/products', new ProductRouter().router);
-    
-    // MainRouter.use('/shops', shopRouter);
-    // MainRouter.use('/prices', priceRouter);
+    .use('/prices'), new PriceRouter().router);
     
 }
