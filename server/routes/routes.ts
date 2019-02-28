@@ -30,6 +30,7 @@ export default function (
             {message : "OK"}          // Mock reply
             );
     })
+
     .post('/signup', (req: Request, res: Response) => {
         console.log("Hit on /observatory/api/signup");
         res.status(200).send(
@@ -37,10 +38,10 @@ export default function (
             );
     })
     
-    .use('/products', new ProductRouter().router);
+    .use('/products', new ProductRouter().router)
     
-    MainRouter.use('/shops', new ShopRouter().router);
+    .use('/shops', new ShopRouter().router)
     
-    MainRouter.use('/prices', new PriceRouter().router);
-    
+    .use('/prices', new PriceRouter().router)
+
 }
