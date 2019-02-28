@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 export const ShopSchema = new Schema({
     id: {
-        type: String
+        type: String,
+        required: true    
     },
     name: {
         type: String,
