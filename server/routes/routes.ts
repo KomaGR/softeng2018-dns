@@ -1,5 +1,7 @@
 import * as express from  'express';
 import ProductRouter from './ProductRouter';
+import ShopRouter from './ShopRouter';
+import PriceRouter from './PriceRouter';
 
 type Request = express.Request;
 type Response = express.Response;
@@ -34,9 +36,11 @@ export default function (
             {message : "OK"}          // Mock reply
             );
     })
+    
     .use('/products', new ProductRouter().router);
     
-    // MainRouter.use('/shops', shopRouter);
-    // MainRouter.use('/prices', priceRouter);
+    MainRouter.use('/shops', new ShopRouter().router);
+    
+    MainRouter.use('/prices', new PriceRouter().router);
     
 }
