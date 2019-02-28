@@ -1,5 +1,5 @@
 import app from "./app";
-import front_end_app from "../client/front_end_app";
+import front_end_app from "../client/FrontEndApp";
 import * as https from 'https';
 import * as fs from 'fs';
 

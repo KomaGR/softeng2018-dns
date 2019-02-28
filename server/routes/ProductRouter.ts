@@ -23,7 +23,6 @@ export default class {
 
     private config(): void {
         this.router
-
             // get all products
             .get('/', this.productController.getProduct)
 
@@ -42,7 +41,5 @@ export default class {
             // delete a specific product
             .delete(':id', this.productController.deleteProduct)
 
-        
-        
     }
 }
