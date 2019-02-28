@@ -26,7 +26,17 @@ class App {
                 console.log(`Database is listening on port ${PORT_db}`);
             }
         });
+        let db = mongoose.connection;
+        this.checkdberr(db);
     }
+
+
+    private checkdberr(db): void {
+        db.on('error', (err:any) => {
+                console.log(err);
+        });
+    }
+
 
     private config(): void{
         // support application/json type post data
