@@ -21,8 +21,7 @@ exports.session = session({
 })
 
 function loginRoute(req, res) {
-    var username = req.body.l_username;
-    var password = req.body.l_password;
+
     const options = {
         hostname: 'localhost',
         port: 8765,
@@ -30,10 +29,11 @@ function loginRoute(req, res) {
         rejectUnauthorized: false,
         method: 'POST',
         json: {
-            "username": username,
-            "password": password
+            "username": req.body.l_username,
+            "password": req.body.l_password
         }
     };
+
     const httpsreq = https.request(options, (httpsres) => {
         console.log('statuscode', httpsres.statusCode);
         httpsres.on('data', (d) => {
@@ -44,13 +44,16 @@ function loginRoute(req, res) {
             }
         });
     });
+
     httpsreq.on('error', (e) => {
         console.error(e);
     });
+
     httpsreq.end();
 }
 
 function logoutRoute(req, res) {
+
     const options = {
         hostname: 'localhost',
         port: 8765,
@@ -75,16 +78,16 @@ function logoutRoute(req, res) {
             }
         });
     });
+    
     httpsreq.on('error', (e) => {
         console.error(e);
     });
+
     httpsreq.end();
 }
 
 function signupRoute(req, res) {
-    var userEmail = req.body.s_email;
-    var username = req.body.s_username;
-    var userPassword = req.body.s_password;
+
     const options = {
         hostname: 'localhost',
         port: 8765,
@@ -92,11 +95,12 @@ function signupRoute(req, res) {
         rejectUnauthorized: false,
         method: 'POST',
         json: {
-            "email": userEmail,
-            "username": username,
-            "password": userPassword
+            "email": req.body.s_email,
+            "username": req.body.s_username,
+            "password": req.body.s_password
         }
     };
+
     const httpsreq = https.request(options, (httpsres) => {
         console.log('statuscode', httpsres.statusCode);
         httpsres.on('data', (d) => {
@@ -108,9 +112,11 @@ function signupRoute(req, res) {
             }
         });
     });
+
     httpsreq.on('error', (e) => {
         console.error(e);
     });
+    
     httpsreq.end();
 }
 
