@@ -40,6 +40,5 @@ export default class {
             
             // delete a specific product
             .delete(':id', this.productController.deleteProduct)
-
     }
 }

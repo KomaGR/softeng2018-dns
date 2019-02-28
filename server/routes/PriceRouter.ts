@@ -17,6 +17,9 @@ export default class {
         this.router = express.Router();
         this.config();
     }
+  
+    // WARNING: DO NOT HANDLE REQUESTS HERE! DISPATCH THEM
+    //          TO APPROPRIATE FILES.
 
     // requests not handled here
     // dispatched to appropriate files
