@@ -5,12 +5,7 @@ function shopSubmit(req, res) {
     if (shopid) {
 
     } else {
-        var shopName = req.body.shopname;
-        var shopAddress = req.body.shopaddress;
-        var shopLng = req.body.shopLng;
-        var shopLat = req.body.shopLat;
-        var shopTags = req.body.shoptags;
-        var withdrawn = false;
+        // Shops can't be withdrawn just when submited
         const options = {
             hostname: 'localhost',
             port: 8765,
@@ -18,14 +13,15 @@ function shopSubmit(req, res) {
             rejectUnauthorized: false,
             method: 'POST',
             json: {
-                "name": shopName,
-                "address": shopAddress,
-                "lng": shopLng,
-                "lat": shopLat,
-                "tags": shopTags,
-                "withdrawn": withdrawn
+                "name": req.body.shopname,
+                "address": req.body.shopaddress,
+                "lng": req.body.shopLng,
+                "lat": req.body.shopLat,
+                "tags": req.body.shoptags,
+                "withdrawn": false
             }
         };
+
         const httpsreq = https.request(options, (httpsres) => {
             console.log('statuscode', httpsres.statusCode);
             httpsres.on('data', (d) => {
@@ -35,9 +31,11 @@ function shopSubmit(req, res) {
                 });
             });
         });
+
         httpsreq.on('error', (e) => {
             console.error(e);
         });
+        
         httpsreq.end();
     }
 }
