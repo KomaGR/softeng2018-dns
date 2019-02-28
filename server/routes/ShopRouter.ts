@@ -18,12 +18,15 @@ export default class {
         this.config();
     }
 
+    // requests not handled here
+    // dispatched to appropriate files
+    
     private config(): void {
         this.router
 
             // get all shops
             .get('/', this.shopController.getShop)
-      
+
             // create a new shop
             .post('/', this.shopController.addNewShop)
 
@@ -32,12 +35,11 @@ export default class {
 
             // update a specific shop
             .put('/:id', this.shopController.updateShop)
-
+      
             // update only one field of a specific shop
             .put('/:id', this.shopController.partialUpdateShop)
             
             // delete a specific shop
             .delete(':id', this.shopController.deleteShop)
-
     }
 }

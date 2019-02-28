@@ -18,6 +18,9 @@ export default class {
         this.config();
     }
 
+    // requests not handled here
+    // dispatched to appropriate files
+
     private config(): void {
         this.router
             // get all products
@@ -37,6 +40,5 @@ export default class {
             
             // delete a specific product
             .delete(':id', this.productController.deleteProduct)
-
     }
 }
