@@ -5,13 +5,6 @@ const auth = require('./auth');
 const product = require('./product');
 const shop = require('./shop');
 
-const TWO_HOURS = 1000 * 60 * 60 * 2;
-const {
-    SESSION_LIFETIME = TWO_HOURS,
-    SESSION_ID = 'X-OBSERVATORY-AUTH'
-} = process.env;
-var SESSION_SECRET = 'zonk';
-
 
 const redirectLogin = (req, res, next) => {
     if (!req.session.auth_token) {
@@ -31,17 +24,7 @@ const redirectHome = (req, res, next) => {
 
 function routes(app) {
     app
-    .use(session({
-         name: SESSION_ID,
-         resave: false,
-         saveUninitialized: false,
-         secret: SESSION_SECRET,
-         cookie: {
-             maxAge: SESSION_LIFETIME,
-             sameSite: true,
-             secure: true
-         }
-     }))
+    .use(auth.session)
 
     .get("/", function (req, res) {
          console.log(req.session);
