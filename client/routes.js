@@ -32,8 +32,27 @@ function routes(app) {
          console.log(auth_token);
          res.render("homepage.ejs", {
              token: auth_token
-         });
+         });      
+      
      })
+     .get("/about", function (req, res) {
+        console.log(req.session);
+        const { auth_token } = req.session;
+        console.log(auth_token);
+        res.render("about.ejs", {
+            token: auth_token
+        });      
+     
+    })
+    .get("/login", function (req, res) {
+        console.log(req.session);
+        const { auth_token } = req.session;
+        console.log(auth_token);
+        res.render("login.ejs", {
+            token: auth_token
+        });      
+     
+    })
      
      .get("/search_results", function (req, res) {
         var searchTerm = req.query.search_term;
