@@ -18,46 +18,27 @@ export default class {
         this.config();
     }
 
-    // WARNING: DO NOT HANDLE REQUESTS HERE! DISPATCH THEM
-    //          TO APPROPRIATE FILES.
     private config(): void {
         this.router
-            // Get all products
-            .get('/', this.productController.getMockProduct)
-            // .get('/', (req: Request, res: Response) => {
-            //     console.log("Hit on /observatory/api/products");
-            //     // TODO: Send all products
-            //     res.status(200).send("NotImplementedError");
-            // })
-            //Create a new product
+
+            // get all products
+            .get('/', this.productController.getProduct)
+
+            // create a new product
             .post('/', this.productController.addNewProduct)
 
-            // .post('/', (req: Request, res: Response) => {
-            //     console.log("Hit on /observatory/api/products");
-            //     // TODO: Register new product
-            //     res.status(200).send("NotImplementedError");
-            // })
-            // get a specific contact
-            .get('/:id', this.productController.getMockProductWithID)
-            // .get('/:id', (req: Request, res: Response) => {
-            //     console.log('Hit on /observatory/api/products/:id');
-            //     // TODO: Send product with id  
-            //     res.status(200).send("NotImplementedError");
-            //     // res.send(req.params);
-            // })
-            // update a specific contact
+            // get a specific product
+            .get('/:id', this.productController.getProductWithID)
+
+            // update a specific product
             .put('/:id', this.productController.updateProduct)
-            // .put('/:id', (req: Request, res: Response) => {
-            //     console.log('Hit on /observatory/api/products/:id');
-            //     // TODO: Update product with id
-            //     res.status(200).send("NotImplementedError");
-            // })
-            .delete(':id', this.productController.updateProduct)
-            // .delete('/:id', (req: Request, res: Response) => {
-            //     console.log('Hit on /observatory/api/products/:id');
-            //     // TODO: Delete product with id
-            //     res.status(200).send("NotImplementedError");
-            // })
+
+            // update only one field of a specific product
+            .put('/:id', this.productController.partialUpdateProduct)
+            
+            // delete a specific product
+            .delete(':id', this.productController.deleteProduct)
+
         
         
     }

@@ -47,6 +47,15 @@ export class ShopController {
         });
     }
 
+    public partialUpdateShop(req: Request, res: Response) {
+        Shop.findOneAndUpdate({ _id: req.params.shopId }, req.body, { new: true }, (err, shop) => {
+            if (err) {
+                res.send(err);
+            }
+            res.json(shop);
+        });
+    }
+
     public deleteShop(req: Request, res: Response) {
         Shop.remove(
             { _id: req.params.shopId },
