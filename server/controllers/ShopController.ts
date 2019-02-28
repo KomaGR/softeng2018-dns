@@ -7,8 +7,10 @@ type Response = express.Response;
 
 const Shop = mongoose.model('Shop', ShopModel.ShopSchema);
 
+
 export class ShopController {
 
+    // add a new shop on database
     public addNewShop(req: Request, res: Response) {
         let newShop = new Shop(req.body);
 
@@ -20,6 +22,7 @@ export class ShopController {
         });
     }
 
+    // get all shops (according to query) from database
     public getShop(req: Request, res: Response) {
         Shop.find({}, (err, shop) => {
             if (err) {
@@ -29,8 +32,11 @@ export class ShopController {
         });
     }
 
+    // get a specific shop from database
     public getShopWithID(req: Request, res: Response) {
-        Shop.findById(req.params.shopId, (err, shop) => {
+        Shop.findById(
+            { _id: req.originalUrl.slice(23)}, 
+            (err, shop) => {
             if (err) {
                 res.send(err);
             }
@@ -38,8 +44,12 @@ export class ShopController {
         });
     }
 
+    // update a specific shop on database
     public updateShop(req: Request, res: Response) {
-        Shop.findOneAndUpdate({ _id: req.params.shopId }, req.body, { new: true }, (err, shop) => {
+        Shop.findOneAndUpdate(
+            { _id: req.originalUrl.slice(23)}, 
+            req.body, { new: true },
+            (err, shop) => {
             if (err) {
                 res.send(err);
             }
@@ -47,8 +57,12 @@ export class ShopController {
         });
     }
 
+    // update only one field of a specific shop on database
     public partialUpdateShop(req: Request, res: Response) {
-        Shop.findOneAndUpdate({ _id: req.params.shopId }, req.body, { new: true }, (err, shop) => {
+        Shop.findOneAndUpdate(
+            { _id: req.originalUrl.slice(23)}, 
+            req.body, { new: true },
+            (err, shop) => {
             if (err) {
                 res.send(err);
             }
@@ -56,10 +70,11 @@ export class ShopController {
         });
     }
 
+    // delete a specific shop from database
     public deleteShop(req: Request, res: Response) {
-        Shop.remove(
-            { _id: req.params.shopId },
-            (err: any) => {
+        Shop.findOneAndDelete(
+            { _id: req.originalUrl.slice(23)}),
+            ((err:any) => {
                 if (err) {
                     res.send(err);
                 }

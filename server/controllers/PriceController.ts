@@ -9,6 +9,7 @@ const Price = mongoose.model('Price', PriceModel.PriceSchema);
 
 export class PriceController {
 
+    // add a new price on database
     public addNewPrice(req: Request, res: Response) {
         let newPrice = new Price(req.body);
 
@@ -20,6 +21,7 @@ export class PriceController {
         });
     }
 
+    // get all prices (according to query) from database
     public getPrice(req: Request, res: Response) {
         Price.find({}, (err, price) => {
             if (err) {
