@@ -12,34 +12,47 @@ export class ProductController {
 
     // add a new product on database
     public addNewProduct(req: Request, res: Response) {
-        let newProduct = new Product(req.body);
+        
+        let newProduct = new Product(req.body);        
 
         newProduct.save((err, product) => {
             if (err) {
                 res.send(err);
-            }
+            }            
             res.json(product);
         });
     }
 
     // get all products (according to query) from database
     public getProduct(req: Request, res: Response) {
-        Product.find({}, (err, product) => {
+        Product.find({}, (err, products) => {
             if (err) {
                 res.send(err);
             }
-            res.json(product);
+
+            let start = Number(Object.values(req.query)[0]);
+            let count = Number(Object.values(req.query)[1]);
+            let total = products.length;
+
+            res.status(200).send({
+                start,
+                count,
+                total,
+                products
+            });
         });
+
     }
 
     // get a specific product from database
     public getProductWithID(req: Request, res: Response) {
+                
         Product.findById(
             { _id: req.originalUrl.slice(26)}, 
             (err, product) => {
-            if (err) {
-                res.send(err);
-            }
+                if (err) {
+                    res.send(err);
+                }
             res.json(product);
         });
     }
@@ -50,37 +63,40 @@ export class ProductController {
             { _id: req.originalUrl.slice(26)}, 
             req.body, { new: true },
             (err, product) => {
-            if (err) {
-                res.send(err);
-            }
+                if (err) {
+                    res.send(err);
+                }
             res.json(product);
         });
     }
     
     // update only one field of a specific product on database
     public partialUpdateProduct(req: Request, res: Response) {
-        Product.update(
-            { _id: req.originalUrl.slice(26)},
-            { $set: {  : req.body } }, { new: true },
+
+        let sad = Object.keys(req.body)[0];
+        let sader = Object.values(req.body)[0];
+
+        Product.updateOne(
+            { _id: req.originalUrl.slice(26)}, 
+            { [sad] : sader }, { new: true },
             (err, product) => {
-            if (err) {
-                res.send(err);
-            }
+                if (err) {
+                    res.send(err);
+                }
             res.json(product);
         });
     }
 
     // delete a specific product from database
     public deleteProduct(req: Request, res: Response) {
-        Product.findOneAndDelete(
-            { _id: req.originalUrl.slice(26)},
-            (err:any) => {
-            if (err) {
-                res.send(err);
-            }
-            res.json({ message: 'Successfully deleted product!' });
+        Product.remove({ _id: req.originalUrl.slice(26)},
+            (err) => {
+                if (err) {
+                    res.send(err);
+                }
+            res.status(200).send(
+                {message : "OK"}
+            );
         });
     }
-
-
 }

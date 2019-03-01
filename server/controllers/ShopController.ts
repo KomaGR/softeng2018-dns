@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as ShopModel from '../models/ShopModel';
 import * as express from 'express';
+import { Int32 } from 'bson';
 
 type Request = express.Request;
 type Response = express.Response;
@@ -24,11 +25,21 @@ export class ShopController {
 
     // get all shops (according to query) from database
     public getShop(req: Request, res: Response) {
-        Shop.find({}, (err, shop) => {
+        Shop.find({}, (err, shops) => {
             if (err) {
                 res.send(err);
             }
-            res.json(shop);
+            
+            let start = Number(Object.values(req.query)[0]);
+            let count = Number(Object.values(req.query)[1]);
+            let total = shops.length;
+
+            res.status(200).send({
+                start,
+                count,
+                total,
+                shops
+            });
         });
     }
 
@@ -37,9 +48,9 @@ export class ShopController {
         Shop.findById(
             { _id: req.originalUrl.slice(23)}, 
             (err, shop) => {
-            if (err) {
-                res.send(err);
-            }
+                if (err) {
+                    res.send(err);
+                }
             res.json(shop);
         });
     }
@@ -50,9 +61,9 @@ export class ShopController {
             { _id: req.originalUrl.slice(23)}, 
             req.body, { new: true },
             (err, shop) => {
-            if (err) {
-                res.send(err);
-            }
+                if (err) {
+                    res.send(err);
+                }
             res.json(shop);
         });
     }
@@ -63,9 +74,9 @@ export class ShopController {
             { _id: req.originalUrl.slice(23)}, 
             req.body, { new: true },
             (err, shop) => {
-            if (err) {
-                res.send(err);
-            }
+                if (err) {
+                    res.send(err);
+                }
             res.json(shop);
         });
     }
@@ -78,7 +89,7 @@ export class ShopController {
                 if (err) {
                     res.send(err);
                 }
-                res.json({ message: 'Successfully deleted shop!' });
+                res.json({ message: 'OK' });
             });
     }
 

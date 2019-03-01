@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { ProductController } from '../controllers/ProductController';
+import { request } from 'http';
 
 type Request = express.Request;
 type Response = express.Response;
@@ -36,9 +37,10 @@ export default class {
             .put('/:id', this.productController.updateProduct)
 
             // update only one field of a specific product
-            .put('/:id', this.productController.partialUpdateProduct)
+            .patch('/:id', this.productController.partialUpdateProduct)
             
             // delete a specific product
-            .delete(':id', this.productController.deleteProduct)
+            .delete('/:id', this.productController.deleteProduct)
     }
+
 }
