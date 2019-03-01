@@ -37,9 +37,9 @@ export default class {
             .put('/:id', this.shopController.updateShop)
       
             // update only one field of a specific shop
-            .put('/:id', this.shopController.partialUpdateShop)
+            .patch('/:id', this.shopController.partialUpdateShop)
             
             // delete a specific shop
-            .delete(':id', this.shopController.deleteShop)
+            .delete('/:id', this.shopController.deleteShop)
     }
 }
