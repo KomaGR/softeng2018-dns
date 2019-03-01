@@ -27,9 +27,7 @@
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav ml-auto">
-                          
-                            
+                            <ul class="navbar-nav ml-auto">                            
                                 <% if ( token ) { %>
                                     <a class="nav-link nav-link-ltr" href="/logout">Αποσυνδεση</a>
                                 <% } else{ %>
@@ -47,48 +45,10 @@
             </header>
 </div>
 
-<!-- Modal -->
-<div id="login_modal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">This is the login page</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <%- include login.ejs %>
-                    <p>Some text in the modal.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-    
-        </div>
-    </div>
+<%- include login.ejs %>
 
+<%- include sign_up.ejs %>
 
-
-
-<!-- Modal -->
-<div id="sign_up_modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">This is the sign up page</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <%- include sign_up.ejs %>
-                <p>Some text in the modal.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
 
 
          <!-- Optional JavaScript -->

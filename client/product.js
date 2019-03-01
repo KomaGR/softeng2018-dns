@@ -81,8 +81,11 @@ function productGetInfo(req, res) {
         console.log('statuscode', httpsres.statusCode);
         httpsres.on('data', (d) => {
             var mydata = JSON.parse(d);
+            const { auth_token } = req.session;
             res.render("product_info.ejs", {
-                product: mydata
+                product: mydata,
+                token: auth_token
+
             });
         });
     });
