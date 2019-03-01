@@ -36,6 +36,11 @@ function routes(app) {
       
      })
 
+     .post("/map", function(req,res){
+        var data = req.body;
+        console.log(data);
+     })
+
      .get("/search_results", function (req, res) {
         var searchTerm = req.query.search_term;
         const options = {
