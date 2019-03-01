@@ -1,41 +1,55 @@
-<h1>this is information about a product</h1>
 
-<p> ID: <%= product.id %> </p>
-<p> Name: <%= product.name %> </p>
-<p> Description: <%= product.description %> </p>
-<p> Category: <%= product.category %> </p>
+<html>
+  <head>
+    <% include navbar.ejs %>
+  </head>
 
-<p> Tags: <% for(var tag in product.tags){ %>
-    <%= product.tags[tag] %>
+
+  <body>
+    <% include search_bar.ejs %>
+
+    <h2 class=" display-4">this is information about a product</h2>
+
+    <p> ID: <%= product.id %> </p>
+    <p> Name: <%= product.name %> </p>
+    <p> Description: <%= product.description %> </p>
+    <p> Category: <%= product.category %> </p>
+
+    <p> Tags: <% for(var tag in product.tags){ %>
+        <%= product.tags[tag] %>
+        <% } %>
+    </p>
+
+    <p> Withdrawn: <%= product.withdrawn %> </p>
+
+    <p> ExtraData: <% for (var key in product.extraData) { %>
+        <%= key + ' ' + product.extraData[key] %>
     <% } %>
-</p>
 
-<p> Withdrawn: <%= product.withdrawn %> </p>
+    <form action="/product_info" method="PUT">
+      <div class="form-group">
+        <label for="productname">Product name</label>
+        <input type="text" placeholder="Enter product name" name="productname" value="<%=product.name%>"required>
+      </div>
+        <div class="form-group">
+        <label for="productdescription">Product Description</label>
+        <input type="text" placeholder="Enter product description" name="productdescription" value="<%=product.description%>"required>
+      </div>
+      <div class="form-group">
+        <label for="productcategory">Product Category</label>
+        <input type="text" placeholder="Enter product category" name="productcategory" value="<%=product.category%>"required>
+      </div>
+      <div class="form-group">
+        <label for="producttags">Product tags</label>
+        <input type="text" placeholder="Enter product tags seperated with comma" name="producttags" value="<%=product.tags%>"required>
+      </div>
+      <button type="submit" name='productID' value="<%=product.id%>">Submit</button>
+    </form>
 
-<p> ExtraData: <% for (var key in product.extraData) { %>
-    <%= key + ' ' + product.extraData[key] %>
-<% } %>
+    <form action='/product_info' method='DELETE'>
+        <button type="submit" name='productID' value="<%=product.id%>">Delete product</button>
+    </form>
 
-<form action="/product_info" method="PUT">
-  <div class="form-group">
-    <label for="productname">Product name</label>
-    <input type="text" placeholder="Enter product name" name="productname" value="<%=product.name%>"required>
-  </div>
-    <div class="form-group">
-    <label for="productdescription">Product Description</label>
-    <input type="text" placeholder="Enter product description" name="productdescription" value="<%=product.description%>"required>
-  </div>
-  <div class="form-group">
-    <label for="productcategory">Product Category</label>
-    <input type="text" placeholder="Enter product category" name="productcategory" value="<%=product.category%>"required>
-  </div>
-  <div class="form-group">
-    <label for="producttags">Product tags</label>
-    <input type="text" placeholder="Enter product tags seperated with comma" name="producttags" value="<%=product.tags%>"required>
-  </div>
-  <button type="submit" name='productID' value="<%=product.id%>">Submit</button>
-</form>
 
-<form action='/product_info' method='DELETE'>
-    <button type="submit" name='productID' value="<%=product.id%>">Delete product</button>
-</form>
+  </body>
+</html>

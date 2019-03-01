@@ -1,3 +1,8 @@
+.skroutz-img{
+  width:30%;
+  height: 30%;}
+
+
 
 .nav-link {
     font-weight: normal;
@@ -11,6 +16,8 @@
     position: relative;
     opacity: 0.8;
   }
+
+
   
   .nav-link:hover {
     opacity: 1;

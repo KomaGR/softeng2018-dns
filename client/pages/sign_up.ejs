@@ -1,17 +1,39 @@
+<div id="sign_up_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">This is the sign up page</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="/sign_up" method="POST">
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" placeholder="Enter your email" name="s_email" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="Username">Username</label>
+                    <input type="text" class="form-control" placeholder="Enter your username" name="s_username" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="text" class="form-control" placeholder="Enter your password" name="s_password" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
 
-  <form action="/sign_up" method="POST">
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" class="form-control" placeholder="Enter your email" name="s_email" required>
     </div>
-    <div class="form-group">
-      <label for="Username">Username</label>
-      <input type="text" class="form-control" placeholder="Enter your username" name="s_username" required>
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="text" class="form-control" placeholder="Enter your password" name="s_password" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+</div>
+  
+  
+  
+  
+  
+  
  

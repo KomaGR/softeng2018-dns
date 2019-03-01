@@ -10,31 +10,31 @@
         <div class="container-md animated fadeIn ">
                 
                 <div class="jumbotron ">
-                    <h1 class="display- ">Καλώς ήρθατε στο DNS</h1>
-                    
-
+                    <h1 class="display-3">Καλώς ήρθατε στο DNS</h1>
                     <p class="lead">Ό,τι χρειαστείς, έχουμε την πλάτη σου! </p>
-
-                    <img src="images/skroutz.png " class=" img-fluid"></img>
-                    
+                    <div class="row">
+                        <div class="col-md-4 col-2"></div>
+                        <div class="col-md-4 col-8">
+                            <img src="images/skroutz.png " class=" img-fluid  "></img>
+                        </div>
+                        <div class="col-md-4 col-2"></div>
+                    </div>
                     <!-- <p class="lead mb-lg-5">
                         <a class="btn btn-primary btn-sm" href="/about" role="button">Learn more</a>
                     </p> -->
-                    <div class="row justify-content-center">
-                        <div class="col col-lg-8  mt-5 mb-5 align-items-center">
-                                <form action="/search_results" method="GET">
-                                    <div class="input-group">
-                                        <h3 for="Search"><i class="fas fa-search mr-3 "></i></h3>
-                                        <input type="text" class="form-control mr-2" placeholder="π.χ. Pitatakia" name="search_term">
-                                        <button type="submit" class="btn btn-outline-success">Αναζήτηση</button>
-                                    </div>
-                                </form>
-                        </div>
-                    </div>
+                    <% include search_bar.ejs %>
 
                     <div class="row mt-5 mb-5 justify-content-center">
                             <!-- <h2 class=" mr-3  ">Καταχώρηση νέου προϊόντος</h2> -->
+                            <% if ( token ) { %>
+
                             <a type="btn" class="btn btn-primary ml-0 display-4" href="/submit_product"> Καταχώρηση νέου προϊόντος </a>
+                            <% } else{ %>
+                            <a  type="btn" class="btn btn-primary ml-0 display-4 text-white "  data-toggle="modal" data-target="#login_modal" >Καταχώρηση νέου προϊόντος</a>
+
+
+                                <% } %>
+
                         </div>
 
                     <% include map.ejs%>
@@ -42,6 +42,7 @@
 
                 </div>
 
+                <%- include login.ejs %>
 
             <%- include footer.ejs %>
 
