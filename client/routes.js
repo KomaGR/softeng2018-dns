@@ -35,25 +35,12 @@ function routes(app) {
          });      
       
      })
-     .get("/about", function (req, res) {
-        console.log(req.session);
-        const { auth_token } = req.session;
-        console.log(auth_token);
-        res.render("about.ejs", {
-            token: auth_token
-        });      
-     
-    })
-    .get("/login", function (req, res) {
-        console.log(req.session);
-        const { auth_token } = req.session;
-        console.log(auth_token);
-        res.render("login.ejs", {
-            token: auth_token
-        });      
-     
-    })
-     
+
+     .post("/map", function(req,res){
+        var data = req.body;
+        console.log(data);
+     })
+
      .get("/search_results", function (req, res) {
         var searchTerm = req.query.search_term;
         const options = {
@@ -87,7 +74,11 @@ function routes(app) {
     })
     
     .get("/about", function (req, res) {
-        res.render("about.ejs");
+        const { auth_token } = req.session;
+        res.render("about.ejs", {
+            token: auth_token  
+        });      
+         
     })
     
     .get("/login", redirectHome, function (req, res) {
@@ -105,7 +96,11 @@ function routes(app) {
     .get("/logout", redirectLogin, auth.logout)
     
     .get("/submit_product", redirectLogin, function (req, res) {
-        res.render("submit_product.ejs");
+        const { auth_token } = req.session;
+
+        res.render("submit_product.ejs", {
+            token: auth_token
+        });
     })
     
     .post("/submit_product", redirectLogin, product.submit)
