@@ -43,6 +43,8 @@ function routes(app) {
 
      .get("/search_results", function (req, res) {
         var searchTerm = req.query.search_term;
+        
+        
         const options = {
             hostname: 'localhost',
             port: 8765,
@@ -58,8 +60,11 @@ function routes(app) {
                     return (entry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         entry.category.toLowerCase().includes(searchTerm.toLowerCase()));
                 });
+                const { auth_token } = req.session;
                 res.render("search_results.ejs", {
-                    myproducts: myproducts
+                    myproducts: myproducts,
+                    token: auth_token  
+
                 });
             });
         });
@@ -67,10 +72,14 @@ function routes(app) {
             console.error(e);
         });
         httpsreq.end();
+
+       
+
     })
     
     .post("search_results", function (req, res) {
         res.redirect('/product_info');
+        
     })
     
     .get("/about", function (req, res) {
@@ -82,7 +91,9 @@ function routes(app) {
     })
     
     .get("/login", redirectHome, function (req, res) {
-        res.render("login.ejs");
+        res.redirect('/');
+
+        // res.render("login.ejs");
     })
     
     .post("/login", redirectHome, auth.login)
@@ -95,7 +106,7 @@ function routes(app) {
     
     .get("/logout", redirectLogin, auth.logout)
     
-    .get("/submit_product", redirectLogin, function (req, res) {
+    .get("/submit_product",  function (req, res) {
         const { auth_token } = req.session;
 
         res.render("submit_product.ejs", {
