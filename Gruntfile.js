@@ -30,5 +30,5 @@ module.exports = function(grunt) {
         }
     });
     grunt.registerTask('build_dev', ["ts:server"]);
-    grunt.registerTask('default', ['build_dev', 'watch']);
+    grunt.registerTask('default', ['build_dev', 'watch:tsserver']);
 };
