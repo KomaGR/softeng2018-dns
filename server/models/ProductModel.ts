@@ -3,9 +3,6 @@ import * as mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export const ProductSchema = new Schema({
-    id: {
-        type: String
-    },
     name: {
         type: String,
         required: 'Enter name'
@@ -19,7 +16,8 @@ export const ProductSchema = new Schema({
         required: 'Enter category'
     },
     withdrawn: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     tags: [{
         type: String
@@ -29,3 +27,11 @@ export const ProductSchema = new Schema({
         default: Date.now
     }
 });
+
+ProductSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) { delete ret._id , delete ret.dateCreated }
+});
+
+module.exports = mongoose.model('Product', ProductSchema);

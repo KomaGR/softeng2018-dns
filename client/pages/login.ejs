@@ -5,24 +5,21 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">This is the login page</h4>
+                <h4 class="modal-title">Συνδέσου</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <form action="/login" method="POST">
                   <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control" placeholder="Enter your username" name="l_username" required>
+                    <label for="username" class="lead">Όνομα χρήστη</label>
+                    <input type="text" class="form-control lead" placeholder="π.χ. zonk" name="l_username" required>
                   </div>
                   <div class="form-group">
-                    <label for="password">Search</label>
-                    <input type="text" class="form-control" placeholder="Enter your password" name="l_password" required>
+                    <label for="password " class="lead">Κωδικός πρόσβασης</label>
+                    <input type="text" class="form-control lead" placeholder="let it be the right one" name="l_password" required>
                   </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </form>                <p>Soame text in the modal.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Σύνδεση</button>
+                </form>
             </div>
         </div>
 

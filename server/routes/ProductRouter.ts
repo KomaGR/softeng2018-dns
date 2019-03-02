@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { ProductController } from '../controllers/ProductController';
+import { request } from 'http';
 
 type Request = express.Request;
 type Response = express.Response;
@@ -18,23 +19,28 @@ export default class {
         this.config();
     }
 
-    // WARNING: DO NOT HANDLE REQUESTS HERE! DISPATCH THEM
-    //          TO APPROPRIATE FILES.
+    // requests not handled here
+    // dispatched to appropriate files
+
     private config(): void {
         this.router
-            // Get all products
-            .get('/', this.productController.getMockProduct)
+            // get all products
+            .get('/', this.productController.getProduct)
 
-            //Create a new product
+            // create a new product
             .post('/', this.productController.addNewProduct)
 
-            // get a specific contact
-            .get('/:id', this.productController.getMockProductWithID)
+            // get a specific product
+            .get('/:id', this.productController.getProductWithID)
 
-            // update a specific contact
+            // update a specific product
             .put('/:id', this.productController.updateProduct)
 
-            .delete(':id', this.productController.updateProduct)  
-        
+            // update only one field of a specific product
+            .patch('/:id', this.productController.partialUpdateProduct)
+            
+            // delete a specific product
+            .delete('/:id', this.productController.deleteProduct)
     }
+
 }

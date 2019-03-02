@@ -3,9 +3,6 @@ import * as mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export const ShopSchema = new Schema({
-    id: {
-        type: String
-    },
     name: {
         type: String,
         required: 'Enter name'
@@ -26,10 +23,20 @@ export const ShopSchema = new Schema({
         type: String
     }],
     withdrawn: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     dateCreated: {
         type: Date,
         default: Date.now
     }
 });
+
+ShopSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) { delete ret._id, delete ret.dateCreated }
+});
+
+
+module.exports = mongoose.model('Shop', ShopSchema);
