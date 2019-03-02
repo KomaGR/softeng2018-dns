@@ -21,10 +21,14 @@ export default function (
         console.log("Hit on /observatory/api");        
         res.status(400).send({ message: "Bad Request" });
     })
+
     .post('/login', (req: Request, res: Response) => {
         console.log("Hit on /observatory/api/login");
         const username = req.body.username;
         const password = req.body.password;
+
+        console.log(`Login: ${username} ${password}`);
+        
 
         if (username && password) {
             user_controller.loginUser(req, res);
@@ -52,7 +56,7 @@ export default function (
         const username = req.body.username;
         const password = req.body.password;
 
-        console.log(`${email} ${username} ${password}`);
+        console.log(`#Back# Signup: ${email} ${username} ${password}`);
 
         if (email && username && password) {
             user_controller.addNewUser(req, res);

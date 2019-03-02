@@ -38,7 +38,7 @@ export default class UserController {
             
             console.log(user[0]);
             
-            const auth_token = session_manager.NewSession(user[0]);
+            const auth_token:string = session_manager.NewSession(user[0]);
 
             res.status(200).send({token: auth_token});
         });
