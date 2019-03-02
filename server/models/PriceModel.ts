@@ -2,7 +2,6 @@ import * as mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-
 export const PriceSchema = new Schema({
     price: {
         type: Number,
@@ -16,9 +15,9 @@ export const PriceSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    PriceId: {
+    productId: {
         type: String,
-        required: 'Enter PriceId'
+        required: 'Enter productId'
     },
     shopId: {
         type: String,
