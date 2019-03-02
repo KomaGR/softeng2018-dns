@@ -12,8 +12,8 @@ export interface User extends mongoose.Document {
 
 export const UserSchema = new Schema({
     email: {
-	type: String,
-	required: 'Enter email'
+	    type: String,
+	    required: 'Enter email'
     },
     username: {
         type: String,
@@ -25,8 +25,9 @@ export const UserSchema = new Schema({
         required: 'Enter password'
     },
     role: {
-	type: String,
-    default: 'user',
+	    type: String,
+	    default: 'user'
+
     },
     dateCreated: {
         type: Date,

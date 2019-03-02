@@ -9,10 +9,12 @@ export const PriceSchema = new Schema({
     },
     dateFrom: {
         type: Date,
-        default: Date.now
+        required: 'Enter date from',
+        default: Date.now,
     },
     dateTo: {
         type: Date,
+        required: 'Enter date to',
         default: Date.now
     },
     productId: {

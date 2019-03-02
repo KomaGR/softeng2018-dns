@@ -23,7 +23,8 @@ export const ShopSchema = new Schema({
         type: String
     }],
     withdrawn: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     dateCreated: {
         type: Date,
