@@ -1,6 +1,8 @@
 import * as mongoose from 'mongoose';
 import * as ProductModel from '../models/ProductModel';
 import * as express from 'express';
+import { Price } from './PriceController';
+
 
 type Request = express.Request;
 type Response = express.Response;
@@ -25,14 +27,15 @@ export class ProductController {
 
     // get all products (according to query) from database
     public getProduct(req: Request, res: Response) {
-        Product.find({}, (err, products) => {
+        Product.find({},  (err, productlist) => {
             if (err) {
                 res.send(err);
             }
 
             let start = Number(Object.values(req.query)[0]);
             let count = Number(Object.values(req.query)[1]);
-            let total = products.length;
+            let total = productlist.length;
+            let products = productlist.slice(start, (start+count))
 
             res.status(200).send({
                 start,
@@ -89,14 +92,20 @@ export class ProductController {
 
     // delete a specific product from database
     public deleteProduct(req: Request, res: Response) {
-        Product.remove({ _id: req.originalUrl.slice(26)},
+        Product.deleteOne({ _id: req.originalUrl.slice(26)},
             (err) => {
                 if (err) {
                     res.send(err);
                 }
-            res.status(200).send(
-                {message : "OK"}
-            );
+        });
+        Price.deleteMany({ productId: req.originalUrl.slice(26)},
+            (err) => {
+                if (err) {
+                    res.send(err);
+                }
+                res.status(200).send(
+                    {message : "OK"}
+                );
         });
     }
 }
