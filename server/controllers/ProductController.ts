@@ -27,11 +27,39 @@ export class ProductController {
 
     // get all products (according to query) from database
     public getProduct(req: Request, res: Response) {
-        Product.find({},  (err, productlist) => {
+       
+        /* define the condition that will filter our
+           products and return those with the status
+           the user requested */
+        let condition = { withdrawn: false };
+
+        switch( String(Object.values(req.query)[2]) ) { 
+            case 'ALL': { 
+                condition = undefined;
+                break; 
+            } 
+            case 'WITHDRAWN': { 
+                condition = { withdrawn: true };
+                break; 
+            } 
+            case 'ACTIVE': { 
+                condition = { withdrawn: false};
+                break; 
+            }
+            default: { 
+                condition = { withdrawn: false};
+                break; 
+            } 
+        } 
+           
+        Product.find( condition,
+        (err, productlist) => {
             if (err) {
                 res.send(err);
             }
 
+            /* determine the total number of products and the
+               list products returned */
             let start = Number(Object.values(req.query)[0]);
             let count = Number(Object.values(req.query)[1]);
             let total = productlist.length;
@@ -51,11 +79,11 @@ export class ProductController {
     public getProductWithID(req: Request, res: Response) {
                 
         Product.findById(
-            { _id: req.originalUrl.slice(26)}, 
-            (err, product) => {
-                if (err) {
-                    res.send(err);
-                }
+        { _id: req.originalUrl.slice(26)}, 
+        (err, product) => {
+            if (err) {
+                res.send(err);
+            }
             res.json(product);
         });
     }
@@ -63,12 +91,12 @@ export class ProductController {
     // update a specific product on database
     public updateProduct(req: Request, res: Response) {
         Product.findOneAndUpdate(
-            { _id: req.originalUrl.slice(26)}, 
-            req.body, { new: true },
-            (err, product) => {
-                if (err) {
-                    res.send(err);
-                }
+        { _id: req.originalUrl.slice(26)}, 
+        req.body, { new: true },
+        (err, product) => {
+            if (err) {
+                res.send(err);
+            }
             res.json(product);
         });
     }
@@ -76,36 +104,42 @@ export class ProductController {
     // update only one field of a specific product on database
     public partialUpdateProduct(req: Request, res: Response) {
 
-        let sad = Object.keys(req.body)[0];
-        let sader = Object.values(req.body)[0];
+        /* get key and value for the field that
+           should be updated */
+        let key = Object.keys(req.body)[0];
+        let value = Object.values(req.body)[0];
 
-        Product.updateOne(
-            { _id: req.originalUrl.slice(26)}, 
-            { [sad] : sader }, { new: true },
-            (err, product) => {
-                if (err) {
-                    res.send(err);
-                }
+        Product.findByIdAndUpdate(
+        { _id: req.originalUrl.slice(26)}, 
+        { [key] : value }, { new: true },
+        (err, product) => {
+            if (err) {
+                res.send(err);
+            }
             res.json(product);
         });
     }
 
     // delete a specific product from database
     public deleteProduct(req: Request, res: Response) {
-        Product.deleteOne({ _id: req.originalUrl.slice(26)},
-            (err) => {
-                if (err) {
-                    res.send(err);
-                }
+        Product.deleteOne(
+        { _id: req.originalUrl.slice(26)},
+        (err) => {
+            if (err) {
+                res.send(err);
+            }
         });
+
+        /* cascade on delete (delete all prices with the
+           specific product id) */
         Price.deleteMany({ productId: req.originalUrl.slice(26)},
-            (err) => {
-                if (err) {
-                    res.send(err);
-                }
-                res.status(200).send(
-                    {message : "OK"}
-                );
+        (err) => {
+            if (err) {
+                res.send(err);
+            }
+            res.status(200).send(
+                {message : "OK"}
+            );
         });
     }
 }
