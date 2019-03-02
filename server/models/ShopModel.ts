@@ -31,4 +31,8 @@ export const ShopSchema = new Schema({
     }
 });
 
-let Shop = module.exports = mongoose.model('Shop', ShopSchema);
+ShopSchema.set('toJSON', {
+    virtuals: true
+});
+
+module.exports = mongoose.model('Shop', ShopSchema);
