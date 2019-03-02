@@ -1,29 +1,66 @@
-<h1>First select the shop that has the product</h1>
 
-<h2>This is where the map goes</h2>
 
-<h2> Else, create a new shop: </h2>
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <!-- <div class="animated infinate fadeInDown"> -->
+            <% include navbar.ejs %>
+        <!-- </div> -->
 
-<form action="/submit_shop" method="POST">
-  <div class="form-group">
-    <label for="shopname">Shop name</label>
-    <input type="text" placeholder="Enter shop name" name="shopname" required>
-  </div>
-  <div class="form-group">
-    <label for="shopaddress">Shop address</label>
-    <input type="text" placeholder="Enter shop address" name="shopaddress" required>
-  </div>
-  <div class="form-group">
-    <label for="shoplng">Shop Longitude</label>
-    <input type="text" placeholder="Enter shop Longitude" name="shoplng" value="users longitude" required>
-  </div>
-  <div class="form-group">
-    <label for="shopLat">Shop Latitude</label>
-    <input type="text" placeholder="Enter shop Latitude" name="shoplat" value="users latitude" required>
-  </div>
-  <div class="form-group">
-    <label for="shoptags">Shop Tags</label>
-    <input type="text" placeholder="Enter shop tags seperated with comma" name="shoptags" required>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    </head>
+
+    <body>
+<% include search_bar.ejs %>
+
+
+
+
+
+
+<h1 class="display-4 mb-0 mt-3 ml-2">Επιλογή ήδη υπάρχοντος καταστήματος </h1>
+
+<% include map.ejs %>
+
+<h1 class="display-4 mb-0 mt-3 ml-2">Δημιουργία νέου καταστήματος </h1>
+
+
+<div class="p-3">
+<div class="card p-5 mb-0">
+    <form action="/submit_shop" method="POST">
+      <div class="form-group">
+        <label for="shopname">Shop name</label>
+        <input type="text" placeholder="Enter shop name" name="shopname" required>
+      </div>
+      <div class="form-group">
+        <label for="shopaddress">Shop address</label>
+        <input type="text" placeholder="Enter shop address" name="shopaddress" required>
+      </div>
+      <div class="form-group">
+        <label for="shoplng">Shop Longitude</label>
+        <input type="text" placeholder="Enter shop Longitude" name="shoplng" value="users longitude" required>
+      </div>
+      <div class="form-group">
+        <label for="shopLat">Shop Latitude</label>
+        <input type="text" placeholder="Enter shop Latitude" name="shoplat" value="users latitude" required>
+      </div>
+      <div class="form-group">
+        <label for="shoptags">Shop Tags</label>
+        <input type="text" placeholder="Enter shop tags seperated with comma" name="shoptags" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    
+</div>
+</div>
+</body>
+<% include footer.ejs %>
+
+</html>
+
+
+
+
+
+
+
+
