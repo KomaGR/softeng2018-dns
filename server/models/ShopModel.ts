@@ -32,7 +32,10 @@ export const ShopSchema = new Schema({
 });
 
 ShopSchema.set('toJSON', {
-    virtuals: true
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) { delete ret._id, delete ret.dateCreated }
 });
+
 
 module.exports = mongoose.model('Shop', ShopSchema);
