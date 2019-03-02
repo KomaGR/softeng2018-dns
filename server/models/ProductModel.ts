@@ -28,7 +28,9 @@ export const ProductSchema = new Schema({
 });
 
 ProductSchema.set('toJSON', {
-    virtuals: true
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) { delete ret._id , delete ret.dateCreated }
 });
 
 module.exports = mongoose.model('Product', ProductSchema);
