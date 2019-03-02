@@ -6,5 +6,10 @@ export default class SessionManager {
         
     }
 
+    public NewSession(user): string {
+        user.
+        return "yes";
+    }
+
     
 }
