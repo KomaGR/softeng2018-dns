@@ -97,15 +97,15 @@ export class ProductController {
                 if (err) {
                     res.send(err);
                 }
-            Price.deleteMany({ productId: req.originalUrl.slice(26)},
+        });
+        Price.deleteMany({ productId: req.originalUrl.slice(26)},
             (err) => {
                 if (err) {
                     res.send(err);
                 }
-            });
-            res.status(200).send(
-                {message : "OK"}
-            );
+                res.status(200).send(
+                    {message : "OK"}
+                );
         });
     }
 }
