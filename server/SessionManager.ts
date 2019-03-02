@@ -16,15 +16,18 @@ export default class SessionManager {
         this.session_list = {};
     }
 
-    public NewSession(user: User): string {
+    public NewSession(user): string {
         let rand_tok = uuidv4();
+
+        // console.log(`New Session For: ${user.username} ${user.role}`);
+
         let session_data: Data = {
             token: rand_tok, 
             username: user.username, 
             role: user.role
         };
 
-        console.log(rand_tok);
+        console.log(`Session: ${session_data.token} ${session_data.username} ${session_data.role}`);
         
         this.session_list[rand_tok] = session_data;
 
@@ -32,15 +35,22 @@ export default class SessionManager {
     }
 
     public CheckSession(tok: string) {
+        console.log(`Looking for ${tok}`);
+        
         let check: Data = this.session_list[tok];
+
         if (check) {
-            return check;
-        } else {
-            return 'none'
+            console.log(`Belongs to ${check.username}`);
+            
         }
+        return check;
     }
 
     public EndSession(tok: string) {
+        const end_sessions = this.session_list[tok];
+        if (end_sessions) {
+            console.log(`Logging Out: ${end_sessions.username}`);            
+        }
         return delete this.session_list[tok];
     }
 
