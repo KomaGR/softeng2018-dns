@@ -1,4 +1,4 @@
-const https = require('https');
+const request = require('request');
 const session = require('express-session');
 
 const TWO_HOURS = 1000 * 60 * 60 * 2;
@@ -13,6 +13,7 @@ exports.session = session({
     resave: false,
     saveUninitialized: false,
     secret: SESSION_SECRET,
+    auth_token: undefined,
     cookie: {
         maxAge: SESSION_LIFETIME,
         sameSite: true,
@@ -23,101 +24,78 @@ exports.session = session({
 function loginRoute(req, res) {
 
     const options = {
-        hostname: 'localhost',
-        port: 8765,
-        path: '/observatory/api/login',
+        url: 'https://localhost:8765/observatory/api/login',
         rejectUnauthorized: false,
-        method: 'POST',
-        json: {
-            "username": req.body.l_username,
-            "password": req.body.l_password
+        form: {
+            username: req.body.username,
+            password: req.body.password
         }
     };
 
-    const httpsreq = https.request(options, (httpsres) => {
-        console.log('statuscode', httpsres.statusCode);
-        httpsres.on('data', (d) => {
-            var mydata = JSON.parse(d);
-            if (mydata.token == 'deadbeef') {
-                req.session.auth_token = mydata.token;
-                return res.redirect('/');
-            }
-        });
-    });
+    console.log("#Front# To Login" + req.body.username + ' ' + req.body.password);
 
-    httpsreq.on('error', (e) => {
-        console.error(e);
-    });
-
-    httpsreq.end();
+    request.post(options, (err, httpsResponse, body) => {
+        if (err) {
+            res.send(err);
+        }
+        console.log('#Front# statuscode:', httpsResponse.statusCode);
+        if (httpsResponse.statusCode == 200) {
+            const jsonBody = JSON.parse(body);
+            console.log('#Front# token: ' + jsonBody.token);
+            req.session.auth_token = jsonBody.token;
+            res.status(200).redirect('/');
+        }
+    })
 }
 
 function logoutRoute(req, res) {
-
     const options = {
-        hostname: 'localhost',
-        port: 8765,
-        path: '/observatory/api/logout',
+        url: 'https://localhost:8765/observatory/api/logout',
         rejectUnauthorized: false,
-        method: 'POST'
+        headers: {
+            'X-OBSERVATORY-AUTH': req.session.auth_token
+        }
     };
 
-    const httpsreq = https.request(options, (httpsres) => {
-        console.log('statuscode', httpsres.statusCode);
-        httpsres.on('data', (d) => {
-            var mydata = JSON.parse(d);
-            if (mydata.message == 'OK') {
-                req.session.destroy(err => {
-                    if (err) {
-                        return res.redirect('/');
-                    }
-                    res.clearCookie(SESSION_ID);
-                    res.redirect('/');
-                })
-            } else {
-            }
-        });
-    });
-    
-    httpsreq.on('error', (e) => {
-        console.error(e);
-    });
+    console.log("#Front# To Logout: " + req.session.auth_token);
 
-    httpsreq.end();
+    request.post(options, (err, httpsResponse, body) => {
+        if (err) {
+            res.send(err);
+        }
+        console.log('#Front# statuscode:', httpsResponse.statusCode);
+        if (httpsResponse.statusCode == 200) {
+            const jsonBody = JSON.parse(body);
+            req.session.auth_token = undefined;
+            res.status(200).redirect('/');
+        }
+    });
 }
 
 function signupRoute(req, res) {
 
     const options = {
-        hostname: 'localhost',
-        port: 8765,
-        path: '/observatory/api/signup',
+        url: 'https://localhost:8765/observatory/api/signup',
         rejectUnauthorized: false,
-        method: 'POST',
-        json: {
-            "email": req.body.s_email,
-            "username": req.body.s_username,
-            "password": req.body.s_password
+        form: {
+            email: req.body.email,
+            username: req.body.username,
+            password: req.body.password
         }
     };
-
-    const httpsreq = https.request(options, (httpsres) => {
-        console.log('statuscode', httpsres.statusCode);
-        httpsres.on('data', (d) => {
-            var mydata = JSON.parse(d);
-            if (mydata.message == 'OK') {
-                res.redirect('/login');
-            } else {
-
-            }
-        });
-    });
-
-    httpsreq.on('error', (e) => {
-        console.error(e);
-    });
     
-    httpsreq.end();
+    console.log("#Front# To Signup: " + req.body.username + ' ' + req.body.email + ' ' + req.body.password);
+
+    request.post(options, (err, httpsResponse, body) => {
+        if (err) {
+            res.send(err);
+        }
+        console.log('statuscode', httpsResponse.statusCode);
+        if (httpsResponse.statusCode == 201) {
+            console.log(body.message);
+            res.status(200).redirect('/');
+        }
+    });
 }
 
 exports.login = loginRoute;
