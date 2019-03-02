@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import * as PriceModel from '../models/PriceModel';
 import * as express from 'express';
 let DateDiff = require('date-diff');
-let nextDay = require('next-day');
+
 
 type Request = express.Request;
 type Response = express.Response;
