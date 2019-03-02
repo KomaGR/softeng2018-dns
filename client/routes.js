@@ -8,7 +8,7 @@ const shop = require('./shop');
 
 const redirectLogin = (req, res, next) => {
     if (!req.session.auth_token) {
-        res.redirect('/login');
+        res.redirect('/');
     } else {
         next();
     }
@@ -109,7 +109,7 @@ function routes(app) {
     
     .get("/logout", redirectLogin, auth.logout)
     
-    .get("/submit_product",  function (req, res) {
+    .get("/submit_product", redirectLogin, function (req, res) {
         const { auth_token } = req.session;
 
         res.render("submit_product.ejs", {
@@ -126,7 +126,11 @@ function routes(app) {
     .delete("/product_info", product.deleteInfo)
     
     .get("/submit_shop", redirectLogin, function (req, res) {
-        res.render("map.ejs");
+        const { auth_token } = req.session;
+
+        res.render("submit_shop.ejs", {
+            token: auth_token
+        });
     })
     
     .post("/submit_shop", redirectLogin, shop.submit);

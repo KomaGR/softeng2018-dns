@@ -2,19 +2,15 @@ import * as mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-
 export const PriceSchema = new Schema({
     price: {
         type: Number,
         required: 'Enter price'
     },
-    dateFrom: {
+    date: {
         type: Date,
-        default: Date.now
-    },
-    dateTo: {
-        type: Date,
-        default: Date.now
+        required: 'Enter date',
+        default: Date.now,
     },
     productId: {
         type: String,
@@ -29,3 +25,11 @@ export const PriceSchema = new Schema({
         default: Date.now
     }
 });
+
+PriceSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) { delete ret._id, delete ret.dateCreated }
+});
+
+module.exports = mongoose.model('Price', PriceSchema);
