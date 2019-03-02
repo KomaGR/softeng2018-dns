@@ -17,7 +17,8 @@ export const UserSchema = new Schema({
     },
     username: {
         type: String,
-        required: 'Enter username'
+        required: 'Enter username',
+        index: true
     },
     password: {
         type: String,
