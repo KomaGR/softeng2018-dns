@@ -29,4 +29,8 @@ export const PriceSchema = new Schema({
     }
 });
 
-let Price = module.exports = mongoose.model('Price', PriceSchema);
+PriceSchema.set('toJSON', {
+    virtuals: true
+});
+
+module.exports = mongoose.model('Price', PriceSchema);

@@ -27,4 +27,8 @@ export const ProductSchema = new Schema({
     }
 });
 
-let Product = module.exports = mongoose.model('Product', ProductSchema);
+ProductSchema.set('toJSON', {
+    virtuals: true
+});
+
+module.exports = mongoose.model('Product', ProductSchema);
