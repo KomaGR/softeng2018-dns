@@ -33,7 +33,7 @@ export class PriceController {
 
       public getPriceWithID(req: Request, res: Response) {
         Price.findById(
-            { id: req.params.priceId },
+            { _id: req.params.priceId },
             (err, price) => {
                 if (err) {
                     res.send(err);
