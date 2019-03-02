@@ -8,47 +8,39 @@
   <body>
     <% include search_bar.ejs %>
 
-    <h2 class=" display-4">this is information about a product</h2>
 
-    <p> ID: <%= product.id %> </p>
-    <p> Name: <%= product.name %> </p>
-    <p> Description: <%= product.description %> </p>
-    <p> Category: <%= product.category %> </p>
+    <div class="card p-2 m-3">
+        <p class="display-4 ml-2"> Name: <%= product.name %> </p>
 
-    <p> Tags: <% for(var tag in product.tags){ %>
-        <%= product.tags[tag] %>
+      <!-- <h2 class=" display-4">this is information about a product</h2> -->
+      <ul>
+        <!-- <p > ID: <%= product.id %> </p> -->
+        <p class="lead"> Description: <%= product.description %> </p>
+        <p class="lead"> Category: <%= product.category %> </p>
+
+        <p class="lead"> Tags: <% for(var tag in product.tags){ %>
+            <%= product.tags[tag] %>
+            <% } %>
+        </p>
+
+        <p class="lead"> Withdrawn: <%= product.withdrawn %> </p>
+
+        <p class="lead"> ExtraData: <% for (var key in product.extraData) { %>
+            <%= key + ' ' + product.extraData[key] %>
         <% } %>
-    </p>
+        </p>
+      </ul>
+  </div>
+  <% if ( token ) { %>
+    <a class="btn btn-primary text-white mx-5 mb-3 align-self-md-auto align-self-center"  data-toggle="modal" data-target="#edit_modal" >Edit</a>
+    <% include edit_product.ejs %>
+  <% } %>
 
-    <p> Withdrawn: <%= product.withdrawn %> </p>
 
-    <p> ExtraData: <% for (var key in product.extraData) { %>
-        <%= key + ' ' + product.extraData[key] %>
-    <% } %>
 
-    <form action="/product_info" method="PUT">
-      <div class="form-group">
-        <label for="productname">Product name</label>
-        <input type="text" placeholder="Enter product name" name="productname" value="<%=product.name%>"required>
-      </div>
-        <div class="form-group">
-        <label for="productdescription">Product Description</label>
-        <input type="text" placeholder="Enter product description" name="productdescription" value="<%=product.description%>"required>
-      </div>
-      <div class="form-group">
-        <label for="productcategory">Product Category</label>
-        <input type="text" placeholder="Enter product category" name="productcategory" value="<%=product.category%>"required>
-      </div>
-      <div class="form-group">
-        <label for="producttags">Product tags</label>
-        <input type="text" placeholder="Enter product tags seperated with comma" name="producttags" value="<%=product.tags%>"required>
-      </div>
-      <button type="submit" name='productID' value="<%=product.id%>">Submit</button>
-    </form>
+<% include footer.ejs %>
 
-    <form action='/product_info' method='DELETE'>
-        <button type="submit" name='productID' value="<%=product.id%>">Delete product</button>
-    </form>
+
 
 
   </body>

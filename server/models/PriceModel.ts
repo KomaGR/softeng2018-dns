@@ -30,7 +30,9 @@ export const PriceSchema = new Schema({
 });
 
 PriceSchema.set('toJSON', {
-    virtuals: true
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) { delete ret._id, delete ret.dateCreated }
 });
 
 module.exports = mongoose.model('Price', PriceSchema);
