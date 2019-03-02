@@ -15,6 +15,10 @@ export const UserSchema = new Schema({
         type: String,
         required: 'Enter password'
     },
+    role: {
+	type: String,
+	default: 'user'
+    },
     dateCreated: {
         type: Date,
         default: Date.now
