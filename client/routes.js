@@ -39,6 +39,10 @@ function routes(app) {
      .post("/map", function(req,res){
         var data = req.body;
         console.log(data);
+        if ( data.new ){
+            console.log("ZONK!");
+        };
+        res.redirect('/');
      })
 
      .get("/search_results", function (req, res) {
@@ -77,9 +81,8 @@ function routes(app) {
 
     })
     
-    .post("search_results", function (req, res) {
+    .post("/search_results", function (req, res) {
         res.redirect('/product_info');
-        
     })
     
     .get("/about", function (req, res) {
@@ -123,7 +126,7 @@ function routes(app) {
     .delete("/product_info", product.deleteInfo)
     
     .get("/submit_shop", redirectLogin, function (req, res) {
-        res.render("submit_shop.ejs");
+        res.render("map.ejs");
     })
     
     .post("/submit_shop", redirectLogin, shop.submit);

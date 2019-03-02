@@ -22,16 +22,39 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,800">
 
 </head>
-<body>
+<body onload='hideButton()'>
 <h5 class="lead mb-3">Ψάχνεις για μαγαζί;</h5>
 <div id="map"></div>
 
 <script>
+
+function hideButton(){
+	document.getElementById("newShop").style.visibility="hidden";  
+}
+
 var mymarker = null;
 var mymap;
 var data;
+var markerdata;
 var geocodeService = L.esri.Geocoding.geocodeService();
+var parameters;
+var parsedata;
 
+function onClick(e) {
+		geocodeService.reverse().latlng(e.latlng).run(function(error, result) {
+
+	markerdata = JSON.stringify({
+		latitude: e.latlng.lat,
+		longitude: e.latlng.lng,
+		shopAddress: result.address.Match_addr,
+		new: false
+});
+});
+if ( mymarker != null){
+		mymap.removeLayer(mymarker);
+		mymarker = null;
+	}
+}
 
 function postBack(e) {
 	if ( mymarker != null){
@@ -39,12 +62,14 @@ function postBack(e) {
 	}
 	geocodeService.reverse().latlng(e.latlng).run(function(error, result) {
       mymarker = L.marker(result.latlng).addTo(mymap).bindPopup(result.address.Match_addr).openPopup();
-	  });
-	//mymarker = L.marker(e.latlng).addTo(mymap).bindPopup('<b>Is this a shop?</b>').openPopup();
-	//alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
+	  
 	data = JSON.stringify({
 		latitude: e.latlng.lat,
-		longitude: e.latlng.lng
+		longitude: e.latlng.lng,
+		shopAddress: result.address.Match_addr,
+		new: true
+	});
+
 	});
 }
 
@@ -68,12 +93,16 @@ function myMap() {
 			popupAnchor:  [0, -60] // point from which the popup should open relative to the iconAnchor
 		});
 
-		data = JSON.stringify({
+		geocodeService.reverse().latlng(latlng).run(function(error, result) {
+			markerdata = JSON.stringify({
 			latitude: latlng.lat,
-			longitude: latlng.lng
+			longitude: latlng.lng,
+			shopAddress: result.address.Match_addr,
+			new: false
 		});
+	  });
 
-		var marker = L.marker(latlng, {icon:userIcon}).addTo(mymap).bindPopup('<b>You are here!</b>').openPopup();  
+		var marker = L.marker(latlng, {icon:userIcon}).addTo(mymap).bindPopup('<b>You are here!</b>').openPopup().on('click',onClick);  
 
 		mymap.on('click', (e) => {
 			console.log(e.latlng.lat);
@@ -83,25 +112,74 @@ function myMap() {
 }
 
 function doFunction(){
-	const parameters = {
+	if ( mymarker != null){
+	document.getElementById("newShop").style.visibility="visible"; 
+	
+	} else {
+	parameters = {
+		method: 'POST',
+		redirect: 'follow',
+		headers: {
+			'Accept': 'application/json, text/plain, */*',
+			"Content-Type": 'application/json'
+		},
+		body: markerdata
+	};
+	
+	fetch('https://localhost:3000/map', parameters)
+	.then(res => res.json())
+	.then(response => console.log("Success!", JSON.stringify(response)))
+	.catch(error => console.error("Oopsie", error));
+	}
+}
+
+function mytest(){
+	var b = JSON.parse(data);
+	var shopname = document.getElementById("sn").value;
+	var shoptags = document.getElementById("st").value;
+	var shoplat = b.latitude;
+	var shoplng = b.longitude;
+	var shopad = b.shopAddress;
+	parsedata = JSON.stringify({
+			latitude: shoplat,
+			longitude: shoplng,
+			shopAddress: shopad,
+			new: true,
+			shopname: shopname,
+			shoptags: shoptags
+	});
+	parameters = {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json, text/plain, */*',
 			"Content-Type": 'application/json'
 		},
-		body: data,
+		body: parsedata,
 	};
 	fetch('https://localhost:3000/map', parameters)
 	.then(res => res.json())
 	.then(response => console.log("Success!", JSON.stringify(response)))
 	.catch(error => console.error("Oopsie", error));
-}
+	}
+
 
 myMap();
 
 </script>
 
-<input id="confirmShop" type="button" class="btn btn-primary mt-4 mb-3" value="Confirm shop" onclick="doFunction();" />
+<input id="confirmShop" type="button" class="btn btn-primary mt-4 mb-3" value="Confirm shop" onclick="doFunction();"/>
+
+<form id="newShop">
+  <div class="form-group">
+    <label for="shopname">Shop name</label>
+    <input id="sn" type="text" placeholder="Enter shop name" name="shopname" required>
+  </div>
+  <div class="form-group">
+    <label for="shoptags">Shop Tags</label>
+    <input id = "st" type="text" placeholder="Enter shop tags seperated with comma" name="shoptags" required>
+  </div>
+  <input id="zonk" type="button" class="btn btn-primary" value="press" onclick="mytest()"/>
+</form>
 
 </body>
 </html>
