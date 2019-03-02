@@ -2,6 +2,8 @@ import * as mongoose from 'mongoose';
 import * as ShopModel from '../models/ShopModel';
 import * as express from 'express';
 import { Int32 } from 'bson';
+import { PriceController } from './PriceController';
+
 
 type Request = express.Request;
 type Response = express.Response;
