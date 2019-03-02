@@ -5,7 +5,7 @@ import * as express from 'express';
 type Request = express.Request;
 type Response = express.Response;
 
-const Price = mongoose.model('Price', PriceModel.PriceSchema);
+export const Price = mongoose.model('Price', PriceModel.PriceSchema);
 
 export class PriceController {
 

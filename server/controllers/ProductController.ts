@@ -1,6 +1,8 @@
 import * as mongoose from 'mongoose';
 import * as ProductModel from '../models/ProductModel';
 import * as express from 'express';
+import { Price } from './PriceController';
+
 
 type Request = express.Request;
 type Response = express.Response;
@@ -94,6 +96,12 @@ export class ProductController {
                 if (err) {
                     res.send(err);
                 }
+            Price.remove({ productId: req.originalUrl.slice(26)},
+            (err) => {
+                if (err) {
+                    res.send(err);
+                }
+            });
             res.status(200).send(
                 {message : "OK"}
             );
