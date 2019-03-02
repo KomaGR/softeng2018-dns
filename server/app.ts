@@ -4,6 +4,8 @@ import routes from './routes/routes';
 import * as mongoose from "mongoose";
 import SessionManager from "./SessionManager";
 
+export const session_manager = new SessionManager();
+
 const PORT_db = 27017;
 
 class App {
