@@ -16,7 +16,8 @@ export const ProductSchema = new Schema({
         required: 'Enter category'
     },
     withdrawn: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     tags: [{
         type: String
