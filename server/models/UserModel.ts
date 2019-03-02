@@ -6,7 +6,7 @@ export const UserSchema = new Schema({
     email: {
 	type: String,
 	required: 'Enter email'
-    }
+    },
     username: {
         type: String,
         required: 'Enter username'
