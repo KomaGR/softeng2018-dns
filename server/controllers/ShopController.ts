@@ -2,6 +2,8 @@ import * as mongoose from 'mongoose';
 import * as ShopModel from '../models/ShopModel';
 import * as express from 'express';
 import { Int32 } from 'bson';
+import { Price } from './PriceController';
+
 
 type Request = express.Request;
 type Response = express.Response;
@@ -25,14 +27,15 @@ export class ShopController {
 
     // get all shops (according to query) from database
     public getShop(req: Request, res: Response) {
-        Shop.find({}, (err, shops) => {
+        Shop.find({}, (err, shoplist) => {
             if (err) {
                 res.send(err);
             }
             
             let start = Number(Object.values(req.query)[0]);
             let count = Number(Object.values(req.query)[1]);
-            let total = shops.length;
+            let total = shoplist.length;
+            let shops = shoplist.slice(start, (start+count))
 
             res.status(200).send({
                 start,
@@ -83,14 +86,21 @@ export class ShopController {
 
     // delete a specific shop from database
     public deleteShop(req: Request, res: Response) {
-        Shop.findOneAndDelete(
-            { _id: req.originalUrl.slice(23)}),
-            ((err:any) => {
+        Shop.deleteOne(
+            { _id: req.originalUrl.slice(23)},
+            (err:any) => {
                 if (err) {
                     res.send(err);
                 }
+                Price.deleteMany({ shopId: req.originalUrl.slice(26)},
+                    (err) => {
+                        if (err) {
+                            res.send(err);
+                        }
+                    });
                 res.json({ message: 'OK' });
-            });
+            }
+        );
     }
 
 
