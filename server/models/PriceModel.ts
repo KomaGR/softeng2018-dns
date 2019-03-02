@@ -7,15 +7,10 @@ export const PriceSchema = new Schema({
         type: Number,
         required: 'Enter price'
     },
-    dateFrom: {
+    date: {
         type: Date,
-        required: 'Enter date from',
+        required: 'Enter date',
         default: Date.now,
-    },
-    dateTo: {
-        type: Date,
-        required: 'Enter date to',
-        default: Date.now
     },
     productId: {
         type: String,

@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as PriceModel from '../models/PriceModel';
 import * as express from 'express';
+let DateDiff = require('date-diff');
 
 type Request = express.Request;
 type Response = express.Response;
@@ -9,7 +10,6 @@ export const Price = mongoose.model('Price', PriceModel.PriceSchema);
 
 export class PriceController {
 
-    // add a new price on database
     public addNewPrice(req: Request, res: Response) {
         let newPrice = new Price(req.body);
 
