@@ -21,7 +21,7 @@
         <div class="container-md  ">
             <header>          
                     <nav class="navbar navbar-expand-md navbar-dark bg-primary ">
-                        <a class="navbar-brand " href="/">Definitely not Skroutz</a>
+                        <a class="navbar-brand lead " href="/">Definitely not Skroutz</a>
 
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
                             <span class="navbar-toggler-icon"></span>
@@ -29,13 +29,14 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto">                            
                                 <% if ( token ) { %>
-                                    <a class="nav-link nav-link-ltr" href="/logout">Αποσυνδεση</a>
+                                    <a class="nav-link nav-link-ltr text-white" href="/logout">Αποσυνδεση</a>
                                 <% } else{ %>
                                     <li class="nav-item">
-                                        <a class="nav-link nav-link-ltr"  data-toggle="modal" data-target="#login_modal" >Συνδεση</a>
+                                        
+                                        <a class="nav-link nav-link-ltr btn text-white"  data-toggle="modal" data-target="#login_modal" >Συνδεση</a>
                                     </li>
-                                    <li class="nav-item">
-                                            <a class="nav-link nav-link-ltr"  data-toggle="modal" data-target="#sign_up_modal" >Εγγραφη</a>
+                                    <li class="nav-item ">
+                                            <a class="nav-link nav-link-ltr btn text-white"  data-toggle="modal" data-target="#sign_up_modal" >Εγγραφη</a>
                                     </li>
                                 <% } %>
 
