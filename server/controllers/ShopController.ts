@@ -33,7 +33,7 @@ export class ShopController {
            the user requested */
         let condition = { withdrawn: false };
 
-        switch( String(Object.values(req.query)[2]) ) { 
+        switch( String(req.query.status )) { 
             case 'ALL': { 
                 condition = undefined;
                 break; 
@@ -52,19 +52,62 @@ export class ShopController {
             } 
         } 
         
-        Shop.find( condition,
-        (err, shoplist) => {
+        /* define the condition that will sort our
+           shops and return them the way the user 
+           requested */
+           let sorting: any = { _id: -1 };
+
+           switch( String(req.query.sort) ) { 
+               case 'id|ASC': { 
+                   sorting = { _id: 1 };
+                   break; 
+               } 
+               case 'id|DESC': { 
+                   sorting = { _id: -1 };
+                   break; 
+               } 
+               case 'name|ASC': { 
+                   sorting = { name: 1 };
+                   break; 
+               }
+               case 'name|DESC': { 
+                   sorting = { name: -1 };
+                   break; 
+               }
+               default: { 
+                   sorting = { _id: -1 };
+                   break; 
+               } 
+           } 
+   
+           /* take start and count values if given
+              else keep the default */
+           let start = Number(req.query.start);
+           let count = Number(req.query.count);
+   
+           if(!(req.query.start)){
+               start = 0;
+           }
+           if(!(req.query.count)){
+               count = 20;
+           }
+           
+           /* sort shop list and define
+              paging parameters */
+           Shop.find( condition )
+           .sort( sorting )
+           .where('shops')
+           .skip(start)
+           .limit(count)
+           .exec((err, shops) => {
             
-            if (err) {
-                res.send(err);
-            }
+                if (err) {
+                    res.send(err);
+                }
             
-            /* determine the total number of shops and the
-               list shops returned */
-            let start = Number(Object.values(req.query)[0]);
-            let count = Number(Object.values(req.query)[1]);
-            let total = shoplist.length;
-            let shops = shoplist.slice(start, (start+count))
+            /* determine the total number of shops
+               returned */
+            let total = shops.length;
 
             res.status(200).send({
                 start,
