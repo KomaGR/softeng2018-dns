@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import * as PriceModel from '../models/PriceModel';
 import * as express from 'express';
 let DateDiff = require('date-diff');
+let nextDay = require('next-day');
 
 type Request = express.Request;
 type Response = express.Response;
@@ -11,14 +12,27 @@ export const Price = mongoose.model('Price', PriceModel.PriceSchema);
 export class PriceController {
 
     public addNewPrice(req: Request, res: Response) {
-        let newPrice = new Price(req.body);
+        let date1 = new Date(req.body.dateFrom);
+        let date2 = new Date(req.body.dateTo);
 
-        newPrice.save((err, price) => {
-            if (err) {
-                res.send(err);
-            }
-            res.json(price);
-        });
+        let diff = new DateDiff(date2, date1);
+
+        console.log(diff.days(), typeof (diff.days()));
+
+        // for (let i = 0; i <= diff.days(); i++) {
+            // req.body.dateTo = date1 + i;
+            // console.log(i+1)
+            let newPrice = new Price(req.body);
+
+            newPrice.save((err, price) => {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(price);
+            });
+        // }
+        // res.sendStatus(200)
+
     }
 
     // get all prices (according to query) from database
