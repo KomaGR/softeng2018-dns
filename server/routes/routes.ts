@@ -14,7 +14,20 @@ const user_controller = new UserController();
 export default function (
     app: express.Application
 ) {
-    app.use('/observatory/api', MainRouter);
+    // Authentication level store in res.locals
+    app.use('/observatory/api', (req: Request, res: Response, next) => {
+        const token = req.get('X-OBSERVATORY-AUTH');
+        const session = session_manager.CheckSession(token);
+        if (session) {
+            res.locals.privilege = session.role;
+            res.locals.user = session.username;
+            console.log(`Hi there ${session.username}`);
+        } else {
+            console.log("I don't recognize you");
+            res.locals.privilege = 'none';
+        }
+        next();
+    }, MainRouter);
     
     MainRouter
     .get('/', (req: Request, res: Response) => {
