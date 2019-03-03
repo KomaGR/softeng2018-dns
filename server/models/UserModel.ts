@@ -5,12 +5,15 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
     email: {
 	    type: String,
-	    required: 'Enter email'
+        required: 'Enter email',
+        index: true,
+        unique: true
     },
     username: {
         type: String,
         required: 'Enter username',
-        index: true
+        index: true,
+        unique: true
     },
     password: {
         type: String,
@@ -24,6 +27,14 @@ const UserSchema = new Schema({
     dateCreated: {
         type: Date,
         default: Date.now
+    }
+});
+
+UserSchema.post('save', (err, res, next) => {
+    if (err.name === 'MongoError' && err.code === 11000) {
+        next(err);
+    } else {
+        next();
     }
 });
 
