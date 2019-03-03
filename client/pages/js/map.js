@@ -10,44 +10,60 @@ function hideButton() {
     document.getElementById("newShop").style.visibility = "hidden";
 }
 
-function onClick(e) {
-    geocodeService.reverse().latlng(e.latlng).run(function (error, result) {
-
-        markerdata = JSON.stringify({
-            latitude: e.latlng.lat,
-            longitude: e.latlng.lng,
-            shopAddress: result.address.Match_addr,
-            new: false
-        });
-    });
-    if (mymarker != null) {
-        mymap.removeLayer(mymarker);
-        mymarker = null;
-    }
-}
+/* Add method to get nearby shops */
 
 function newMarker(e) {
-    if (mymarker != null) {
+    if (mymarker) {
         mymap.removeLayer(mymarker);
     }
+    // Reverse geo search
     geocodeService.reverse().latlng(e.latlng).run(function (error, result) {
         mymarker = L.marker(result.latlng).addTo(mymap).bindPopup(result.address.Match_addr).openPopup();
 
-        data = JSON.stringify({
-            latitude: e.latlng.lat,
-            longitude: e.latlng.lng,
-            shopAddress: result.address.Match_addr,
-            new: true
-        });
+        markerdata = {
+            lat: e.latlng.lat,
+            lng: e.latlng.lng,
+            address: result.address.Match_addr,
+            withdrawn: false
+        };
 
+        console.log(markerdata);
     });
 }
 
-function myMap() {
-    navigator.geolocation.getCurrentPosition(function (location) {
-        var latlng = new L.LatLng(location.coords.latitude, location.coords.longitude);
+function confirmShop() {
+    if (mymarker) {
+        // If we have an active marker for the store
+        document.getElementById("newShop").style.visibility = "visible";
 
-        mymap = L.map('map').setView(latlng, 16)
+        document.getElementById("lat").value = markerdata.lat;
+        document.getElementById("lng").value = markerdata.lng;        
+        document.getElementById("address").value = markerdata.address;
+    } else {
+        console.error("Error: No marker selected.")
+    }
+}
+
+// function inputShop() {
+
+//     var shop_name = document.getElementById("shop-name").value;
+//     var shop_tags = document.getElementById("shop-tags").value;
+    
+//     const shop_data = markerdata;
+//     shop_data['name'] = shop_name;
+//     shop_data['tags'] = shop_tags.split(',');
+
+//     console.log(shop_data['tags']);
+//     document.getElementById("shop-tags").value = shop_data['tags'];
+
+//     document.getElementById("newShop").submit();
+// }
+
+function myMap() {    
+    navigator.geolocation.getCurrentPosition(function (location) {
+
+        var latlng = new L.LatLng(location.coords.latitude, location.coords.longitude);
+        mymap = L.map('map').setView(latlng, 16);
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>',
             maxZoom: 18,
@@ -58,86 +74,45 @@ function myMap() {
         var userIcon = L.icon({
             iconUrl: 'images/user_map.png',
 
-            iconSize: [60, 60], // size of the icon
-            iconAnchor: [30, 60], // point of the icon which will correspond to marker's location
-            popupAnchor: [0, -60] // point from which the popup should open relative to the iconAnchor
+            iconSize: [60, 60],     // size of the icon
+            iconAnchor: [30, 60],   // point of the icon which will correspond to marker's location
+            popupAnchor: [0, -60]   // point from which the popup should open relative to the iconAnchor
         });
 
         geocodeService.reverse().latlng(latlng).run(function (error, result) {
-            markerdata = JSON.stringify({
-                latitude: latlng.lat,
-                longitude: latlng.lng,
-                shopAddress: result.address.Match_addr,
-                new: false
-            });
+            markerdata = {
+                lat: latlng.lat,
+                lng: latlng.lng,
+                address: result.address.Match_addr,
+                withdrawn: false
+            };
+            console.log(markerdata);
         });
 
         var marker = L.marker(latlng, { icon: userIcon })
-                        .addTo(mymap)
-                        .bindPopup('<b>You are here!</b>')
-                        .openPopup()
-                        .on('click', onClick);
+            .addTo(mymap)
+            .bindPopup('<b>You are here!</b>')
+            .openPopup()
+            .on('click', (e) => {
+                geocodeService.reverse().latlng(e.latlng).run(function (error, result) {
 
-        mymap.on('click', (e) => {
-            console.log(e.latlng.lat);
-            newMarker(e);
-        });
+                    markerdata = {
+                        lat: e.latlng.lat,
+                        lng: e.latlng.lng,
+                        address: result.address.Match_addr,
+                        withdrawn: false
+                    };
+                    console.log(markerdata);
+                });
+                mymarker = this;
+            });
+
+        mymap.on('click', newMarker);
     });
 }
 
-function postShop() {
-
+/* This method is called when the page loads */
+function onLoad() {
+    hideButton();
+    myMap();
 }
-
-function confirmShop() {
-    if (mymarker != null) {
-        document.getElementById("newShop").style.visibility = "visible";
-    } else {
-        parameters = {
-            method: 'POST',
-            redirect: 'follow',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                "Content-Type": 'application/json'
-            },
-            body: markerdata
-        };
-
-        fetch('https://localhost:3000/map', parameters)
-            .then(res => res.json())
-            .then(response => console.log("Success!", JSON.stringify(response)))
-            .catch(error => console.error("Oopsie", error));
-    }
-}
-
-function inputShop() {
-    var b = JSON.parse(data);
-    var shopname = document.getElementById("sn").value;
-    var shoptags = document.getElementById("st").value;
-    var shoplat = b.latitude;
-    var shoplng = b.longitude;
-    var shopad = b.shopAddress;
-    parsedata = JSON.stringify({
-        latitude: shoplat,
-        longitude: shoplng,
-        shopAddress: shopad,
-        new: true,
-        shopname: shopname,
-        shoptags: shoptags
-    });
-    parameters = {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            "Content-Type": 'application/json'
-        },
-        body: parsedata,
-    };
-    fetch('https://localhost:3000/map', parameters)
-        .then(res => res.json())
-        .then(response => console.log("Success!", JSON.stringify(response)))
-        .catch(error => console.error("Oopsie", error));
-}
-
-
-myMap();
