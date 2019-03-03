@@ -26,33 +26,35 @@ export class PriceController {
         console.log(referenceDate);
         console.log(endDate);
 
-        delete req.body.dateFrom;
-        delete req.body.dateTo;
+        // delete req.body.dateFrom;
+        // delete req.body.dateTo;
 
         let diff = dateDiffInDays(referenceDate, endDate);
         if (diff < 0) {
             res.status(400).send({ message: "Bad Request" });
         }
-        var prices = [];
+        var pricestable = [];
 
         for (let i = 0; i <= diff; i++) {
             req.body.date = new Date(referenceDate);
             referenceDate.setDate(referenceDate.getDate()+1);
 
             let newPrice = new Price(req.body);
+            console.log(req.body);
 
             newPrice.save((err, price) => {
                 if (err) {
                     res.send(err);
                 }
                 // res.json(price);
-                prices.push(price);
+                console.log(price);
+
+                pricestable[i] = price;
+
+                console.log(pricestable);
+                if (i == diff) res.send(pricestable);
             });
-
         }
-        console.log(prices);
-        res.send(prices);
-
     }
 
     // get all prices (according to query) from database
