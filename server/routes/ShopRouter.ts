@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { ShopController } from '../controllers/ShopController';
+import { bounceStrangers } from "./bouncer";
 
 type Request = express.Request;
 type Response = express.Response;
@@ -28,18 +29,18 @@ export default class {
             .get('/', this.shopController.getShop)
 
             // create a new shop
-            .post('/', this.shopController.addNewShop)
+            .post('/', bounceStrangers, this.shopController.addNewShop)
 
             // get a specific shop
             .get('/:id', this.shopController.getShopWithID)
 
             // update a specific shop
-            .put('/:id', this.shopController.updateShop)
+            .put('/:id', bounceStrangers, this.shopController.updateShop)
       
             // update only one field of a specific shop
-            .patch('/:id', this.shopController.partialUpdateShop)
+            .patch('/:id', bounceStrangers, this.shopController.partialUpdateShop)
             
             // delete a specific shop
-            .delete('/:id', this.shopController.deleteShop)
+            .delete('/:id', bounceStrangers, this.shopController.deleteShop)
     }
 }

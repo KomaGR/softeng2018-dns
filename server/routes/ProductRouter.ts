@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { ProductController } from '../controllers/ProductController';
-import { request } from 'http';
+import { bounceStrangers } from "./bouncer";
 
 type Request = express.Request;
 type Response = express.Response;
@@ -28,19 +28,19 @@ export default class {
             .get('/', this.productController.getProduct)
 
             // create a new product
-            .post('/', this.productController.addNewProduct)
+            .post('/', bounceStrangers ,this.productController.addNewProduct)
 
             // get a specific product
             .get('/:id', this.productController.getProductWithID)
 
             // update a specific product
-            .put('/:id', this.productController.updateProduct)
+            .put('/:id', bounceStrangers, this.productController.updateProduct)
 
             // update only one field of a specific product
-            .patch('/:id', this.productController.partialUpdateProduct)
+            .patch('/:id', bounceStrangers, this.productController.partialUpdateProduct)
             
             // delete a specific product
-            .delete('/:id', this.productController.deleteProduct)
+            .delete('/:id', bounceStrangers, this.productController.deleteProduct)
     }
 
 }
