@@ -4,6 +4,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.initConfig({
         ts: {
+            options: {
+                fast: 'always'
+            },
             server: {
                 tsconfig: './tsconfig.json'
             }

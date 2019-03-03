@@ -43,10 +43,10 @@ ShopSchema.set('toJSON', {
 // Error handler (error message customization)
 ShopSchema.post('save', function(error, doc, next) {
     if (error.name === 'ValidatorError' && error.code === 11000) {
-      next(new Error('Bad Request'));
-    } else {
-      next();
-    }
+        next(error);
+      } else {
+        next();
+      }
   });
 
 export const Shop = mongoose.model('Shop', ShopSchema);
