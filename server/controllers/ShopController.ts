@@ -12,6 +12,19 @@ export class ShopController {
 
     // add a new shop on database
     public addNewShop(req: Request, res: Response) {
+
+        /* check query's format. Only acceptable format is json.
+        We also accept queries with the format field undefined
+        Any query with format value defined with value different
+        from json is not accepted. */
+        if( req.query.format != 'json' && req.query.format ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
+        if (!(Number(req.body.lng)) ||
+        !(Number(req.body.lat)) ){
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
         
         let newShop = new Shop(req.body);
 
@@ -31,6 +44,14 @@ export class ShopController {
 
     // get all shops (according to query) from database
     public getShop(req: Request, res: Response) {
+
+        /* check query's format. Only acceptable format is json.
+        We also accept queries with the format field undefined
+        Any query with format value defined with value different
+        from json is not accepted. */
+        if( req.query.format != 'json' && req.query.format ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
         
         let condition: any;
 
@@ -174,6 +195,15 @@ export class ShopController {
 
     // get a specific shop from database
     public getShopWithID(req: Request, res: Response) {
+
+        /* check query's format. Only acceptable format is json.
+        We also accept queries with the format field undefined
+        Any query with format value defined with value different
+        from json is not accepted. */
+        if( req.query.format != 'json' && req.query.format ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
         Shop.findById(
         { _id: req.originalUrl.slice(23)}, 
         (err, shop) => {
@@ -186,6 +216,26 @@ export class ShopController {
 
     // update a specific shop on database
     public updateShop(req: Request, res: Response) {
+
+        /* check query's format. Only acceptable format is json.
+        We also accept queries with the format field undefined
+        Any query with format value defined with value different
+        from json is not accepted. */
+        if( req.query.format != 'json' && req.query.format ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+        
+        // check that the user passed all fields of shop entity (correctly)
+        if ( !(req.body.name) ||
+        !(req.body.address) ||
+        !(req.body.lng) ||
+        !(req.body.lat) ||
+        !(req.body.tags) ||
+        !(Number(req.body.lng)) ||
+        !(Number(req.body.lat)) ){
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
         Shop.findOneAndUpdate(
         { _id: req.originalUrl.slice(23)}, 
         req.body, { new: true },
@@ -199,6 +249,31 @@ export class ShopController {
 
     // update only one field of a specific shop on database
     public partialUpdateShop(req: Request, res: Response) {
+
+        /* check query's format. Only acceptable format is json.
+        We also accept queries with the format field undefined
+        Any query with format value defined with value different
+        from json is not accepted. */
+        if( req.query.format != 'json' && req.query.format ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
+        // check that user passes exactly one entry
+        if ( Object.entries(req.body).length != 1) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
+        /* check that the entry given, is one of the
+        entries of shop entity */
+        if ( (!(req.body.name) &&
+        !(req.body.address) &&
+        !(req.body.lng) &&
+        !(req.body.lat) &&
+        !(req.body.tags) ) ||
+        (( req.body.lng && !(Number(req.body.lng)))) ||
+        (( req.body.lat && !(Number(req.body.lat)))) ){
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
 
         /* get key and value for the field that
         should be updated */
@@ -219,6 +294,15 @@ export class ShopController {
 
     // delete a specific shop from database
     public deleteShop(req: Request, res: Response) {
+
+        /* check query's format. Only acceptable format is json.
+        We also accept queries with the format field undefined
+        Any query with format value defined with value different
+        from json is not accepted. */
+        if( req.query.format != 'json' && req.query.format ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
         Shop.deleteOne(
         { _id: req.originalUrl.slice(23)},
         (err) => {
