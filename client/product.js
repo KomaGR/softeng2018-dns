@@ -1,4 +1,5 @@
 const https = require('https');
+const request = require('request');
 
 function productSubmitRoute(req, res) {
     var prodid = req.body.prodid;
@@ -84,10 +85,10 @@ function productGetInfo(req, res) {
         console.log('statuscode', httpsres.statusCode);
         httpsres.on('data', (d) => {
             var mydata = JSON.parse(d);
-            const { auth_token } = req.session;
+            const session = req.session;
             res.render("product_info.ejs", {
                 product: mydata,
-                token: auth_token
+                session: session
 
             });
         });
@@ -102,42 +103,39 @@ function productGetInfo(req, res) {
 
 function productPutInfo(req, res) {
 
-    var productid = req.query.productID;
-    console.log(productid);
+    var productid = req.body.productID;
+    console.log( "this is the product is ------" + req.body.productname);
 
     const options = {
-        hostname: 'localhost',
-        port: 8765,
-        path: '/observatory/api/products/' + productid,
+        url: 'https://localhost:8765/observatory/api/products/' + productid,
         rejectUnauthorized: false,
-        method: 'PUT',
-        json: {
-            "name": req.body.productname,
-            "description": req.body.productdescription,
-            "category": req.body.productcategory,
-            "tags": req.body.producttags
+        form: {
+            name: req.body.productname,
+            description: req.body.productdescription,
+            category: req.body.productcategory,
+            tags: req.body.producttags
+        },
+        headers: {
+            'X-OBSERVATORY-AUTH': req.session.auth_token
         }
     };
 
-    const httpsreq = https.request(options, (httpsres) => {
-        console.log('statuscode', httpsres.statusCode);
-        httpsres.on('data', (d) => {
-            var mydata = JSON.parse(d);
-            res.render("product_info.ejs");
-        });
+    request.put(options, (err, httpsResponse, body) =>{
+       
+        if (httpsResponse.statusCode == 200){
+            const data = JSON.parse(body); 
+            res.render("product_info.ejs", {
+                product: data,
+                session: req.session
+            })
+        }
     });
-
-    httpsreq.on('error', (e) => {
-        console.error(e);
-    });
-
-    httpsreq.end();
 }
 
 function productDeleteInfo(req, res) {
 
     var productid = req.body.productID;
-    console.log(productid);
+    console.log( "this is the product is ------" + productid);
 
     const options = {
         hostname: 'localhost',

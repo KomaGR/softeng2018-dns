@@ -22,16 +22,23 @@ const redirectHome = (req, res, next) => {
     }
 };
 
+const redirectNonAdmin = (req, res, next) => {
+    if (req.session.role != 'admin') {
+        res.redirect('/');
+    } else {
+        next();
+    }
+};
 function routes(app) {
     app
     .use(auth.session)
 
     .get("/", function (req, res) {
          console.log(req.session);
-         const { auth_token } = req.session;
-         console.log(auth_token);
+         const session = req.session;
+         console.log(req.session.auth_token);
          res.render("homepage.ejs", {
-             token: auth_token
+             session: session
          });      
       
      })
@@ -54,10 +61,7 @@ function routes(app) {
             port: 8765,
             path: '/observatory/api/products',
             rejectUnauthorized: false,
-            method: 'GET',
-            headers: {
-                'X-OBSERVATORY-AUTH': req.session.auth_token
-            }
+            method: 'GET'
         };
         const httpsreq = https.request(options, (httpsres) => {
             console.log('statuscode', httpsres.statusCode);
@@ -67,10 +71,10 @@ function routes(app) {
                     return (entry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         entry.category.toLowerCase().includes(searchTerm.toLowerCase()));
                 });
-                const { auth_token } = req.session;
+                const session = req.session;
                 res.render("search_results.ejs", {
                     myproducts: myproducts,
-                    token: auth_token  
+                    session: session  
 
                 });
             });
@@ -89,9 +93,9 @@ function routes(app) {
     })
     
     .get("/about", function (req, res) {
-        const { auth_token } = req.session;
+        const session = req.session;
         res.render("about.ejs", {
-            token: auth_token  
+            session: session  
         });      
          
     })
@@ -113,10 +117,10 @@ function routes(app) {
     .get("/logout", redirectLogin, auth.logout)
     
     .get("/submit_product", redirectLogin, function (req, res) {
-        const { auth_token } = req.session;
+        const session = req.session;
 
         res.render("submit_product.ejs", {
-            token: auth_token
+            session: session
         });
     })
     
@@ -124,15 +128,15 @@ function routes(app) {
     
     .get("/product_info", product.getInfo)
     
-    .put("/product_info", product.putInfo)
+    .post("/product_info", product.putInfo)
     
     .delete("/product_info", product.deleteInfo)
     
     .get("/submit_shop", redirectLogin, function (req, res) {
-        const { auth_token } = req.session;
+        const session = req.session;
 
         res.render("submit_shop.ejs", {
-            token: auth_token
+            session: session
         });
     })
     .post("/shop_info", (req, res) => {
@@ -145,7 +149,7 @@ function routes(app) {
     
     .post("/submit_shop", redirectLogin, shop.submit)
 
-    .get("/admin_hub", redirectLogin, function(req, res){
+    .get("/admin_hub", redirectNonAdmin, function(req, res){
         const options = {
             hostname: 'localhost',
             port: 8765,
@@ -160,10 +164,10 @@ function routes(app) {
             console.log('statuscode', httpsres.statusCode);
             httpsres.on('data', (d) => {
                 var mydata = JSON.parse(d);
-                const { auth_token } = req.session;
+                const session = req.session;
                 res.render("admin_hub.ejs", {
                     users: mydata,
-                    token: auth_token  
+                    session: session  
                 });
             });
         });
