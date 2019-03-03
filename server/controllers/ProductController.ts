@@ -13,6 +13,14 @@ export class ProductController {
     // add a new product on database
     public addNewProduct(req: Request, res: Response) {  
 
+        /* check query's format. Only acceptable format is json.
+        We also accept queries with the format field undefined
+        Any query with format value defined with value different
+        from json is not accepted. */
+        if( req.query.format != 'json' && req.query.format ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
         let newProduct: any = new Product(req.body);        
 
         /* if all required fields were given then
@@ -32,6 +40,14 @@ export class ProductController {
     // get all products (according to query) from database
     public getProduct(req: Request, res: Response) {
        
+        /* check query's format. Only acceptable format is json.
+        We also accept queries with the format field undefined
+        Any query with format value defined with value different
+        from json is not accepted. */
+        if( req.query.format != 'json' && req.query.format ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
         let condition: any;
 
         if( !(req.query.status)) {
@@ -174,7 +190,15 @@ export class ProductController {
 
     // get a specific product from database
     public getProductWithID(req: Request, res: Response) {
-                
+        
+        /* check query's format. Only acceptable format is json.
+        We also accept queries with the format field undefined
+        Any query with format value defined with value different
+        from json is not accepted. */
+        if( req.query.format != 'json' && req.query.format ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
         Product.findById(
         { _id: req.originalUrl.slice(26)}, 
         (err, product) => {
@@ -187,6 +211,23 @@ export class ProductController {
 
     // update a specific product on database
     public updateProduct(req: Request, res: Response) {
+
+        /* check query's format. Only acceptable format is json.
+        We also accept queries with the format field undefined
+        Any query with format value defined with value different
+        from json is not accepted. */
+        if( req.query.format != 'json' && req.query.format ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
+        // check that the user passed all fields of product entity (correctly)
+        if ( !(req.body.name) ||
+        !(req.body.description) ||
+        !(req.body.category) ||
+        !(req.body.tags) ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
         Product.findOneAndUpdate(
         { _id: req.originalUrl.slice(26)}, 
         req.body, { new: true },
@@ -200,6 +241,28 @@ export class ProductController {
     
     // update only one field of a specific product on database
     public partialUpdateProduct(req: Request, res: Response) {
+
+        /* check query's format. Only acceptable format is json.
+        We also accept queries with the format field undefined
+        Any query with format value defined with value different
+        from json is not accepted. */
+        if( req.query.format != 'json' && req.query.format ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
+        // check that user passes exactly one entry
+        if ( Object.entries(req.body).length != 1) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
+        /* check that the entry given, is one of the
+        entries of product entity */
+        if ( !(req.body.name) &&
+        !(req.body.description) &&
+        !(req.body.category) &&
+        !(req.body.tags) ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
 
         /* get key and value for the field that
         should be updated */
@@ -219,6 +282,15 @@ export class ProductController {
 
     // delete a specific product from database
     public deleteProduct(req: Request, res: Response) {
+
+        /* check query's format. Only acceptable format is json.
+        We also accept queries with the format field undefined
+        Any query with format value defined with value different
+        from json is not accepted. */
+        if( req.query.format != 'json' && req.query.format ) {
+            return(res.status(400).send({ message: "Bad Request" })); 
+        }
+
         Product.deleteOne(
         { _id: req.originalUrl.slice(26)},
         (err) => {
