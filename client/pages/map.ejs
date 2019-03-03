@@ -22,22 +22,26 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,800">
 
 </head>
-<body onload='hideButton()'>
+<body onload='onLoad()'>
 <h5 class="lead mb-3">Ψάχνεις για μαγαζί;</h5>
+
 <div id="map"></div>
 
-<input id="confirmShop" type="button" class="btn btn-primary mt-4 mb-3" value="Confirm shop" onclick="confirmShop();"/>
+<input id="confirmShop" type="button" class="btn btn-primary mt-4 mb-3" value="Επιβεβαίωση επιλογής" onclick="confirmShop();"/>
 
-<form id="newShop">
+<form id="newShop" action='/shop_info' method="POST">
+  <input id="lat" type="text" name="lat" hidden>
+  <input id="lng" type="text" name="lng" hidden>
+  <input id="address" type="text" name="address" hidden>
   <div class="form-group">
     <label for="shopname">Shop name</label>
-    <input id="sn" type="text" placeholder="Enter shop name" name="shopname" required>
+    <input id="shop-name" type="text" placeholder="Enter shop name" name="name" required>
   </div>
   <div class="form-group">
     <label for="shoptags">Shop Tags</label>
-    <input id = "st" type="text" placeholder="Enter shop tags seperated with comma" name="shoptags" required>
+    <input id = "shop-tags" type="text" placeholder="Enter shop tags seperated with comma" name="tags" required>
   </div>
-  <input id="zonk" type="button" class="btn btn-primary" value="press" onclick="mytest()"/>
+  <button type="submit" class="btn btn-primary">Καταχώρηση</button>
 </form>
 
 </body>
