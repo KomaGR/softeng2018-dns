@@ -132,6 +132,13 @@ function routes(app) {
             token: auth_token
         });
     })
+    .post("/shop_info", (req, res) => {
+        req.body.tags = req.body.tags.split(',');
+        console.log(req.body);
+        // Do something with data (shop to backend).
+        // Redirect to submit product?
+        res.status(200).redirect('/')
+    })
     
     .post("/submit_shop", redirectLogin, shop.submit);
 
