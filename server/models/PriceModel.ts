@@ -12,7 +12,7 @@ export const PriceSchema = new Schema({
         type: Number,
         required: 'Enter price'
     },
-    dateFrom: {
+    date: {
         type: Date,
         required: 'Enter date',
         default: Date.now,
