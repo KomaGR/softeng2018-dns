@@ -15,7 +15,8 @@ export default class UserController {
 
         newUser.save((err, user) => {
             if (err) {
-                res.send(err);
+                if (err.code === 11000) res.status(403).send({message: "Username or email already exists"});
+                res.status(500).send(err);
             }
             res.status(201).send(
                 { message: "Created" }
@@ -32,6 +33,9 @@ export default class UserController {
             (err, user) => {
             if (err) {
                 res.status(500).send(err);
+            }
+            if (user.length === 0) {
+                res.status(404).send("Not found");
             }
             
             console.log(user[0]);

@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { PriceController } from '../controllers/PriceController';
+import { bounceStrangers } from "./bouncer";
 
 type Request = express.Request;
 type Response = express.Response;
@@ -31,7 +32,7 @@ export default class {
             .get('/', this.priceController.getPrice)
             
             // create a new price
-            .post('/', this.priceController.addNewPrice)
+            .post('/', bounceStrangers, this.priceController.addNewPrice)
 
             
     }
