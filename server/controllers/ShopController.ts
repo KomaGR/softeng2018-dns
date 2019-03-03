@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import {Shop} from '../models/ShopModel';
 import * as express from 'express';
 import { Int32 } from 'bson';
-import { Price } from './PriceController';
+import { Price } from '../models/PriceModel';
 
 
 type Request = express.Request;

@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import {Product} from '../models/ProductModel';
 import * as express from 'express';
-import { Price } from './PriceController';
+import { Price } from '../models/PriceModel';
 
 
 type Request = express.Request;
