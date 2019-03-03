@@ -1,13 +1,9 @@
 import * as mongoose from 'mongoose';
-import * as PriceModel from '../models/PriceModel';
+import { Price } from '../models/PriceModel';
 import * as express from 'express';
-let DateDiff = require('date-diff');
-
 
 type Request = express.Request;
 type Response = express.Response;
-
-export const Price = mongoose.model('Price', PriceModel.PriceSchema);
 
 const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
