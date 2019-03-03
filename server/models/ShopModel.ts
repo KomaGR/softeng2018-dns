@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const ShopSchema = new Schema({
+export const ShopSchema = new Schema({
     name: {
         type: String,
         required: 'Enter name'
