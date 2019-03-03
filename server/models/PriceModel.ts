@@ -1,10 +1,10 @@
 import * as mongoose from 'mongoose';
-import { Product } from './ProductModel';
-import { Shop } from './ShopModel';
+import { ProductSchema } from './ProductModel';
+import { ShopSchema } from './ShopModel';
 
 const Schema = mongoose.Schema;
 
-const PriceSchema = new Schema({
+export const PriceSchema = new Schema({
     price: {
         type: Number,
         required: 'Enter price'
