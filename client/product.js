@@ -74,7 +74,10 @@ function productGetInfo(req, res) {
         port: 8765,
         path: '/observatory/api/products/' + productid,
         rejectUnauthorized: false,
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            'X-OBSERVATORY-AUTH': req.session.auth_token
+        }
     };
 
     const httpsreq = https.request(options, (httpsres) => {

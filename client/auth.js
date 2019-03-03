@@ -29,6 +29,9 @@ function loginRoute(req, res) {
         form: {
             username: req.body.username,
             password: req.body.password
+        },
+        headers: {
+            'X-OBSERVATORY-AUTH': req.session.auth_token
         }
     };
 

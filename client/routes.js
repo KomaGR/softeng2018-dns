@@ -54,7 +54,10 @@ function routes(app) {
             port: 8765,
             path: '/observatory/api/products',
             rejectUnauthorized: false,
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'X-OBSERVATORY-AUTH': req.session.auth_token
+            }
         };
         const httpsreq = https.request(options, (httpsres) => {
             console.log('statuscode', httpsres.statusCode);
@@ -148,7 +151,10 @@ function routes(app) {
             port: 8765,
             path: '/observatory/api/users',
             rejectUnauthorized: false,
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'X-OBSERVATORY-AUTH': req.session.auth_token
+            }
         };
         const httpsreq = https.request(options, (httpsres) => {
             console.log('statuscode', httpsres.statusCode);
