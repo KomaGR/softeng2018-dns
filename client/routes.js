@@ -140,7 +140,142 @@ function routes(app) {
         res.status(200).redirect('/')
     })
     
-    .post("/submit_shop", redirectLogin, shop.submit);
+    .post("/submit_shop", redirectLogin, shop.submit)
+
+    .get("/admin_hub", redirectLogin, function(req, res){
+        const options = {
+            hostname: 'localhost',
+            port: 8765,
+            path: '/observatory/api/users',
+            rejectUnauthorized: false,
+            method: 'GET'
+        };
+        const httpsreq = https.request(options, (httpsres) => {
+            console.log('statuscode', httpsres.statusCode);
+            httpsres.on('data', (d) => {
+                var mydata = JSON.parse(d);
+                const { auth_token } = req.session;
+                res.render("admin_hub.ejs", {
+                    users: mydata,
+                    token: auth_token  
+                });
+            });
+        });
+        httpsreq.on('error', (e) => {
+            console.error(e);
+        });
+        httpsreq.end();
+    })
+
+    .patch("/adminUpgrade", redirectLogin, function(req, res){
+        var userId = req.body.admin;
+        const options = {
+            hostname: 'localhost',
+            port: 8765,
+            path: '/observatory/api/users/' + userId,
+            rejectUnauthorized: false,
+            method: 'PATCH',
+            json: {
+                "role": 'admin'
+            }
+        };
+        const httpsreq = https.request(options, (httpsres) => {
+            console.log('statuscode', httpsres.statusCode);
+            res.redirect('/admin_hub');
+        });
+        httpsreq.on('error', (e) => {
+            console.error(e);
+        });
+        httpsreq.end();
+    })
+
+    .patch("/investorUpgrade", redirectLogin, function(req, res){
+        var userId = req.body.investor;
+        const options = {
+            hostname: 'localhost',
+            port: 8765,
+            path: '/observatory/api/users/' + userId,
+            rejectUnauthorized: false,
+            method: 'PATCH',
+            json: {
+                "role": 'investor'
+            }
+        };
+        const httpsreq = https.request(options, (httpsres) => {
+            console.log('statuscode', httpsres.statusCode);
+            res.redirect('/admin_hub');
+        });
+        httpsreq.on('error', (e) => {
+            console.error(e);
+        });
+        httpsreq.end();
+    })
+
+    .patch("/userDowngrade", redirectLogin, function(req, res){
+        var userId = req.body.downgrade;
+        const options = {
+            hostname: 'localhost',
+            port: 8765,
+            path: '/observatory/api/users/' + userId,
+            rejectUnauthorized: false,
+            method: 'PATCH',
+            json: {
+                "role": 'user'
+            }
+        };
+        const httpsreq = https.request(options, (httpsres) => {
+            console.log('statuscode', httpsres.statusCode);
+            res.redirect('/admin_hub');
+        });
+        httpsreq.on('error', (e) => {
+            console.error(e);
+        });
+        httpsreq.end();
+    })
+
+    .patch("/userLock", redirectLogin, function(req, res){
+        var userId = req.body.lock;
+        const options = {
+            hostname: 'localhost',
+            port: 8765,
+            path: '/observatory/api/users/' + userId,
+            rejectUnauthorized: false,
+            method: 'PATCH',
+            json: {
+                "locked": true
+            }
+        };
+        const httpsreq = https.request(options, (httpsres) => {
+            console.log('statuscode', httpsres.statusCode);
+            res.redirect('/admin_hub');
+        });
+        httpsreq.on('error', (e) => {
+            console.error(e);
+        });
+        httpsreq.end();
+    })
+
+    .patch("/userUnlock", redirectLogin, function(req, res){
+        var userId = req.body.unlock;
+        const options = {
+            hostname: 'localhost',
+            port: 8765,
+            path: '/observatory/api/users/' + userId,
+            rejectUnauthorized: false,
+            method: 'PATCH',
+            json: {
+                "locked": false
+            }
+        };
+        const httpsreq = https.request(options, (httpsres) => {
+            console.log('statuscode', httpsres.statusCode);
+            res.redirect('/admin_hub');
+        });
+        httpsreq.on('error', (e) => {
+            console.error(e);
+        });
+        httpsreq.end();
+    });
 
  }
 

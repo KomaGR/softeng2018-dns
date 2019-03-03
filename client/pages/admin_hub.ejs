@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <% include navbar.ejs %>
+    </head>
+    <body>                
+        <div class = "ml-md-5 mr-md-5 ">
+            <% include search_bar.ejs %>
+        </div>
+        
+
+            
+        <h3 class=" mb-4 mt-3 ml-3"> Μενού διαχείρισης: </h3>
+
+        <div class="col ">
+            <% for(var i = 0;i < users.length;i++){ %>
+            <div class="row-6 mb-3 ">
+                <div class="col">
+                    <div class="card p-md-2" > 
+                        <div class="ml-0">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="lead "> Username: <%= users[i].username %> </p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="lead "> Email: <%= users[i].email %></p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="lead "> Role: <%= users[i].role %></p>
+                                </div>
+                            </div>
+                            <% if ( users[i].role == 'user' ){ %>
+                            <form  class="form-group text-center text-md-left" action='/adminUpgrade' method='PATCH'>
+                                <button class="btn btn-outline-secondary" type="submit" name='admin' value="<%=users[i].id%>">Upgrade to admin</button>
+                            </form>
+                            <form  class="form-group text-center text-md-left" action='/investorUpgrade' method='PATCH'>
+                                <button class="btn btn-outline-secondary" type="submit" name='investor' value="<%=users[i].id%>">Upgrade to investor</button>
+                            </form>
+                            <% }else if( users[i].role == 'admin' ){ %>
+                            <form  class="form-group text-center text-md-left" action='/userDowngrade' method='PATCH'>
+                                <button class="btn btn-outline-secondary" type="submit" name='downgrade' value="<%=users[i].id%>">Downgrade to user</button>
+                            </form>
+                            <form  class="form-group text-center text-md-left" action='/investorUpgrade' method='PATCH'>
+                                <button class="btn btn-outline-secondary" type="submit" name='investor' value="<%=users[i].id%>">Change to investor</button>
+                            </form>
+                            <% } %>
+                            <% else if ( users[i].role == 'investor' ){ %>
+                            <form  class="form-group text-center text-md-left" action='/userDowngrade' method='PATCH'>
+                                <button class="btn btn-outline-secondary" type="submit" name='downgrade' value="<%=users[i].id%>">Downgrade to user</button>
+                            </form>
+                            <form  class="form-group text-center text-md-left" action='/adminUpgrade' method='PATCH'>
+                                <button class="btn btn-outline-secondary" type="submit" name='admin' value="<%=users[i].id%>">Change to admin</button>
+                            </form>
+                            <% } %>
+                            <% if ( users[i].locked ){ %>
+                            <form  class="form-group text-center text-md-left" action='/userUnlock' method='PATCH'>
+                                <button class="btn btn-outline-secondary" type="submit" name='unlock' value="<%=users[i].id%>">Unlock user</button>
+                            </form>
+                            <% } else {%>
+                            <form  class="form-group text-center text-md-left" action='/userLock' method='PATCH'>
+                                <button class="btn btn-outline-secondary" type="submit" name='lock' value="<%=users[i].id%>">Lock user</button>
+                            </form>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <% include footer.ejs %>
+    </body>
+</html>
