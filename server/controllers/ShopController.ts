@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import * as ShopModel from '../models/ShopModel';
+import {Shop} from '../models/ShopModel';
 import * as express from 'express';
 import { Int32 } from 'bson';
 import { Price } from './PriceController';
@@ -8,19 +8,20 @@ import { Price } from './PriceController';
 type Request = express.Request;
 type Response = express.Response;
 
-const Shop = mongoose.model('Shop', ShopModel.ShopSchema);
-
-
 export class ShopController {
 
     // add a new shop on database
     public addNewShop(req: Request, res: Response) {
+        
         let newShop = new Shop(req.body);
 
+        /* if all required fields were given then
+           save new product to database, else throw
+           error 400 : Bad Request */
         newShop.save((err, shop) => {
             if (err) {
-                res.send(err);
-            }
+                res.status(400).send({ message: "Bad Request" });
+            }     
             res.json(shop);
         });
     }

@@ -1,13 +1,11 @@
 import * as mongoose from 'mongoose';
-import * as UserModel from '../models/UserModel';
+import {User} from '../models/UserModel';
 import * as express from 'express';
 
 import { session_manager } from "../app";
 
 type Request = express.Request;
 type Response = express.Response;
-
-const User = mongoose.model('User', UserModel.UserSchema);
 
 export default class UserController {
 
