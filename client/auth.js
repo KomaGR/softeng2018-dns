@@ -18,7 +18,8 @@ exports.session = session({
         maxAge: SESSION_LIFETIME,
         sameSite: true,
         secure: true
-    }
+    },
+    role:undefined
 })
 
 function loginRoute(req, res) {
@@ -46,6 +47,7 @@ function loginRoute(req, res) {
             const jsonBody = JSON.parse(body);
             console.log('#Front# token: ' + jsonBody.token);
             req.session.auth_token = jsonBody.token;
+            req.session.role = jsonBody.role;
             res.status(200).redirect('/');
         }
     })
@@ -70,6 +72,7 @@ function logoutRoute(req, res) {
         if (httpsResponse.statusCode == 200) {
             const jsonBody = JSON.parse(body);
             req.session.auth_token = undefined;
+            req.session.role = undefined;
             res.status(200).redirect('/');
         }
     });
