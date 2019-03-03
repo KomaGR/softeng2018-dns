@@ -9,29 +9,53 @@ type Response = express.Response;
 
 export const Price = mongoose.model('Price', PriceModel.PriceSchema);
 
+const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+// a and b are javascript Date objects
+function dateDiffInDays(a, b) {
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+}
+
+
 export class PriceController {
 
     public addNewPrice(req: Request, res: Response) {
-        let date1 = new Date(req.body.dateFrom);
-        let date2 = new Date(req.body.dateTo);
 
-        let diff = new DateDiff(date2, date1);
+        let endDate = new Date(req.body.dateTo);
+        let referenceDate = new Date(req.body.dateFrom);
+        console.log(referenceDate);
+        console.log(endDate);
 
-        console.log(diff.days(), typeof (diff.days()));
+        delete req.body.dateFrom;
+        delete req.body.dateTo;
 
-        // for (let i = 0; i <= diff.days(); i++) {
-            // req.body.dateTo = date1 + i;
-            // console.log(i+1)
+        let diff = dateDiffInDays(referenceDate, endDate);
+        if (diff < 0) {
+            res.status(400).send({ message: "Bad Request" });
+        }
+        var prices = [];
+
+        for (let i = 0; i <= diff; i++) {
+            req.body.date = new Date(referenceDate);
+            referenceDate.setDate(referenceDate.getDate()+1);
+
             let newPrice = new Price(req.body);
 
             newPrice.save((err, price) => {
                 if (err) {
                     res.send(err);
                 }
-                res.json(price);
+                // res.json(price);
+                prices.push(price);
             });
-        // }
-        // res.sendStatus(200)
+
+        }
+        console.log(prices);
+        res.send(prices);
 
     }
 
