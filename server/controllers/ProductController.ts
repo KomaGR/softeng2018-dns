@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import * as ProductModel from '../models/ProductModel';
+import {Product} from '../models/ProductModel';
 import * as express from 'express';
 import { Price } from './PriceController';
 
@@ -7,19 +7,19 @@ import { Price } from './PriceController';
 type Request = express.Request;
 type Response = express.Response;
 
-const Product = mongoose.model('Product', ProductModel.ProductSchema);
-
-
 export class ProductController {
 
     // add a new product on database
-    public addNewProduct(req: Request, res: Response) {
-        
-        let newProduct = new Product(req.body);        
+    public addNewProduct(req: Request, res: Response) {  
 
+        let newProduct: any = new Product(req.body);        
+
+        /* if all required fields were given then
+           save new product to database, else throw
+           error 400 : Bad Request */
         newProduct.save((err, product) => {
             if (err) {
-                res.send(err);
+                res.status(400).send({ message: "Bad Request" });
             }            
             res.json(product);
         });

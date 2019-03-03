@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-export const ShopSchema = new Schema({
+const ShopSchema = new Schema({
     name: {
         type: String,
         required: 'Enter name'
@@ -20,11 +20,13 @@ export const ShopSchema = new Schema({
         required: 'Enter latitude'
     },
     tags: [{
-        type: String
+        type: String,
+        required: 'Enter tags'
     }],
     withdrawn: {
         type: Boolean,
-        default: false
+        default: false,
+        required: 'Set value'
     },
     dateCreated: {
         type: Date,
@@ -38,5 +40,13 @@ ShopSchema.set('toJSON', {
     transform: function (doc, ret) { delete ret._id, delete ret.dateCreated }
 });
 
+// Error handler (error message customization)
+ShopSchema.post('save', function(error, doc, next) {
+    if (error.name === 'ValidatorError' && error.code === 11000) {
+      next(new Error('Bad Request'));
+    } else {
+      next();
+    }
+  });
 
-module.exports = mongoose.model('Shop', ShopSchema);
+export const Shop = mongoose.model('Shop', ShopSchema);

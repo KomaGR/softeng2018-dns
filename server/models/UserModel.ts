@@ -2,15 +2,7 @@ import * as mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-export interface User extends mongoose.Document {
-    email: string;
-    username: string;
-    password: string;
-    role: string;
-    dateCreated: Date;
-}
-
-export const UserSchema = new Schema({
+const UserSchema = new Schema({
     email: {
 	    type: String,
 	    required: 'Enter email'
@@ -41,4 +33,4 @@ UserSchema.set('toJSON', {
     transform: function (doc, ret) { delete ret._id, delete ret.dateCreated }
 });
 
-module.exports = mongoose.model('User', UserSchema);
+export const User = mongoose.model('User', UserSchema);
