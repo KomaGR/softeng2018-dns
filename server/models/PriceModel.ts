@@ -4,6 +4,9 @@ import { ShopSchema } from './ShopModel';
 
 const Schema = mongoose.Schema;
 
+const Shop = mongoose.model('Shop', ShopSchema);
+const Product = mongoose.model('Product', ProductSchema);
+
 export const PriceSchema = new Schema({
     price: {
         type: Number,
