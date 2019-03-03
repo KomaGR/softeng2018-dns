@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 const Product = mongoose.model('Product', ProductSchema);
 const Shop = mongoose.model('Shop', ShopSchema);
 
-export const PriceSchema = new Schema({
+const PriceSchema = new Schema({
     price: {
         type: Number,
         required: 'Enter price'
@@ -39,4 +39,4 @@ PriceSchema.set('toJSON', {
     transform: function (doc, ret) { delete ret._id, delete ret.dateCreated }
 });
 
-module.exports = mongoose.model('Price', PriceSchema);
+export const Price = mongoose.model('Price', PriceSchema);
