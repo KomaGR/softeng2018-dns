@@ -98,8 +98,8 @@ function productGetInfo(req, res) {
                         var shopData = JSON.parse(d);
                         res.render('shop_info.ejs', {
                             shopData: shopData,
-                            priceData: pricedata,
-                            productData: myproductdata,
+                            priceData: priceData,
+                            productData: productData,
                             session: session  
                         });
                     });
