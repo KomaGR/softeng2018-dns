@@ -22,6 +22,13 @@ function newOldMarker(e) {
     var mylatlng = new L.LatLng(e.lat,e.lng);
     id = e.id;
     oldmymarker = L.marker(mylatlng).addTo(mymap).bindPopup(e.name).on('click', (e)=>{
+        for ( var i=0; i<shops.length; i++){
+            //console.log(e.lat + " vs " + shops[i].lat);
+            if ( (e.latlng.lat == shops[i].lat) && (e.latlng.lng == shops[i].lng)){
+                //console.log("zonk");
+                id = shops[i].id;
+            }
+        }
         markerdata = {
             shopId: id
         }
@@ -29,6 +36,7 @@ function newOldMarker(e) {
             mymap.removeLayer(mymarker);
             mymarker = null;
         }
+        console.log(markerdata);
     });
 }
 
