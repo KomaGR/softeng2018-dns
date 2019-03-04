@@ -38,7 +38,7 @@ ProductSchema.set('toJSON', {
 
 // Error handler (error message customization)
 ProductSchema.post('save', function(error, doc, next) {
-    if (error.name === 'ValidatorError' && error.code === 11000) {
+    if (error.code === 11000) {
       next(error);
     } else {
       next();
