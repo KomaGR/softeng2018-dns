@@ -17,15 +17,28 @@ describe('Login endpoints', () => {
     });
 
     afterAll((done) => {
-        app.default.db.close();
-        server.close();
-    });
-
-    beforeEach((done) => {
-        app.default.db.dropDatabase( () => {
+        async.waterfall([
+            (cb) => app.default.db.dropDatabase(cb),
+            (res,cb) => app.default.db.close(cb),
+            (res,cb) => server.close(cb)
+        ], (err, res) => {
+            if (err) done(err);
             done();
         });
+        
     });
+
+    // beforeEach((done) => {
+    //     app.default.db.dropDatabase( () => {
+    //         done();
+    //     });
+    // });
+
+    // afterEach((done) => {
+    //     app.default.db.dropDatabase( () => {
+    //         done();
+    //     });
+    // });
 
     test('Empty POST /login is Bad Request', (done) => {
         request(server)
@@ -48,12 +61,12 @@ describe('Login endpoints', () => {
         async.waterfall([
             (cb) => request(server)
                     .post('/observatory/api/signup')
-                    .send({email: 'username@example', username: 'testname', password: '12345'})
+                    .send({email: 'username1@example', username: 'testname1', password: '12345'})
                     .set('Accept', 'application/json')
                     .expect(201, cb),
             (results, cb) => request(server)
                 .post('/observatory/api/login')
-                .send({username: 'testname', password: '12345'})
+                .send({username: 'testname1', password: '12345'})
                 .set('Accept', 'application/json')
                 .expect(200, cb)
         ], (err, res) => {
