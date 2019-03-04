@@ -73,33 +73,13 @@ export class UserController {
     // update only one field of a specific user on database
     public partialUpdateUser(req: Request, res: Response) {
 
-        /* check query's format. Only acceptable format is json.
-        We also accept queries with the format field undefined
-        Any query with format value defined with value different
-        from json is not accepted. */
-        if (req.query.format != 'json' && req.query.format) {
-            return (res.status(400).send({ message: "Bad Request" }));
-        }
-
-        // check that user passes exactly one entry
-        if (Object.entries(req.body).length != 1) {
-            return (res.status(400).send({ message: "Bad Request" }));
-        }
-
-        /* check that the entry given, is one of the
-        entries of user entity */
-        if (!(req.body.username) &&
-            !(req.body.password)){
-            return (res.status(400).send({ message: "Bad Request" }));
-        }
-
         /* get key and value for the field that
         should be updated */
         let key = Object.keys(req.body)[0];
         let value = Object.values(req.body)[0];
 
         User.findByIdAndUpdate(
-            { _id: req.originalUrl.slice(26) },
+            { _id: req.originalUrl.slice(23) },
             { [key]: value }, { new: true },
             (err, user) => {
                 if (err) {
