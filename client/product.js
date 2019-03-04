@@ -56,13 +56,14 @@ function productSubmitRoute(req, res) {
 
 function productGetInfo(req, res) {
 
-    var productid = req.query.productID;
-    console.log(productid);
+    var productId = req.query.productID;
+    const session = req.session;
+    console.log(productId);
 
     const options = {
         hostname: 'localhost',
         port: 8765,
-        path: '/observatory/api/products/' + productid,
+        path: '/observatory/api/products/' + productId,
         rejectUnauthorized: false,
         method: 'GET'
     };
@@ -71,19 +72,54 @@ function productGetInfo(req, res) {
         console.log('statuscode', httpsres.statusCode);
         httpsres.on('data', (d) => {
             var mydata = JSON.parse(d);
-            const session = req.session;
-            res.render("product_info.ejs", {
-                product: mydata,
-                session: session
+            const options1 = {
+                hostname: 'localhost',
+                port: 8765,
+                path: '/observatory/api/prices/?products=' + productId,
+                rejectUnauthorized: false,
+                method: 'GET'
+            };
 
+        const httpsreqPrices = https.request(options1, (httpsres) => {
+            console.log('statuscodde:', httpsres.statusCode);
+            httpsres.on('data', (d) => {
+                var productData = JSON.parse(d);
+                var priceData = productData.prices;
+                const options2 = {
+                    hostname: 'localhost',
+                    port: 8765,
+                    path: '/observatory/api/shops/' + priceData.shopId,
+                    rejectUnauthorized: false,
+                    method: 'GET' 
+                };
+                const httpsreqShops = https.request(options2, (httpsres) => {
+                    console.log('statuscode', httpsres.statusCode);
+                    httpsres.on('data', (d) => {
+                        var shopData = JSON.parse(d);
+                        res.render('shop_info.ejs', {
+                            shopData: shopData,
+                            priceData: pricedata,
+                            productData: myproductdata,
+                            session: session  
+                        });
+                    });
+                });
+
+                 httpsreqShops.on('error', (e) => {
+                        console.error(e);
+                    });
+                    httpsreqShops.end();
+                });
             });
+            httpsreqPrices.on('error', (e) => {
+                console.error(e);
+            });
+            httpsreqPrices.end();
         });
     });
-
     httpsreq.on('error', (e) => {
         console.error(e);
     });
-
     httpsreq.end();
 }
 
