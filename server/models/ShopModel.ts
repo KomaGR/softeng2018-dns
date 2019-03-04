@@ -1,6 +1,9 @@
 import * as mongoose from 'mongoose';
+import * as express from 'express';
 
 const Schema = mongoose.Schema;
+type Request = express.Request;
+type Response = express.Response;
 
 export const ShopSchema = new Schema({
     name: {
@@ -12,12 +15,16 @@ export const ShopSchema = new Schema({
         required: 'Enter address'
     },
     lng: {
-        type: String,
+        type: Number,
         required: 'Enter longitude'
     },
     lat: {
-        type: String,
+        type: Number,
         required: 'Enter latitude'
+    },
+    location: {
+        type: {type: String, default: 'Point'},
+        coordinates: [Number],
     },
     tags: [{
         type: String,
@@ -44,9 +51,11 @@ ShopSchema.set('toJSON', {
 ShopSchema.post('save', function(error, doc, next) {
     if (error.name === 'ValidatorError' && error.code === 11000) {
         next(error);
-      } else {
+    } else {
         next();
-      }
-  });
+    }
+});
+
+ShopSchema.index({ location: '2dsphere' });
 
 export const Shop = mongoose.model('Shop', ShopSchema);
