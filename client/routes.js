@@ -199,114 +199,127 @@ function routes(app) {
         httpsreq.end();
     })
 
-    .patch("/adminUpgrade", redirectLogin, function(req, res){
+    .post("/adminUpgrade", redirectLogin, function(req, res){
         var userId = req.body.admin;
         const options = {
-            hostname: 'localhost',
-            port: 8765,
-            path: '/observatory/api/users/' + userId,
+            url: 'https://localhost:8765/observatory/api/users/' + userId,
             rejectUnauthorized: false,
-            method: 'PATCH',
-            json: {
-                "role": 'admin'
+            form: {
+                role: 'admin'
+            },
+            headers: {
+                'X-OBSERVATORY-AUTH': req.session.auth_token
             }
         };
-        const httpsreq = https.request(options, (httpsres) => {
-            console.log('statuscode', httpsres.statusCode);
-            res.redirect('/admin_hub');
-        });
-        httpsreq.on('error', (e) => {
-            console.error(e);
-        });
-        httpsreq.end();
+
+        request.patch(options, (err, httpsResponse, body) => {
+            if (err) {
+                res.send(err);
+            }
+            if (httpsResponse.statusCode == 200) {
+                res.redirect('/admin_hub');
+            }
+ 
+        })
     })
 
-    .patch("/investorUpgrade", redirectLogin, function(req, res){
+    .post("/investorUpgrade", redirectLogin, function(req, res){
         var userId = req.body.investor;
         const options = {
-            hostname: 'localhost',
-            port: 8765,
-            path: '/observatory/api/users/' + userId,
+            url: 'https://localhost:8765/observatory/api/users/' + userId,
             rejectUnauthorized: false,
-            method: 'PATCH',
-            json: {
-                "role": 'investor'
+            form: {
+                role: 'investor'
+            },
+            headers: {
+                'X-OBSERVATORY-AUTH': req.session.auth_token
             }
         };
-        const httpsreq = https.request(options, (httpsres) => {
-            console.log('statuscode', httpsres.statusCode);
-            res.redirect('/admin_hub');
-        });
-        httpsreq.on('error', (e) => {
-            console.error(e);
-        });
-        httpsreq.end();
+
+        request.patch(options, (err, httpsResponse, body) => {
+            if (err) {
+                res.send(err);
+            }
+            if (httpsResponse.statusCode == 200) {
+                res.redirect('/admin_hub');
+            }
+ 
+        })
+    
     })
 
-    .patch("/userDowngrade", redirectLogin, function(req, res){
+    .post("/userDowngrade", redirectLogin, function(req, res){
         var userId = req.body.downgrade;
         const options = {
-            hostname: 'localhost',
-            port: 8765,
-            path: '/observatory/api/users/' + userId,
+            url: 'https://localhost:8765/observatory/api/users/' + userId,
             rejectUnauthorized: false,
-            method: 'PATCH',
-            json: {
-                "role": 'user'
+            form: {
+                role: 'user'
+            },
+            headers: {
+                'X-OBSERVATORY-AUTH': req.session.auth_token
             }
         };
-        const httpsreq = https.request(options, (httpsres) => {
-            console.log('statuscode', httpsres.statusCode);
-            res.redirect('/admin_hub');
-        });
-        httpsreq.on('error', (e) => {
-            console.error(e);
-        });
-        httpsreq.end();
+
+        request.patch(options, (err, httpsResponse, body) => {
+            if (err) {
+                res.send(err);
+            }
+            if (httpsResponse.statusCode == 200) {
+                res.redirect('/admin_hub');
+            }
+ 
+        })
+    
     })
 
-    .patch("/userLock", redirectLogin, function(req, res){
+    .post("/userLock", redirectLogin, function(req, res){
         var userId = req.body.lock;
         const options = {
-            hostname: 'localhost',
-            port: 8765,
-            path: '/observatory/api/users/' + userId,
+            url: 'https://localhost:8765/observatory/api/users/' + userId,
             rejectUnauthorized: false,
-            method: 'PATCH',
-            json: {
-                "locked": true
+            form: {
+                locked: true
+            },
+            headers: {
+                'X-OBSERVATORY-AUTH': req.session.auth_token
             }
         };
-        const httpsreq = https.request(options, (httpsres) => {
-            console.log('statuscode', httpsres.statusCode);
-            res.redirect('/admin_hub');
-        });
-        httpsreq.on('error', (e) => {
-            console.error(e);
-        });
-        httpsreq.end();
+
+        request.patch(options, (err, httpsResponse, body) => {
+            if (err) {
+                res.send(err);
+            }
+            if (httpsResponse.statusCode == 200) {
+                res.redirect('/admin_hub');
+            }
+ 
+        })
+    
     })
 
-    .patch("/userUnlock", redirectLogin, function(req, res){
+    .post("/userUnlock", redirectLogin, function(req, res){
         var userId = req.body.unlock;
         const options = {
-            hostname: 'localhost',
-            port: 8765,
-            path: '/observatory/api/users/' + userId,
+            url: 'https://localhost:8765/observatory/api/users/' + userId,
             rejectUnauthorized: false,
-            method: 'PATCH',
-            json: {
-                "locked": false
+            form: {
+                locked: false
+            },
+            headers: {
+                'X-OBSERVATORY-AUTH': req.session.auth_token
             }
         };
-        const httpsreq = https.request(options, (httpsres) => {
-            console.log('statuscode', httpsres.statusCode);
-            res.redirect('/admin_hub');
-        });
-        httpsreq.on('error', (e) => {
-            console.error(e);
-        });
-        httpsreq.end();
+
+        request.patch(options, (err, httpsResponse, body) => {
+            if (err) {
+                res.send(err);
+            }
+            if (httpsResponse.statusCode == 200) {
+                res.redirect('/admin_hub');
+            }
+ 
+        })
     });
 
  }
