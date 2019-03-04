@@ -38,7 +38,7 @@ function routes(app) {
     .get("/", function (req, res) {
          console.log(req.session);
          const session = req.session;
-         console.log(auth_token);
+         console.log(session.auth_token);
          const options = {
             url: 'https://localhost:8765/observatory/api/shops',
             rejectUnauthorized: false
@@ -47,6 +47,7 @@ function routes(app) {
             if (err) {
                 res.send(err);
             }
+            response= httpsResponse.statusCode;
             if (httpsResponse.statusCode == 200) {
                 const jsonBody = JSON.parse(body);
                 res.status(200).render("homepage.ejs", {
@@ -147,7 +148,7 @@ function routes(app) {
     .get("/submit_shop", redirectLogin, function (req, res) {
         console.log(req.session);
          const session = req.session;
-         console.log(auth_token);
+         console.log(session.auth_token);
          const options = {
             url: 'https://localhost:8765/observatory/api/shops',
             rejectUnauthorized: false
