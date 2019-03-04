@@ -27,8 +27,12 @@
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav ml-auto">                            
-                                <% if ( token ) { %>
+                            <ul class="navbar-nav ml-auto">   
+                                <%      console.log("role is:" + session.auth_token);
+                                    if (session.role == 'admin') { %>
+                                    <a class="nav-link nav-link-ltr text-white" href="/admin_hub">Admin Hub</a>
+                                <% } %>
+                                <% if ( session.auth_token ) { %>
                                     <a class="nav-link nav-link-ltr text-white" href="/logout">Αποσυνδεση</a>
                                 <% } else{ %>
                                     <li class="nav-item">
