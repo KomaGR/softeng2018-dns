@@ -38,11 +38,15 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-ts": "^6.0.0-beta.22",
     "jest": "^24.1.0",
+    "jest-extended": "^0.11.1",
     "supertest": "^3.4.2",
     "typescript": "^3.3.3333"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "jest-extended"
+    ]
   },
   "scripts": {
     "test": "jest",
