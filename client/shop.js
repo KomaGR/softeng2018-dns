@@ -46,6 +46,7 @@ function shopSubmit(req, res) {
 
 function shopInfo(req, res){
     var shopId = req.body.shopId;
+    const session = req.session;
     const options = {
         hostname: 'localhost',
         port: 8765,
@@ -58,36 +59,105 @@ function shopInfo(req, res){
         console.log('statuscode', httpsres.statusCode);
         httpsres.on('data', (d) => {
             shopdata = JSON.parse(d);
+            const options1 = {
+                hostname: 'localhost',
+                port: 8765,
+                path: '/observatory/api/prices/?shops=' + shopId,
+                rejectUnauthorized: false,
+                method: 'GET'
+            };
+            const httpsreq1 = https.request(options1, (httpsres) => {
+                console.log('statuscode', httpsres.statusCode);
+                httpsres.on('data', (d) => {
+                    var mydata = JSON.parse(d);
+                    var pricedata = mydata.prices;
+                    const options2 = {
+                        hostname: 'localhost',
+                        port: 8765,
+                        path: '/observatory/api/products/' + pricedata.productId,
+                        rejectUnauthorized: false,
+                        method: 'GET'
+                    };
+                    const httpsreq2 = https.request(options2, (httpsres) => {
+                        console.log('statuscode', httpsres.statusCode);
+                        httpsres.on('data', (d) => {
+                            var myproductdata = JSON.parse(d);
+                            res.render('shop_info.ejs', {
+                                shopData: shopdata,
+                                priceData: pricedata,
+                                productData: myproductdata,
+                                session: session  
+                            });
+                        });
+                    });
+                    httpsreq2.on('error', (e) => {
+                        console.error(e);
+                    });
+                    httpsreq2.end();
+                });
+            });
+            httpsreq1.on('error', (e) => {
+                console.error(e);
+            });
+            httpsreq1.end();
         });
     });
     httpsreq.on('error', (e) => {
         console.error(e);
     });
     httpsreq.end();
+}
 
-    const options1 = {
-        hostname: 'localhost',
-        port: 8765,
-        path: '/observatory/api/prices/?shops=' + shopId,
+function shopPutInfo(req, res) {
+
+    var shopid = req.body.shopID;
+
+    const options = {
+        url: 'https://localhost:8765/observatory/api/shops/' + shopid,
         rejectUnauthorized: false,
-        method: 'GET'
+        form: {
+            name: req.body.productname,
+            description: req.body.productdescription,
+            category: req.body.productcategory,
+            tags: req.body.producttags
+        },
+        headers: {
+            'X-OBSERVATORY-AUTH': req.session.auth_token
+        }
     };
-    const httpsreq1 = https.request(options1, (httpsres) => {
-        console.log('statuscode', httpsres.statusCode);
-        httpsres.on('data', (d) => {
-            var mydata = JSON.parse(d);
-            var pricedata = mydata.prices;
-            res.render('shop_info.ejs', {
-                shopData: shopdata,
-                priceData: pricedata
-            });
-        });
+
+    request.put(options, (err, httpsResponse, body) =>{
+       
+        if (httpsResponse.statusCode == 200){
+            const data = JSON.parse(body); 
+            res.render("shop_info.ejs", {
+                shopData: data,
+                session: req.session
+            })
+        }
     });
-    httpsreq1.on('error', (e) => {
-        console.error(e);
+}
+function shopDeleteInfo(req, res) {
+
+    var shopid = req.body.shopID;
+    const options = {
+        url: 'https://localhost:8765/observatory/api/shops/' + shopid,
+        rejectUnauthorized: false,
+        headers: {
+            'X-OBSERVATORY-AUTH': req.session.auth_token
+        }
+    };
+
+    request.delete(options, (err, httpsResponse, body) =>{
+       
+        if (httpsResponse.statusCode == 200){
+            const data = JSON.parse(body); 
+            res.redirect('/');
+        }
     });
-    httpsreq1.end();
 }
 
 exports.submit = shopSubmit;
 exports.info = shopInfo;
+exports.putInfo = shopPutInfo;
+exports.deleteInfo = shopDeleteInfo;
