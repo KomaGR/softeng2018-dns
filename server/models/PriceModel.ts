@@ -39,4 +39,13 @@ PriceSchema.set('toJSON', {
     transform: function (doc, ret) { delete ret._id, delete ret.dateCreated }
 });
 
+// Error handler (error message customization)
+PriceSchema.post('save', function (error, doc, next) {
+    if (error.name === 'ValidatorError' && error.code === 11000) {
+        next(new Error('Bad Request'));
+    } else {
+        next();
+    }
+});
+
 export const Price = mongoose.model('Price', PriceSchema);
