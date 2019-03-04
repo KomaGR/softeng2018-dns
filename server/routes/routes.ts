@@ -3,6 +3,7 @@ import ProductRouter from './ProductRouter';
 import ShopRouter from './ShopRouter';
 import PriceRouter from './PriceRouter';
 import UserRouter from './UserRouter';
+import { UserController } from '../controllers/UserController';
 import { session_manager } from "../app";
 
 type Request = express.Request;
