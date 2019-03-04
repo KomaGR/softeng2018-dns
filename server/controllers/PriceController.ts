@@ -37,7 +37,7 @@ export class PriceController {
 
         let diff = dateDiffInDays(referenceDate, endDate);
         if (diff < 0) {
-            res.status(400).send({ message: "Bad Request" });
+            return(res.status(400).send({ message: "Bad Request" }));
         }
         var pricestable = [];
 
@@ -52,44 +52,29 @@ export class PriceController {
                 if (err) {
                     res.send(err);
                 }
-                // res.json(price);
-                console.log(price);
+                else {
+                    // res.json(price);
+                    console.log(price);
 
-                pricestable[i] = price;
+                    pricestable[i] = price;
 
-                console.log(pricestable);
-                if (i == diff) res.send(pricestable);
+                    console.log(pricestable);
+                    if (i == diff) {res.send(pricestable)};
+                }
             });
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // get all prices (according to query) from database
     public getPrice(req: Request, res: Response) {
 
         let start: number;
         let count: number;
+
+        console.log(`Start: ${req.query.start} - Count: ${req.query.count} - 
+        geoDist: ${req.query.geoDist} - geoLng: ${req.query.lng} - geoLat: ${req.query.lat} - 
+        dateFrom: ${req.query.dateFrom} - dateTo: ${req.query.dateTo} - shops: ${req.query.shops} -
+        products: ${req.query.products} - tags: ${req.query.tags} - sort: ${req.query.sort}`)
 
         if(!(req.query.start)){
             start = 0;
@@ -100,7 +85,7 @@ export class PriceController {
             if it is greater or equal to zero */
             if ( !(Number.isInteger(Number(req.query.start))) || 
             Number(req.query.start) < 0 ){
-                res.status(400).send({ message: "Bad Request" });
+                return(res.status(400).send({ message: "Bad Request" }));
             }
 
             start = Number(req.query.start);
@@ -116,7 +101,7 @@ export class PriceController {
             if it is greater or equal to zero */
             if ( !(Number.isInteger(Number(req.query.count))) ||
             Number(req.query.count) < 0 ){
-                res.status(400).send({ message: "Bad Request" });
+                return(res.status(400).send({ message: "Bad Request" }));
             }
 
             count = Number(req.query.count);        
@@ -124,26 +109,33 @@ export class PriceController {
         }
 
 
-        let shopIdList: any;
+        // check that either none or both of the date-parameters were defined
+        if (req.query.dateFrom ? ! req.query.dateTo : req.query.dateTo ) {
+            return(res.status(400).send({ message: "Bad Request" }));
+        }
+        else if ( ! req.query.dateFrom && ! req.query.dateTo) {
+            let today = new Date();
+            req.query.dateFrom = req.query.dateTo = today.toISOString().slice(0, 10);
+        }
+
+        let shopConditions: any = {};
+
+
+        if( req.query.shops ) {
+            shopConditions._id = { $in: req.query.shops };
+        }
+
+        console.log(shopConditions);
+        
+
+        let shopIdList: mongoose.DocumentQuery<mongoose.MongooseDocument[],
+        mongoose.Document, {}>;
 
         // check that either all or none of the geo-parameters were defined
         if( !( req.query.geoLng && req.query.geoLat && req.query.geoDist ) ) {
             if( !( !req.query.geoLng && !req.query.geoLat && !req.query.geoDist ) ) {
                 // case some of the geo-parameters are defined and some are undefined
-                res.status(400).send({ message: "Bad Request" });
-            }
-            else {  // case none of the geo-parameters are defined
-
-                /* List of Shop ids we are intrested in, in case
-                none of the geo-parameters are defined */
-                shopIdList =
-                Shop.find({ shopId: { $in: req.query.products } },
-                { _id: 1 },
-                ( err , shopIdList ) => {
-                    if (err) {
-                        res.send(err);
-                    }
-                });
+                return(res.status(400).send({ message: "Bad Request" }));
             }
         }
         else {  // case all of the geo-parameters are defined
@@ -152,140 +144,149 @@ export class PriceController {
             also if geoDist is greater or equal to zero */
             if ( !(Number.isInteger(Number(req.query.geoDist))) ||
             Number(req.query.geoDist) < 0 ){
-                res.status(400).send({ message: "Bad Request" });
+                return(res.status(400).send({ message: "Bad Request" }));
             }
             if ( !( Number(req.query.geoLng ) ) ) {
-                res.status(400).send({ message: "Bad Request" });
+                return(res.status(400).send({ message: "Bad Request" }));
             }
     
             if ( !( Number(req.query.geoLat ) ) ) {
-                res.status(400).send({ message: "Bad Request" });
+                return(res.status(400).send({ message: "Bad Request" }));
             }
 
-            /* List of Shop ids we are intrested in, in case
-            all geo-parameters are defined */
-            shopIdList =
-            Shop.find({$and:[
-                {_id: { $in: req.query.shops } },
-                {
-                    location: {
-                        $near: {
-                            $geometry: {
-                                type: "Point",
-                                coordinates: [parseFloat(req.query.geoLng), parseFloat(req.query.geoLat)]
-                            },
-                            $maxDistance: 1000*parseFloat(req.query.geoDist)
-                        }
-                    }
+            shopConditions.location = {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [parseFloat(req.query.geoLng), parseFloat(req.query.geoLat)]
+                    },
+                    $maxDistance: 1000*parseFloat(req.query.geoDist)
                 }
-            ]},
-            { _id: 1 },
-            ( err , shopIdList ) => {
-                if (err) {
-                    res.send(err);
-                }
-            });
+            };
         }
 
+        // List of Shop ids we are intrested in
+        shopIdList =
+        Shop.find(shopConditions,
+        { _id: 1 });
+
+        let productConditions: any = {};
+
+        if ( req.query.products ) {
+            productConditions._id = { $in: req.query.products }
+        };
+
+        console.log(productConditions);
+        
 
         // List of Product ids we are intrested in
-        let productIdList =
-        Product.find({ productId: { $in: req.query.products } },
-        { _id: 1 },
-        ( err , productIdList) => {
-            if (err) {
-                res.send(err);
-            }
-        });
+        let productIdList: mongoose.DocumentQuery<mongoose.MongooseDocument[],
+        mongoose.Document, {}> =
+        Product.find( productConditions ,
+        { _id: 1 });
 
 
-        // check that either none or both of the date-parameters were defined
-        if( req.query.dateFrom ? !( req.query.dateTo ) : req.query.dateTo ) {
-            res.status(400).send({ message: "Bad Request" });
-        }
+        let productByTagConditions: any = {};
 
-        // check if date-parameters are of type date
-        if ( !( req.query.dateFrom instanceof Date ) ) {
-            res.status(400).send({ message: "Bad Request" });
-        }
-        if ( !( req.query.dateTo instanceof Date ) ) {
-            res.status(400).send({ message: "Bad Request" });
-        }
+        if ( req.query.tags ) {
+            productByTagConditions.tags = { $elemMatch: { $in: req.query.tags } };
+        };
+
+        console.log(productByTagConditions);
 
 
         /* List of Product ids that include at least one 
         of the tags we are intrested in */
-        let productIdListByTag =
-        Product.find( { tags: { $elemMatch: { $in: req.query.tags } } },
-        { _id: 1},
-        ( err , productIdListByTag ) => {
-            if (err) {
-                res.send(err);
-            }
-        });
+        let productIdListByTag: mongoose.DocumentQuery<mongoose.MongooseDocument[],
+        mongoose.Document, {}> =
+        Product.find( productByTagConditions,
+        { _id: 1});
 
+
+        let shopByTagConditions: any = {};
+
+        if ( req.query.tags ) {
+            shopByTagConditions.tags = { $elemMatch: { $in: req.query.tags } };
+        };
+
+        console.log(shopByTagConditions);
+        
 
         /* List of Shop ids that include at least one 
         of the tags we are intrested in */
-        let shopIdListByTag =
-        Shop.find( { tags: { $elemMatch: { $in: req.query.tags } } },
-        { _id: 1},
-        ( err , shopIdListByTag ) => {
+        let shopIdListByTag: mongoose.DocumentQuery<mongoose.MongooseDocument[],
+        mongoose.Document, {}> =
+        Shop.find( shopByTagConditions,
+        { _id: 1});
+
+        
+        console.log(`Start: ${start} - Count: ${count} - 
+        dateFrom: ${req.query.dateFrom} - dateTo: ${req.query.dateTo} - shops: ${req.query.shops} -
+        products: ${req.query.products} - tags: ${req.query.tags} - sort*: ${req.query.sort}`)
+
+
+        // // Query to get prices as described in restAPI specifications
+        // let prices: mongoose.DocumentQuery<mongoose.MongooseDocument[],
+        // mongoose.Document, {}> =
+        productIdList.exec((err, productIdList) => {
             if (err) {
                 res.send(err);
+            } else {
+                console.log(productIdList);
+                
+                shopIdList.exec((err, shopIdList) => {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        console.log(shopIdList);
+                        
+                        productIdListByTag.exec((err,productIdListByTag) => {
+                            if (err) {
+                                res.send(err)
+                            } else {
+                                console.log(productIdListByTag);
+                                
+                                shopIdListByTag.exec((err, shopIdListByTag) => {
+                                    if (err) {
+                                        res.send(err);
+                                    } else {
+                                        console.log(shopIdListByTag);
+                                        
+                                        Price.find({ $and: [
+                                                    { date: { $gte: req.query.dateFrom , $lte: req.query.dateTo } },
+                                                    { productId: { $in: productIdList } },
+                                                    { shopId: { $in: shopIdList } },
+                                                    { $or: [
+                                                           { productId: { $in: productIdListByTag } },
+                                                           { shopId: { $in: shopIdListByTag } }
+                                                    ]}
+                                                    ]})
+                                                    //.sort( sorting )
+                                                    .where('prices')
+                                                    .skip(start)
+                                                    .limit(count)
+                                                    .exec((err, prices) => {
+                                                        if (err) {
+                                                           res.send(err);
+                                                        } else {
+                                                            let total = prices.length;
+                                                            res.status(200).send({
+                                                                start,
+                                                                count,
+                                                                total,
+                                                                prices
+                                                            });
+                                                        }
+                                                    });
+                                    }
+                                });
+                            }
+                        });                        
+                    }
+                });
             }
         });
-
-
-        // Query to get prices as described in restAPI specifications
-        let prices =
-        Price.find({ $and: [
-                   { date: { $gte: req.query.dateFrom , $lte: req.query.dateTo } },
-                   { productId: { $in: productIdList } },
-                   { shopId: { $in: shopIdList } },
-                   { $or: [
-                          { productId: { $in: productIdListByTag } },
-                          { shopId: { $in: shopIdListByTag } }
-                   ]}
-                   ]},
-        ( err , prices ) => {
-            if (err) {
-                res.send(err);
-            }
-            res.json(prices);
-        });
-
-        // console.log(prices);
-        
-
-        // determine the total number of shops returned
-        // let total = prices.length;
-        
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public getPriceWithID(req: Request, res: Response) {
         Price.findById(
@@ -294,7 +295,9 @@ export class PriceController {
                 if (err) {
                     res.send(err);
                 }
-                res.json(price);
+                else {
+                    res.json(price);
+                }
             });
     }
 
@@ -305,7 +308,9 @@ export class PriceController {
                 if (err) {
                     res.send(err);
                 }
-                res.json(price);
+                else {
+                    res.json(price);
+                }
             });
     }
 
@@ -316,7 +321,9 @@ export class PriceController {
                 if (err) {
                     res.send(err);
                 }
-                res.json({ message: 'Successfully deleted price!' });
+                else {
+                    res.json({ message: 'Successfully deleted price!' });
+                }
             });
     }
 

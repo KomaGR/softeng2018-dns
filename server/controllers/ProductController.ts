@@ -174,18 +174,15 @@ export class ProductController {
         .exec((err, products) => {
             if (err) {
                 res.send(err);
+            } else {
+                let total = products.length;
+                res.status(200).send({
+                    start,
+                    count,
+                    total,
+                    products
+                });
             }
-
-            /* determine the total number of products
-            returned */
-            let total = products.length;
-
-            res.status(200).send({
-                start,
-                count,
-                total,
-                products
-            });
         });
 
     }
