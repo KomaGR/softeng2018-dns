@@ -4,6 +4,8 @@ const https = require('https');
 const auth = require('./auth');
 const product = require('./product');
 const shop = require('./shop');
+const request = require('request');
+
 
 
 const redirectLogin = (req, res, next) => {
@@ -36,13 +38,24 @@ function routes(app) {
     .get("/", function (req, res) {
          console.log(req.session);
          const session = req.session;
-         const response = req.httpsResponse;
-         console.log(req.session.auth_token);
-         res.render("homepage.ejs", {
-             session: session,
-             response: response
-         });      
-      
+         console.log(auth_token);
+         const options = {
+            url: 'https://localhost:8765/observatory/api/shops',
+            rejectUnauthorized: false
+        };    
+        request.get(options, (err, httpsResponse, body) => {
+            if (err) {
+                res.send(err);
+            }
+            if (httpsResponse.statusCode == 200) {
+                const jsonBody = JSON.parse(body);
+                res.status(200).render("homepage.ejs", {
+                    session: session,
+                     response: response,
+                    shops: jsonBody.shops
+                });
+            }
+        });
      })
 
      .post("/map", function(req,res){
@@ -76,8 +89,7 @@ function routes(app) {
                 const session = req.session;
                 res.render("search_results.ejs", {
                     myproducts: myproducts,
-                    session: session  
-
+                    session: session 
                 });
             });
         });
@@ -133,21 +145,30 @@ function routes(app) {
     .post("/product_info_delete", product.deleteInfo)
     
     .get("/submit_shop", redirectLogin, function (req, res) {
-        const session = req.session;
-
-        res.render("submit_shop.ejs", {
-            session: session
+        console.log(req.session);
+         const session = req.session;
+         console.log(auth_token);
+         const options = {
+            url: 'https://localhost:8765/observatory/api/shops',
+            rejectUnauthorized: false
+        };    
+        request.get(options, (err, httpsResponse, body) => {
+            if (err) {
+                res.send(err);
+            }
+            if (httpsResponse.statusCode == 200) {
+                const jsonBody = JSON.parse(body);
+                res.status(200).render("submit_shop.ejs", {
+                    session: session,
+                    shops: jsonBody.shops
+                });
+            }
         });
-    })
-    .post("/shop_info", (req, res) => {
-        req.body.tags = req.body.tags.split(',');
-        console.log(req.body);
-        // Do something with data (shop to backend).
-        // Redirect to submit product?
-        res.status(200).redirect('/')
     })
     
     .post("/submit_shop", redirectLogin, shop.submit)
+
+    .post("/shop_info", shop.info)
 
     .get("/admin_hub", redirectNonAdmin, function(req, res){
         const options = {
