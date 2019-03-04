@@ -15,12 +15,16 @@ export default class UserController {
 
         newUser.save((err, user) => {
             if (err) {
-                if (err.code === 11000) res.status(403).send({message: "Username or email already exists"});
-                res.status(500).send(err);
+                if (err.code === 11000) {
+                    res.status(403).send({message: "Username or email already exists"});
+                } else {
+                    res.status(500).send(err);
+                }
+            } else {
+                res.status(201).send(
+                    { message: "Created" }
+                );
             }
-            res.status(201).send(
-                { message: "Created" }
-            );
         });
     }
 
