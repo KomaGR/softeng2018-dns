@@ -25,7 +25,15 @@
                         <a class="btn btn-primary btn-sm" href="/about" role="button">Learn more</a>
                     </p> -->
                     <% include search_bar.ejs %>
-
+                    <script> 
+                        var hash;
+                        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1);
+                     
+                        hash = hashes.split('=');
+                        if (hash[1]==1){
+                            alert("τα γαμησες");
+                        }
+                    </script>
                     <div class="row mt-5 mb-5 justify-content-center">
                             <!-- <h2 class=" mr-3  ">Καταχώρηση νέου προϊόντος</h2> -->
                             <% if ( session.auth_token ) { %>
@@ -36,7 +44,12 @@
 
 
                                 <% } %>
+                                <% if ( response == 404 ) { %>
+                                    
 
+                                <script>alert("zonk")</script>
+                                <% } %>
+                                
                         </div>
 
                     <% include map.ejs%>
