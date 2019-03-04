@@ -1,6 +1,5 @@
 const request = require('request');
 const session = require('express-session');
-const express = require('express');
 
 
 const TWO_HOURS = 1000 * 60 * 60 * 2;
@@ -33,7 +32,6 @@ function loginRoute(req, res) {
             username: req.body.username,
             password: req.body.password
         },
-        devel:true,
         headers: {
             'X-OBSERVATORY-AUTH': req.session.auth_token
         }
