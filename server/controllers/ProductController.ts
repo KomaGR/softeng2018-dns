@@ -27,7 +27,7 @@ export class ProductController {
         save new product to database, else throw
         error 400 : Bad Request */
         newProduct.save((err, product) => {
-            if (err && err.name === 'ValidatorError') {
+            if (err.code === 11000) {
                 res.status(400).send({ message: "Bad Request" });
             }
             else if (err) {
