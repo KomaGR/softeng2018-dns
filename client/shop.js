@@ -5,10 +5,10 @@ function shopSubmit(req, res) {
     var shopid = req.body.shopId;
     console.log("the shop id is:" + shopid);
     if (shopid != null) {
-        const { auth_token } = req.session;
+        const session = req.session;
         res.render("submit_product.ejs",{
             shopId: shopid,
-            token: auth_token  
+            session: session  
         });
     } else {
         // Shops can't be withdrawn just when submited
@@ -34,10 +34,10 @@ function shopSubmit(req, res) {
             console.log('#Front# statuscode:', httpsResponse.statusCode);
             if (httpsResponse.statusCode == 200) {
                 const jsonBody = JSON.parse(body);
-                const { auth_token } = req.session;
+                const session = req.session;
                 res.status(200).render("submit_product.ejs",{
                     shopId: jsonBody.id,
-                    token: auth_token  
+                    session: session  
                 });
             }
         })

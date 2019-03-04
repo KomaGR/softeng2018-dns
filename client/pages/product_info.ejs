@@ -31,7 +31,7 @@
         </p>
       </ul>
   </div>
-  <% if ( token ) { %>
+  <% if ( session.auth_token ) { %>
     <a class="btn btn-primary text-white mx-5 mb-3 align-self-md-auto align-self-center"  data-toggle="modal" data-target="#edit_modal" >Edit</a>
     <% include edit_product.ejs %>
   <% } %>
