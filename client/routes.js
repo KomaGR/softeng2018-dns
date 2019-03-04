@@ -51,7 +51,7 @@ function routes(app) {
                 const jsonBody = JSON.parse(body);
                 res.status(200).render("homepage.ejs", {
                     session: session,
-                     response: response,
+                    response: response,
                     shops: jsonBody.shops
                 });
             }
