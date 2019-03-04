@@ -8,19 +8,30 @@ var parsedata;
 var script_tag = document.getElementById("searcher");
 var shops = JSON.parse(script_tag.getAttribute("name"));
 var id;
+var ismarker = false;
 
 function newMarker(e) {
     var mylatlng = new L.LatLng(e.lat,e.lng);
     id = e.id;
+    console.log(id);
     mymarker = L.marker(mylatlng).addTo(mymap).bindPopup(e.name).on('click', (e)=>{
+        ismarker = true;
+        for ( var i=0; i<shops.length; i++){
+            //console.log(e.lat + " vs " + shops[i].lat);
+            if ( (e.latlng.lat == shops[i].lat) && (e.latlng.lng == shops[i].lng)){
+                //console.log("zonk");
+                id = shops[i].id;
+            }
+        }
         markerdata = {
             shopId: id
         }
+        console.log(markerdata);
     });
 }
 
 function confirmShop() {
-    if (mymarker) {
+    if (ismarker) {
         document.getElementById("shopId").value = markerdata.shopId;
     } else {
         console.error("Error: No marker selected.")
@@ -51,4 +62,4 @@ function myMap() {
 /* This method is called when the page loads */
 function onLoad() {
     myMap();
-}
+}[]
