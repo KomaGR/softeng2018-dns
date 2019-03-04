@@ -2,12 +2,13 @@ import * as mongoose from 'mongoose';
 import {User} from '../models/UserModel';
 import * as express from 'express';
 
+
 import { session_manager } from "../app";
 
 type Request = express.Request;
 type Response = express.Response;
 
-export default class UserController {
+export class UserController {
 
     // add a new user on database
     public addNewUser(req: Request, res: Response) {
@@ -55,13 +56,32 @@ export default class UserController {
                     res.send(err);
                 }
                 res.json(user);
-            });
+            }).select('-password');
     }
 
     public updateUser(req: Request, res: Response) {
         User.findOneAndUpdate(
             { _id: req.params.userId },
             req.body, { new: true }, (err, user) => {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(user);
+            });
+    }
+
+    // update only one field of a specific user on database
+    public partialUpdateUser(req: Request, res: Response) {
+
+        /* get key and value for the field that
+           should be updated */
+        let key = Object.keys(req.body)[0];
+        let value = Object.values(req.body)[0];
+
+        User.findByIdAndUpdate(
+            { _id: req.originalUrl.slice(26) },
+            { [key]: value }, { new: true },
+            (err, user) => {
                 if (err) {
                     res.send(err);
                 }
@@ -79,6 +99,4 @@ export default class UserController {
                 res.json({ message: 'Successfully deleted user!' });
             });
     }
-
-
 }
