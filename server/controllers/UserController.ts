@@ -16,7 +16,8 @@ export class UserController {
 
         newUser.save((err, user) => {
             if (err) {
-                res.send(err);
+                if (err.code === 11000) res.status(403).send({message: "Username or email already exists"});
+                res.status(500).send(err);
             }
             res.status(201).send(
                 { message: "Created" }
@@ -81,11 +82,10 @@ export class UserController {
     }
 
     // update only one field of a specific user on database
-    // update only one field of a specific user on database
     public partialUpdateUser(req: Request, res: Response) {
 
         /* get key and value for the field that
-        should be updated */
+           should be updated */
         let key = Object.keys(req.body)[0];
         let value = Object.values(req.body)[0];
 
@@ -110,6 +110,4 @@ export class UserController {
                 res.json({ message: 'Successfully deleted user!' });
             });
     }
-
-
 }
