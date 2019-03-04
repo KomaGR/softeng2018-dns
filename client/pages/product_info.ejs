@@ -1,47 +1,48 @@
 
 <html>
-  <head>
-    <% include navbar.ejs %>
-  </head>
-
-
-  <body>
-    <% include search_bar.ejs %>
-
-
-    <div class="card p-2 m-3">
-        <p class="display-4 ml-2"> Name: <%= product.name %> </p>
-
-      <!-- <h2 class=" display-4">this is information about a product</h2> -->
-      <ul>
-        <!-- <p > ID: <%= product.id %> </p> -->
-        <p class="lead"> Description: <%= product.description %> </p>
-        <p class="lead"> Category: <%= product.category %> </p>
-
-        <p class="lead"> Tags: <% for(var tag in product.tags){ %>
-            <%= product.tags[tag] %>
-            <% } %>
-        </p>
-
-        <p class="lead"> Withdrawn: <%= product.withdrawn %> </p>
-
-        <p class="lead"> ExtraData: <% for (var key in product.extraData) { %>
-            <%= key + ' ' + product.extraData[key] %>
-        <% } %>
-        </p>
-      </ul>
-  </div>
-  <% if ( session.auth_token ) { %>
-    <a class="btn btn-primary text-white mx-5 mb-3 align-self-md-auto align-self-center"  data-toggle="modal" data-target="#edit_modal" >Edit</a>
-    <% include edit_product.ejs %>
-  <% } %>
-
-
-
-<% include footer.ejs %>
-
-
-
-
-  </body>
-</html>
+    <head>
+      <% include navbar.ejs %>
+    </head>
+  
+  
+    <body>
+      <% include search_bar.ejs %>
+  
+  
+      <div class="card p-md-2 p-0 m-3">
+  
+        <!-- <h2 class=" display-4">this is information about a product</h2> -->
+        <div class='p-3'>
+          <p class="lead mark"><b> Name:</b> <%= product.name %> </p>
+  
+          <!-- <p > ID: <%= product.id %> </p> -->
+          <p class="lead "> <b> Description:</b> <%= product.description %> </p>
+          <p class="lead"><b> Category:</b> <%= product.category %> </p>
+  
+          <p class="lead"> <b>Tags:</b> <% for(var tag in product.tags){ %>
+              <%= product.tags[tag] %>
+              <% } %>
+          </p>
+  
+          <p class="lead"> <b>Withdrawn:</b> <%= product.withdrawn %> </p>
+  
+          <p class="lead"><b> ExtraData:</b> <% for (var key in product.extraData) { %>
+              <%= key + ' ' + product.extraData[key] %>
+          <% } %>
+          </p>
+        </div>
+    </div>
+    <% if ( session.auth_token ) { %>
+      <a class="btn btn-primary text-white mx-5 mb-3 align-self-md-auto align-self-center"  data-toggle="modal" data-target="#edit_modal" >Edit</a>
+      <% include edit_product.ejs %>
+    <% } %>
+  
+  
+  
+  <% include footer.ejs %>
+  
+  
+  
+  
+    </body>
+  </html>
