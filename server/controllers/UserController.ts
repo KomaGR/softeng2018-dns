@@ -37,12 +37,14 @@ export default class UserController {
             if (user.length === 0) {
                 res.status(404).send("Not found");
             }
+            else {
             
             console.log(user[0]);
 
             const auth_token:string = session_manager.NewSession(user[0]);
 
             res.status(200).send({token: auth_token, role: user[0].toObject().role});
+            }
         });
 
     }

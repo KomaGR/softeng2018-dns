@@ -1,5 +1,7 @@
 const request = require('request');
 const session = require('express-session');
+const express = require('express');
+
 
 const TWO_HOURS = 1000 * 60 * 60 * 2;
 const {
@@ -31,6 +33,7 @@ function loginRoute(req, res) {
             username: req.body.username,
             password: req.body.password
         },
+        devel:true,
         headers: {
             'X-OBSERVATORY-AUTH': req.session.auth_token
         }
@@ -48,8 +51,19 @@ function loginRoute(req, res) {
             console.log('#Front# token: ' + jsonBody.token);
             req.session.auth_token = jsonBody.token;
             req.session.role = jsonBody.role;
+            
             res.status(200).redirect('/');
+            
         }
+            const response =httpsResponse.statusCode; 
+        if (httpsResponse.statusCode == 404) {
+            console.log("404 error");
+            // alert('zonk');
+            res.status(404).redirect('/?pass=1');
+            
+        
+        }
+
     })
 }
 

@@ -36,9 +36,11 @@ function routes(app) {
     .get("/", function (req, res) {
          console.log(req.session);
          const session = req.session;
+         const response = req.httpsResponse;
          console.log(req.session.auth_token);
          res.render("homepage.ejs", {
-             session: session
+             session: session,
+             response: response
          });      
       
      })
@@ -102,8 +104,6 @@ function routes(app) {
     
     .get("/login", redirectHome, function (req, res) {
         res.redirect('/');
-
-        // res.render("login.ejs");
     })
     
     .post("/login", redirectHome, auth.login)
@@ -128,9 +128,9 @@ function routes(app) {
     
     .get("/product_info", product.getInfo)
     
-    .post("/product_info", product.putInfo)
+    .post("/product_info_submit", product.putInfo)
     
-    .delete("/product_info", product.deleteInfo)
+    .post("/product_info_delete", product.deleteInfo)
     
     .get("/submit_shop", redirectLogin, function (req, res) {
         const session = req.session;

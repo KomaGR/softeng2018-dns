@@ -75,10 +75,7 @@ function productGetInfo(req, res) {
         port: 8765,
         path: '/observatory/api/products/' + productid,
         rejectUnauthorized: false,
-        method: 'GET',
-        headers: {
-            'X-OBSERVATORY-AUTH': req.session.auth_token
-        }
+        method: 'GET'
     };
 
     const httpsreq = https.request(options, (httpsres) => {
@@ -131,33 +128,29 @@ function productPutInfo(req, res) {
         }
     });
 }
-
 function productDeleteInfo(req, res) {
 
     var productid = req.body.productID;
-    console.log( "this is the product is ------" + productid);
+    console.log( "this is the product is ------" + req.body.productname);
 
     const options = {
-        hostname: 'localhost',
-        port: 8765,
-        path: '/observatory/api/products/' + productid,
+        url: 'https://localhost:8765/observatory/api/products/' + productid,
         rejectUnauthorized: false,
-        method: 'DELETE'
+        headers: {
+            'X-OBSERVATORY-AUTH': req.session.auth_token
+        }
     };
 
-    const httpsreq = https.request(options, (httpsres) => {
-        console.log('statuscode', httpsres.statusCode);
-        httpsres.on('data', (d) => {
-            var mydata = JSON.parse(d);
-            res.render("product_info.ejs");
-        });
+    request.delete(options, (err, httpsResponse, body) =>{
+       
+        if (httpsResponse.statusCode == 200){
+            const data = JSON.parse(body); 
+            res.render("product_info.ejs", {
+                product: data,
+                session: req.session
+            })
+        }
     });
-
-    httpsreq.on('error', (e) => {
-        console.error(e);
-    });
-
-    httpsreq.end();
 }
 
 exports.submit = productSubmitRoute;
