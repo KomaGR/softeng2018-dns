@@ -13,16 +13,17 @@ class App {
     public app: express.Application;
     public readonly mongoUri: string = 'mongodb://localhost:27017/DNSdb';
     public session_manager = new SessionManager();
+    public db: mongoose.Connection;
+
 
     // public connection = mongoose.createConnection('mongodb://localhost:27017/DNSdb');
      
     constructor() {
         this.app = express();
-        this.mongoSetup();
         this.config();
     }
 
-    private mongoSetup(): void {
+    public mongoSetup(): void {
         mongoose.connect(this.mongoUri, { useNewUrlParser: true, useCreateIndex: true }, (err: any) => {
             if (err) {
                 console.log(err.message);
@@ -30,7 +31,7 @@ class App {
                 console.log(`Database is listening on port ${PORT_db}`);
             }
         });
-        let db = mongoose.connection;
+        this.db = mongoose.connection;
     }
 
 
@@ -46,4 +47,4 @@ class App {
     
 }
 
-export default new App().app;
+export default new App();
