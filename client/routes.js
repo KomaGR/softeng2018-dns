@@ -24,13 +24,20 @@ const redirectHome = (req, res, next) => {
     }
 };
 
+const redirectNonAdmin = (req, res, next) => {
+    if (req.session.role != 'admin') {
+        res.redirect('/');
+    } else {
+        next();
+    }
+};
 function routes(app) {
     app
     .use(auth.session)
 
     .get("/", function (req, res) {
          console.log(req.session);
-         const { auth_token } = req.session;
+         const session = req.session;
          console.log(auth_token);
          const options = {
             url: 'https://localhost:8765/observatory/api/shops',
@@ -43,11 +50,12 @@ function routes(app) {
             if (httpsResponse.statusCode == 200) {
                 const jsonBody = JSON.parse(body);
                 res.status(200).render("homepage.ejs", {
-                    token: auth_token,
+                    session: session,
+                    response: response,
                     shops: jsonBody.shops
                 });
             }
-        }); 
+        });
      })
 
      .post("/map", function(req,res){
@@ -78,10 +86,10 @@ function routes(app) {
                     return (entry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         entry.category.toLowerCase().includes(searchTerm.toLowerCase()));
                 });
-                const { auth_token } = req.session;
+                const session = req.session;
                 res.render("search_results.ejs", {
                     myproducts: myproducts,
-                    token: auth_token  
+                    session: session 
                 });
             });
         });
@@ -99,17 +107,15 @@ function routes(app) {
     })
     
     .get("/about", function (req, res) {
-        const { auth_token } = req.session;
+        const session = req.session;
         res.render("about.ejs", {
-            token: auth_token  
+            session: session  
         });      
          
     })
     
     .get("/login", redirectHome, function (req, res) {
         res.redirect('/');
-
-        // res.render("login.ejs");
     })
     
     .post("/login", redirectHome, auth.login)
@@ -123,10 +129,10 @@ function routes(app) {
     .get("/logout", redirectLogin, auth.logout)
     
     .get("/submit_product", redirectLogin, function (req, res) {
-        const { auth_token } = req.session;
+        const session = req.session;
 
         res.render("submit_product.ejs", {
-            token: auth_token
+            session: session
         });
     })
     
@@ -134,13 +140,13 @@ function routes(app) {
     
     .get("/product_info", product.getInfo)
     
-    .put("/product_info", product.putInfo)
+    .post("/product_info_submit", product.putInfo)
     
-    .delete("/product_info", product.deleteInfo)
+    .post("/product_info_delete", product.deleteInfo)
     
     .get("/submit_shop", redirectLogin, function (req, res) {
         console.log(req.session);
-         const { auth_token } = req.session;
+         const session = req.session;
          console.log(auth_token);
          const options = {
             url: 'https://localhost:8765/observatory/api/shops',
@@ -153,7 +159,7 @@ function routes(app) {
             if (httpsResponse.statusCode == 200) {
                 const jsonBody = JSON.parse(body);
                 res.status(200).render("submit_shop.ejs", {
-                    token: auth_token,
+                    session: session,
                     shops: jsonBody.shops
                 });
             }
@@ -164,22 +170,25 @@ function routes(app) {
 
     .post("/shop_info", shop.info)
 
-    .get("/admin_hub", redirectLogin, function(req, res){
+    .get("/admin_hub", redirectNonAdmin, function(req, res){
         const options = {
             hostname: 'localhost',
             port: 8765,
             path: '/observatory/api/users',
             rejectUnauthorized: false,
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'X-OBSERVATORY-AUTH': req.session.auth_token
+            }
         };
         const httpsreq = https.request(options, (httpsres) => {
             console.log('statuscode', httpsres.statusCode);
             httpsres.on('data', (d) => {
                 var mydata = JSON.parse(d);
-                const { auth_token } = req.session;
+                const session = req.session;
                 res.render("admin_hub.ejs", {
                     users: mydata,
-                    token: auth_token  
+                    session: session  
                 });
             });
         });
