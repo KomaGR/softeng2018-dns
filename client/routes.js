@@ -139,10 +139,24 @@ function routes(app) {
     .delete("/product_info", product.deleteInfo)
     
     .get("/submit_shop", redirectLogin, function (req, res) {
-        const { auth_token } = req.session;
-
-        res.render("submit_shop.ejs", {
-            token: auth_token
+        console.log(req.session);
+         const { auth_token } = req.session;
+         console.log(auth_token);
+         const options = {
+            url: 'https://localhost:8765/observatory/api/shops',
+            rejectUnauthorized: false
+        };    
+        request.get(options, (err, httpsResponse, body) => {
+            if (err) {
+                res.send(err);
+            }
+            if (httpsResponse.statusCode == 200) {
+                const jsonBody = JSON.parse(body);
+                res.status(200).render("submit_shop.ejs", {
+                    token: auth_token,
+                    shops: jsonBody.shops
+                });
+            }
         });
     })
     
