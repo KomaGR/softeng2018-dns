@@ -23,8 +23,13 @@ export const ShopSchema = new Schema({
         required: 'Enter latitude'
     },
     location: {
-        type: {type: String, default: 'Point'},
-        coordinates: [Number],
+        type: {
+            type: String,
+            enum: ['Point']
+        },
+        coordinates: [{
+            type: Number
+        }]
     },
     tags: [{
         type: String,
@@ -44,7 +49,7 @@ export const ShopSchema = new Schema({
 ShopSchema.set('toJSON', {
     virtuals: true,
     versionKey: false,
-    transform: function (doc, ret) { delete ret._id, delete ret.dateCreated }
+    transform: function (doc, ret) { delete ret._id, delete ret.dateCreated, delete ret.location }
 });
 
 // Error handler (error message customization)
@@ -52,9 +57,19 @@ ShopSchema.post('save', function(error, doc, next) {
     if (error.name === 'ValidatorError' && error.code === 11000) {
         next(error);
     } else {
+
         next();
     }
 });
+
+// ShopSchema.methods.setCoordinates = function(doc) {
+
+// }
+
+// ShopSchema.pre("save", function (next) {
+//     this.setCoordinates();
+//     next();
+// });
 
 ShopSchema.index({ location: '2dsphere' });
 

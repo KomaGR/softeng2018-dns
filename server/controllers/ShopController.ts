@@ -25,9 +25,13 @@ export class ShopController {
         !(Number(req.body.lat)) ){
             return(res.status(400).send({ message: "Bad Request" })); 
         }
+
+        // req.body.location.coordinates = [Number(req.body.lng), Number(req.body.lat)];
+        // req.body.location.coordinates = Number ();
         
         let newShop = new Shop(req.body);
-
+        // req.body.
+        newShop.set('location', {type: 'Point', coordinates: [req.body.lng, req.body.lat]});
         /* if all required fields were given then
         save new product to database, else throw
         error 400 : Bad Request */
@@ -37,8 +41,10 @@ export class ShopController {
             }
             else if (err) {
                 res.json(err);
-            }   
-            res.json(shop);
+            } 
+            else {   
+                res.json(shop);
+            }
         });
     }
 
