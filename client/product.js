@@ -44,6 +44,7 @@ function productSubmitRoute(req, res) {
                 if (err) {
                     res.send(err);
                 }
+                console.log('stelios');
                 console.log('#Front# statuscode:', httpsResponse.statusCode);
                 if (httpsResponse.statusCode == 200) {
                     res.status(200).redirect('/');
