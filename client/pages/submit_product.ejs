@@ -10,10 +10,13 @@
     <body>
 <% include search_bar.ejs %>
 <h1 class="display-4 mb-0 mt-3 ml-2">Υποβολή νέου προϊόντος</h1>
-
+<% console.log(shopId) %>
 <div class="p-3">
 <div class="card p-5 mb-0">
   <form action="/submit_product" method="POST">
+  <div class="form-group">
+      <input type="text" name="shopId" value="<%=shopId%>" hidden>
+    </div>
     <div class="form-group">
       <label for="productname" class="lead mr-3">Όνομα προϊόντος</label>
       <input type="text" placeholder="Όνομα προϊόντος" name="productname" required>
@@ -36,11 +39,11 @@
     </div>
     <div class="form-group">
       <label for="dateFrom" class="lead mr-3">Ημερομηνία από</label>
-      <input type="date" placeholder="Ημερομηνία από" name="datefrom" value="04/24/2019" required>
+      <input type="date" placeholder="Ημερομηνία από" name="datefrom" required>
     </div>
     <div class="form-group">
       <label for="dateTo" class="lead mr-3">Ημερομηνία έως</label>
-      <input type="date" placeholder="Ημερομηνία έως" name="dateto" value="04/24/2019" required>
+      <input type="date" placeholder="Ημερομηνία έως" name="dateto" required>
     </div>
     <button type="submit" class="btn btn-primary mb-5">Καταχώρηση</button>
   </form>

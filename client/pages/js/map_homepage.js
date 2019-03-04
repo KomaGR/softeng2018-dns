@@ -7,12 +7,14 @@ var parameters;
 var parsedata;
 var script_tag = document.getElementById("searcher");
 var shops = JSON.parse(script_tag.getAttribute("name"));
+var id;
 
 function newMarker(e) {
     var mylatlng = new L.LatLng(e.lat,e.lng);
+    id = e.id;
     mymarker = L.marker(mylatlng).addTo(mymap).bindPopup(e.name).on('click', (e)=>{
         markerdata = {
-            shopId: e.id
+            shopId: id
         }
     });
 }
@@ -38,7 +40,7 @@ function myMap() {
         }).addTo(mymap);
 
 
-        console.log(shops[0].name);
+        console.log(shops[0].tags);
 
         for ( var i=0; i<shops.length; i++){
             newMarker(shops[i]);
