@@ -24,7 +24,7 @@ export class UserController {
             } else {
                 res.status(201).send(
                     { message: "Created" }
-                );             
+                );
             }
         });
     }
