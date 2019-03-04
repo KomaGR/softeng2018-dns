@@ -144,6 +144,10 @@ function routes(app) {
     .post("/product_info_submit", product.putInfo)
     
     .post("/product_info_delete", product.deleteInfo)
+
+    .post("/shop_info_submit", shop.putInfo)
+
+    .post("/shop_info_delete", shop.deleteInfo)
     
     .get("/submit_shop", redirectLogin, function (req, res) {
         console.log(req.session);
