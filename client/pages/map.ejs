@@ -29,6 +29,13 @@
 
 <input id="confirmShop" type="button" class="btn btn-primary mt-4 mb-3" value="Επιβεβαίωση επιλογής" onclick="confirmShop();"/>
 
+<form id="oldShop" action='/submit_product' method='GET'>
+  <input id="old_lat" type="text" name="lat" hidden>
+  <input id="old_lng" type="text" name="lng" hidden>
+  <input id="old_address" type="text" name="address" hidden>
+  <button type="submit" class="btn btn-primary">Καταχώρηση υπάρχοντος μαγαζιού</button>
+</form>
+
 <form id="newShop" action='/shop_info' method="POST">
   <input id="lat" type="text" name="lat" hidden>
   <input id="lng" type="text" name="lng" hidden>
@@ -46,6 +53,6 @@
 
 </body>
 
-<script src='js/map.js'></script>
+<script id="searcher" src='js/map.js' name="<%=JSON.stringify(shops)%>"></script>
 
 </html>

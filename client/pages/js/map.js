@@ -1,20 +1,38 @@
 var mymarker = null;
+var oldmymarker;
 var mymap;
 var data;
 var markerdata;
 var geocodeService = L.esri.Geocoding.geocodeService();
 var parameters;
 var parsedata;
+var script_tag = document.getElementById("searcher");
+var shops = JSON.parse(script_tag.getAttribute("name"));
 
 function hideButton() {
     document.getElementById("newShop").style.visibility = "hidden";
+    document.getElementById("oldShop").style.visibility = "hidden";
 }
 
 /* Add method to get nearby shops */
 
+function newOldMarker(e) {
+    var mylatlng = new L.LatLng(e.lat,e.lng);
+    oldmymarker = L.marker(mylatlng).addTo(mymap).bindPopup(e.name).on('click', (e)=>{
+        markerdata = {
+            shopId: e.id
+        }
+        if (mymarker) {
+            mymap.removeLayer(mymarker);
+            mymarker = null;
+        }
+    });
+}
+
 function newMarker(e) {
     if (mymarker) {
         mymap.removeLayer(mymarker);
+        mymarker = null;
     }
     // Reverse geo search
     geocodeService.reverse().latlng(e.latlng).run(function (error, result) {
@@ -32,16 +50,19 @@ function newMarker(e) {
 }
 
 function confirmShop() {
-    if (mymarker) {
+    //if (mymarker) {
         // If we have an active marker for the store
-        document.getElementById("newShop").style.visibility = "visible";
-
+        if (mymarker === null){
+            document.getElementById("oldShop").style.visibility = "visible";
+        } else {
+            document.getElementById("newShop").style.visibility = "visible";
+        }
         document.getElementById("lat").value = markerdata.lat;
         document.getElementById("lng").value = markerdata.lng;        
         document.getElementById("address").value = markerdata.address;
-    } else {
-        console.error("Error: No marker selected.")
-    }
+    //} else {
+    //    console.error("Error: No marker selected.")
+    //}
 }
 
 // function inputShop() {
@@ -79,6 +100,10 @@ function myMap() {
             popupAnchor: [0, -60]   // point from which the popup should open relative to the iconAnchor
         });
 
+        for ( var i=0; i<shops.length; i++){
+            newOldMarker(shops[i]);
+        }
+
         geocodeService.reverse().latlng(latlng).run(function (error, result) {
             markerdata = {
                 lat: latlng.lat,
@@ -95,7 +120,6 @@ function myMap() {
             .openPopup()
             .on('click', (e) => {
                 geocodeService.reverse().latlng(e.latlng).run(function (error, result) {
-
                     markerdata = {
                         lat: e.latlng.lat,
                         lng: e.latlng.lng,
@@ -104,6 +128,9 @@ function myMap() {
                     };
                     console.log(markerdata);
                 });
+                if (mymarker) {
+                    mymap.removeLayer(mymarker);
+                }
                 mymarker = this;
             });
 
