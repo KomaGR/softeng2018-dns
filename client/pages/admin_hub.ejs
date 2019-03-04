@@ -42,8 +42,7 @@
                             <form  class="form-group text-center text-md-left" action='/investorUpgrade' method='POST'>
                                 <button class="btn btn-outline-secondary" type="submit" name='investor' value="<%=users[i].id%>">Change to investor</button>
                             </form>
-                            <% } %>
-                            <% else if ( users[i].role == 'investor' ){ %>
+                            <% }else if ( users[i].role == 'investor' ){ %>
                             <form  class="form-group text-center text-md-left" action='/userDowngrade' method='POST'>
                                 <button class="btn btn-outline-secondary" type="submit" name='downgrade' value="<%=users[i].id%>">Downgrade to user</button>
                             </form>
