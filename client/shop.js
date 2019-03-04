@@ -40,4 +40,50 @@ function shopSubmit(req, res) {
     }
 }
 
+function shopInfo(req, res){
+    var shopId = req.body.shopId;
+    const options = {
+        hostname: 'localhost',
+        port: 8765,
+        path: '/observatory/api/shops/' + shopId,
+        rejectUnauthorized: false,
+        method: 'GET'
+    };
+    var shopdata;
+    const httpsreq = https.request(options, (httpsres) => {
+        console.log('statuscode', httpsres.statusCode);
+        httpsres.on('data', (d) => {
+            shopdata = JSON.parse(d);
+        });
+    });
+    httpsreq.on('error', (e) => {
+        console.error(e);
+    });
+    httpsreq.end();
+
+    const options1 = {
+        hostname: 'localhost',
+        port: 8765,
+        path: '/observatory/api/prices/?shops=' + shopId,
+        rejectUnauthorized: false,
+        method: 'GET'
+    };
+    const httpsreq1 = https.request(options1, (httpsres) => {
+        console.log('statuscode', httpsres.statusCode);
+        httpsres.on('data', (d) => {
+            var mydata = JSON.parse(d);
+            var pricedata = mydata.prices;
+            res.render('shop_info.ejs', {
+                shopData: shopdata,
+                priceData: pricedata
+            });
+        });
+    });
+    httpsreq1.on('error', (e) => {
+        console.error(e);
+    });
+    httpsreq1.end();
+}
+
 exports.submit = shopSubmit;
+exports.info = shopInfo;
