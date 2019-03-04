@@ -71,6 +71,7 @@ function shopInfo(req, res){
                 httpsres.on('data', (d) => {
                     var mydata = JSON.parse(d);
                     var pricedata = mydata.prices;
+                    console.log("this is the price data" + pricedata);
                     const options2 = {
                         hostname: 'localhost',
                         port: 8765,
