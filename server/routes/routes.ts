@@ -2,7 +2,7 @@ import * as express from  'express';
 import ProductRouter from './ProductRouter';
 import ShopRouter from './ShopRouter';
 import PriceRouter from './PriceRouter';
-import UserController from '../controllers/UserController';
+import UserRouter from './UserRouter';
 import { session_manager } from "../app";
 
 type Request = express.Request;
@@ -84,5 +84,7 @@ export default function (
     .use('/shops', new ShopRouter().router)
     
     .use('/prices', new PriceRouter().router)
+
+    .use('/users', new UserRouter().router)
 
 }
