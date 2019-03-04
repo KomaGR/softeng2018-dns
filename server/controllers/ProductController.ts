@@ -27,7 +27,7 @@ export class ProductController {
         save new product to database, else throw
         error 400 : Bad Request */
         newProduct.save((err, product) => {
-            if (err && err.name === 'ValidatorError') {
+            if (err.code === 11000) {
                 res.status(400).send({ message: "Bad Request" });
             }
             else if (err) {
@@ -137,9 +137,10 @@ export class ProductController {
         }
         else {
 
-            // check if start parameter given, are type: Int
+            /* check if start parameter given, is type Int and also
+            if it is greater or equal to zero */
             if ( !(Number.isInteger(Number(req.query.start))) || 
-            Number(req.query.start) <= 0 ){
+            Number(req.query.start) < 0 ){
                 return(res.status(400).send({ message: "Bad Request" }));
             }
 
@@ -152,9 +153,10 @@ export class ProductController {
         }
         else {
         
-            // check if start parameter given, are type: Int
+            /* check if count parameter given, is type Int and also
+            if it is greater or equal to zero */
             if ( !(Number.isInteger(Number(req.query.count))) ||
-            Number(req.query.count) <= 0 ){
+            Number(req.query.count) < 0 ){
                 return(res.status(400).send({ message: "Bad Request" }));
             }
 
@@ -172,18 +174,15 @@ export class ProductController {
         .exec((err, products) => {
             if (err) {
                 res.send(err);
+            } else {
+                let total = products.length;
+                res.status(200).send({
+                    start,
+                    count,
+                    total,
+                    products
+                });
             }
-
-            /* determine the total number of products
-            returned */
-            let total = products.length;
-
-            res.status(200).send({
-                start,
-                count,
-                total,
-                products
-            });
         });
 
     }

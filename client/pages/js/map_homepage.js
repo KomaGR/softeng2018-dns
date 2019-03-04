@@ -62,4 +62,4 @@ function myMap() {
 /* This method is called when the page loads */
 function onLoad() {
     myMap();
-}[]
+}
