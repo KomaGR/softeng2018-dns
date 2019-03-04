@@ -44,6 +44,7 @@ function productSubmitRoute(req, res) {
                 if (err) {
                     res.send(err);
                 }
+                console.log('stelios');
                 console.log('#Front# statuscode:', httpsResponse.statusCode);
                 if (httpsResponse.statusCode == 200) {
                     res.status(200).redirect('/');
@@ -132,11 +133,7 @@ function productDeleteInfo(req, res) {
     request.delete(options, (err, httpsResponse, body) =>{
        
         if (httpsResponse.statusCode == 200){
-            const data = JSON.parse(body); 
-            res.render("product_info.ejs", {
-                product: data,
-                session: req.session
-            })
+            res.redirect('/');
         }
     });
 }

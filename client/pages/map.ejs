@@ -23,32 +23,35 @@
 
 </head>
 <body onload='onLoad()'>
-<h5 class="lead mb-3">Ψάχνεις για μαγαζί;</h5>
+<!-- <h5 class="lead mb-3">Ψάχνεις για μαγαζί;</h5> -->
 
 <div id="map"></div>
 
-<input id="confirmShop" type="button" class="btn btn-primary mt-4 mb-3" value="Επιβεβαίωση επιλογής" onclick="confirmShop();"/>
 
-<form id="oldShop" action='/submit_shop' method='POST'>
-  <input id="shopId" type="text" name="shopId" hidden>
-  <button type="submit" class="btn btn-primary">Καταχώρηση υπάρχοντος μαγαζιού</button>
-</form>
 
-<form id="newShop" action='/submit_shop' method="POST">
-  <input id="lat" type="text" name="lat" hidden>
-  <input id="lng" type="text" name="lng" hidden>
-  <input id="address" type="text" name="address" hidden>
-  <div class="form-group">
-    <label for="shopname">Shop name</label>
-    <input id="shop-name" type="text" placeholder="Enter shop name" name="name" required>
-  </div>
-  <div class="form-group">
-    <label for="shoptags">Shop Tags</label>
-    <input id = "shop-tags" type="text" placeholder="Enter shop tags seperated with comma" name="tags" required>
-  </div>
-  <button type="submit" class="btn btn-primary">Καταχώρηση</button>
-</form>
+<div class="container-fluid ml-3 p-2 m-1">
+  <input id="confirmShop" type="button" class="btn btn-primary mt-4 mb-3 " value="Επιβεβαίωση επιλογής" onclick="confirmShop();"/>
 
+  <form id="oldShop" action='/submit_shop' method='POST'>
+    <input id="shopId" type="text" name="shopId" hidden>
+    <button type="submit" class="btn btn-primary mb-3">Καταχώρηση υπάρχοντος μαγαζιού</button>
+  </form>
+
+  <form id="newShop" action='/submit_shop' method="POST">
+    <input id="lat" type="text" name="lat" hidden>
+    <input id="lng" type="text" name="lng" hidden>
+    <input id="address" type="text" name="address" hidden>
+    <div class="form-group">
+      <label for="shopname">Shop name</label>
+      <input id="shop-name" type="text" placeholder="Enter shop name" name="name" required>
+    </div>
+    <div class="form-group">
+      <label for="shoptags">Shop Tags</label>
+      <input id = "shop-tags" type="text" placeholder="Enter shop tags seperated with comma" name="tags" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Καταχώρηση</button>
+  </form>
+</div>
 </body>
 
 <script id="searcher" src='js/map.js' name="<%=JSON.stringify(shops)%>"></script>
