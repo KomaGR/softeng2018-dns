@@ -3,14 +3,6 @@
   "version": "0.1.0",
   "description": "Crowdsource application for price watching",
   "main": "index.js",
-  "scripts": {
-    "test": "jest",
-    "build": "tsc",
-    "dev": "ts-node ./server/server.ts",
-    "database": "mongod --dbpath=data/",
-    "start": "nodemon ./server/server.js",
-    "prod": "npm run build && npm run start"
-  },
   "author": "Definitely Not Skroutz",
   "license": "GPLv3",
   "repository": {
@@ -48,5 +40,16 @@
     "jest": "^24.1.0",
     "supertest": "^3.4.2",
     "typescript": "^3.3.3333"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "dev": "ts-node ./server/server.ts",
+    "database": "mkdir -p data && mongod --dbpath=data/",
+    "start": "nodemon ./server/server.js",
+    "prod": "npm run build && npm run start"
   }
 }

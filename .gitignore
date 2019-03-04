@@ -5,6 +5,7 @@ node_modules/
 data/*
 server/**/*.js
 server/**/*.js.map
+!server/testing
 *.log
 *.tmp.txt
 !notes.md
