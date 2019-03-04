@@ -30,8 +30,11 @@ export default class {
             // create a new user
             .post('/', this.userController.addNewUser)
 
+            //get all users
+            .get('/', this.userController.getUsers)
+
             // get a specific user
-            .get('/:id', this.userController.getUserWithID)
+            .get('/:username', this.userController.getUserWithId)
 
             // update a specific user
             .put('/:id', this.userController.updateUser)

@@ -47,9 +47,20 @@ export class UserController {
 
     }
 
-    public getUserWithID(req: Request, res: Response) {
-        User.findById(
-            { _id: req.params.userId },
+    //get all users
+    public getUsers(req: Request, res: Response) {
+        User.find( {},
+            (err, user) => {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(user);
+            }).select('-password');
+    }        
+
+    public getUserWithId(req: Request, res: Response) {
+        User.find(
+            { _id : req.query.id },
             (err, user) => {
                 if (err) {
                     res.send(err);
@@ -60,7 +71,7 @@ export class UserController {
 
     public updateUser(req: Request, res: Response) {
         User.findOneAndUpdate(
-            { _id: req.params.userId },
+            { _id: req.query.id },
             req.body, { new: true }, (err, user) => {
                 if (err) {
                     res.send(err);
@@ -91,7 +102,7 @@ export class UserController {
 
     public deleteUser(req: Request, res: Response) {
         User.remove(
-            { _id: req.params.userId },
+            { _id: req.params.id },
             (err: any) => {
                 if (err) {
                     res.send(err);
