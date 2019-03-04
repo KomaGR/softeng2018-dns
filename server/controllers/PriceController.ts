@@ -29,11 +29,6 @@ export class PriceController {
 
         let endDate = new Date(req.body.dateTo);
         let referenceDate = new Date(req.body.dateFrom);
-        console.log(referenceDate);
-        console.log(endDate);
-
-        // delete req.body.dateFrom;
-        // delete req.body.dateTo;
 
         let diff = dateDiffInDays(referenceDate, endDate);
         if (diff < 0) {
@@ -46,19 +41,15 @@ export class PriceController {
             referenceDate.setDate(referenceDate.getDate()+1);
 
             let newPrice = new Price(req.body);
-            console.log(req.body);
 
             newPrice.save((err, price) => {
                 if (err) {
                     res.send(err);
                 }
                 else {
-                    // res.json(price);
-                    console.log(price);
 
                     pricestable[i] = price;
 
-                    console.log(pricestable);
                     if (i == diff) {res.send(pricestable)};
                 }
             });
@@ -71,10 +62,10 @@ export class PriceController {
         let start: number;
         let count: number;
 
-        console.log(`Start: ${req.query.start} - Count: ${req.query.count} - 
-        geoDist: ${req.query.geoDist} - geoLng: ${req.query.lng} - geoLat: ${req.query.lat} - 
-        dateFrom: ${req.query.dateFrom} - dateTo: ${req.query.dateTo} - shops: ${req.query.shops} -
-        products: ${req.query.products} - tags: ${req.query.tags} - sort: ${req.query.sort}`)
+        // console.log(`Start: ${req.query.start} - Count: ${req.query.count} - 
+        // geoDist: ${req.query.geoDist} - geoLng: ${req.query.lng} - geoLat: ${req.query.lat} - 
+        // dateFrom: ${req.query.dateFrom} - dateTo: ${req.query.dateTo} - shops: ${req.query.shops} -
+        // products: ${req.query.products} - tags: ${req.query.tags} - sort: ${req.query.sort}`)
 
         if(!(req.query.start)){
             start = 0;
@@ -123,10 +114,7 @@ export class PriceController {
 
         if( req.query.shops ) {
             shopConditions._id = { $in: req.query.shops };
-        }
-
-        console.log(shopConditions);
-        
+        }        
 
         let shopIdList: mongoose.DocumentQuery<mongoose.MongooseDocument[],
         mongoose.Document, {}>;
@@ -174,10 +162,7 @@ export class PriceController {
 
         if ( req.query.products ) {
             productConditions._id = { $in: req.query.products }
-        };
-
-        console.log(productConditions);
-        
+        };        
 
         // List of Product ids we are intrested in
         let productIdList: mongoose.DocumentQuery<mongoose.MongooseDocument[],
@@ -192,9 +177,6 @@ export class PriceController {
             productByTagConditions.tags = { $elemMatch: { $in: req.query.tags } };
         };
 
-        console.log(productByTagConditions);
-
-
         /* List of Product ids that include at least one 
         of the tags we are intrested in */
         let productIdListByTag: mongoose.DocumentQuery<mongoose.MongooseDocument[],
@@ -207,10 +189,7 @@ export class PriceController {
 
         if ( req.query.tags ) {
             shopByTagConditions.tags = { $elemMatch: { $in: req.query.tags } };
-        };
-
-        console.log(shopByTagConditions);
-        
+        };        
 
         /* List of Shop ids that include at least one 
         of the tags we are intrested in */
@@ -220,9 +199,9 @@ export class PriceController {
         { _id: 1});
 
         
-        console.log(`Start: ${start} - Count: ${count} - 
-        dateFrom: ${req.query.dateFrom} - dateTo: ${req.query.dateTo} - shops: ${req.query.shops} -
-        products: ${req.query.products} - tags: ${req.query.tags} - sort*: ${req.query.sort}`)
+        // console.log(`Start: ${start} - Count: ${count} - 
+        // dateFrom: ${req.query.dateFrom} - dateTo: ${req.query.dateTo} - shops: ${req.query.shops} -
+        // products: ${req.query.products} - tags: ${req.query.tags} - sort*: ${req.query.sort}`)
 
 
         // // Query to get prices as described in restAPI specifications
@@ -231,27 +210,19 @@ export class PriceController {
         productIdList.exec((err, productIdList) => {
             if (err) {
                 res.send(err);
-            } else {
-                console.log(productIdList);
-                
+            } else {                
                 shopIdList.exec((err, shopIdList) => {
                     if (err) {
                         res.send(err);
-                    } else {
-                        console.log(shopIdList);
-                        
+                    } else {                        
                         productIdListByTag.exec((err,productIdListByTag) => {
                             if (err) {
                                 res.send(err)
-                            } else {
-                                console.log(productIdListByTag);
-                                
+                            } else {                                
                                 shopIdListByTag.exec((err, shopIdListByTag) => {
                                     if (err) {
                                         res.send(err);
-                                    } else {
-                                        console.log(shopIdListByTag);
-                                        
+                                    } else {                                        
                                         Price.find({ $and: [
                                                     { date: { $gte: req.query.dateFrom , $lte: req.query.dateTo } },
                                                     { productId: { $in: productIdList } },
