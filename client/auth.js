@@ -1,5 +1,7 @@
 const request = require('request');
 const session = require('express-session');
+const express = require('express');
+
 
 const TWO_HOURS = 1000 * 60 * 60 * 2;
 const {
@@ -18,7 +20,8 @@ exports.session = session({
         maxAge: SESSION_LIFETIME,
         sameSite: true,
         secure: true
-    }
+    },
+    role:undefined
 })
 
 function loginRoute(req, res) {
@@ -29,6 +32,10 @@ function loginRoute(req, res) {
         form: {
             username: req.body.username,
             password: req.body.password
+        },
+        devel:true,
+        headers: {
+            'X-OBSERVATORY-AUTH': req.session.auth_token
         }
     };
 
@@ -43,8 +50,20 @@ function loginRoute(req, res) {
             const jsonBody = JSON.parse(body);
             console.log('#Front# token: ' + jsonBody.token);
             req.session.auth_token = jsonBody.token;
+            req.session.role = jsonBody.role;
+            
             res.status(200).redirect('/');
+            
         }
+            const response =httpsResponse.statusCode; 
+        if (httpsResponse.statusCode == 404) {
+            console.log("404 error");
+            // alert('zonk');
+            res.status(404).redirect('/?pass=1');
+            
+        
+        }
+
     })
 }
 
@@ -67,6 +86,7 @@ function logoutRoute(req, res) {
         if (httpsResponse.statusCode == 200) {
             const jsonBody = JSON.parse(body);
             req.session.auth_token = undefined;
+            req.session.role = undefined;
             res.status(200).redirect('/');
         }
     });
