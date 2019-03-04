@@ -8,6 +8,7 @@ import { Db } from 'mongodb';
 import { Product } from '../models/ProductModel';
 import { equal } from 'assert';
 
+let flatten = require('flat')
 type Request = express.Request;
 type Response = express.Response;
 
@@ -235,11 +236,29 @@ export class PriceController {
                                                     //.sort( sorting )
                                                     .where('prices')
                                                     .skip(start)
-                                                    .limit(count)
+                                                    .limit(count)                                                
+                                                    // .populate({
+                                                    //     path: 'Shop',
+                                                    //     select: {
+                                                    //         'name': 1,
+                                                    //         'tags': 1,
+                                                    //         'address': 1,
+                                                    //         'shopLng': 1,
+                                                    //         'shopLat': 1
+                                                    //     }
+                                                    // })
+                                                    // .populate({
+                                                    //     path: 'Product',
+                                                    //     select: {
+                                                    //         // 'name': 1,
+                                                    //         'tags': 1
+                                                    //     }
+                                                    // })
                                                     .exec((err, prices) => {
                                                         if (err) {
-                                                           res.send(err);
+                                                            res.send(err);
                                                         } else {
+                                                            // flatten(prices)
                                                             let total = prices.length;
                                                             res.status(200).send({
                                                                 start,
