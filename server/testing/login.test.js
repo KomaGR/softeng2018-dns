@@ -54,7 +54,7 @@ describe('Login endpoints', () => {
         .post('/observatory/api/signup')
         .send({email: 'username@example.com', username: 'testname', password: '12345'})
         .set('Accept', 'application/json')
-        .expect(201, done);
+        .expect(201, done);    
     });
     
     test('POST /login existing user', (done) => {
@@ -73,6 +73,33 @@ describe('Login endpoints', () => {
             if (err) done(err);
             expect(res.body.token).toBeDefined();
             expect(res.body.token).toBeString();
+            
+            done();
+        });
+    });
+
+    test('POST /logout logged in user', (done) => {
+        async.waterfall([
+            (cb) => request(server)
+                    .post('/observatory/api/signup')
+                    .send({email: 'username3@example', username: 'testname3', password: '12345'})
+                    .set('Accept', 'application/json')
+                    .expect(201, cb),
+            (results1, cb) => request(server)
+                    .post('/observatory/api/login')
+                    .send({username: 'testname3', password: '12345'})
+                    .set('Accept', 'application/json')
+                    .expect(200, cb),
+            (results2, cb) => request(server)
+                    .post('/observatory/api/logout')
+                    .set({
+                        'Accept': 'application/json',
+                        'X-OBSERVATORY-AUTH': results2.body.token      
+                    })
+                    .expect(200, cb)
+        ], (err, res) => {
+            if(err) done(err);
+            expect(res.statusCode).toBe(200);
             
             done();
         });
