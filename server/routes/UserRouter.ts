@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { UserController } from '../controllers/UserController';
 import { request } from 'http';
+import { bounceNonAdmins } from "./bouncer";
 
 type Request = express.Request;
 type Response = express.Response;
@@ -31,19 +32,19 @@ export default class {
             .post('/', this.userController.addNewUser)
 
             //get all users
-            .get('/', this.userController.getUsers)
+            .get('/', bounceNonAdmins, this.userController.getUsers)
 
             // get a specific user
-            .get('/:username', this.userController.getUserWithId)
+            .get('/:id', bounceNonAdmins,this.userController.getUserWithId)
 
             // update a specific user
-            .put('/:id', this.userController.updateUser)
+            .put('/:id', bounceNonAdmins, this.userController.updateUser)
 
             // update only one field of a specific user
-            .patch('/:id', this.userController.partialUpdateUser)
+            .patch('/:id', bounceNonAdmins, this.userController.partialUpdateUser)
 
             // delete a specific user
-            .delete('/:id', this.userController.deleteUser)
+            .delete('/:id', bounceNonAdmins, this.userController.deleteUser)
     }
 
 }
