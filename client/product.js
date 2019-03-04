@@ -132,11 +132,7 @@ function productDeleteInfo(req, res) {
     request.delete(options, (err, httpsResponse, body) =>{
        
         if (httpsResponse.statusCode == 200){
-            const data = JSON.parse(body); 
-            res.render("product_info.ejs", {
-                product: data,
-                session: req.session
-            })
+            res.redirect('/');
         }
     });
 }
