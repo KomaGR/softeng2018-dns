@@ -8,6 +8,8 @@ var parameters;
 var parsedata;
 var script_tag = document.getElementById("searcher");
 var shops = JSON.parse(script_tag.getAttribute("name"));
+var id;
+
 
 function hideButton() {
     document.getElementById("newShop").style.visibility = "hidden";
@@ -18,9 +20,10 @@ function hideButton() {
 
 function newOldMarker(e) {
     var mylatlng = new L.LatLng(e.lat,e.lng);
+    id = e.id;
     oldmymarker = L.marker(mylatlng).addTo(mymap).bindPopup(e.name).on('click', (e)=>{
         markerdata = {
-            shopId: e.id
+            shopId: id
         }
         if (mymarker) {
             mymap.removeLayer(mymarker);
@@ -54,12 +57,14 @@ function confirmShop() {
         // If we have an active marker for the store
         if (mymarker === null){
             document.getElementById("oldShop").style.visibility = "visible";
+            document.getElementById("shopId").value = markerdata.shopId;    
         } else {
             document.getElementById("newShop").style.visibility = "visible";
+            document.getElementById("lat").value = markerdata.lat;
+            document.getElementById("lng").value = markerdata.lng;        
+            document.getElementById("address").value = markerdata.address;
+    
         }
-        document.getElementById("lat").value = markerdata.lat;
-        document.getElementById("lng").value = markerdata.lng;        
-        document.getElementById("address").value = markerdata.address;
     //} else {
     //    console.error("Error: No marker selected.")
     //}
