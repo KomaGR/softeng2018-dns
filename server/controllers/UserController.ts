@@ -2,12 +2,13 @@ import * as mongoose from 'mongoose';
 import {User} from '../models/UserModel';
 import * as express from 'express';
 
+
 import { session_manager } from "../app";
 
 type Request = express.Request;
 type Response = express.Response;
 
-export default class UserController {
+export class UserController {
 
     // add a new user on database
     public addNewUser(req: Request, res: Response) {
@@ -41,20 +42,44 @@ export default class UserController {
             if (user.length === 0) {
                 res.status(404).send("Not found");
             }
+            else {
             
             console.log(user[0]);
-            
+
             const auth_token:string = session_manager.NewSession(user[0]);
 
-            res.status(200).send({token: auth_token});
+            res.status(200).send({token: auth_token, role: user[0].toObject().role});
+            }
         });
 
     }
 
-    public getUserWithID(req: Request, res: Response) {
-        User.findById(
-            { _id: req.params.userId },
+    //get all users
+    public getUsers(req: Request, res: Response) {
+        User.find( {},
             (err, user) => {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(user);
+            }).select('-password');
+    }        
+
+    public getUserWithId(req: Request, res: Response) {
+        User.find(
+            { _id : req.query.id },
+            (err, user) => {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(user);
+            }).select('-password');
+    }
+
+    public updateUser(req: Request, res: Response) {
+        User.findOneAndUpdate(
+            { _id: req.query.id },
+            req.body, { new: true }, (err, user) => {
                 if (err) {
                     res.send(err);
                 }
@@ -62,10 +87,18 @@ export default class UserController {
             });
     }
 
-    public updateUser(req: Request, res: Response) {
-        User.findOneAndUpdate(
-            { _id: req.params.userId },
-            req.body, { new: true }, (err, user) => {
+    // update only one field of a specific user on database
+    public partialUpdateUser(req: Request, res: Response) {
+
+        /* get key and value for the field that
+           should be updated */
+        let key = Object.keys(req.body)[0];
+        let value = Object.values(req.body)[0];
+
+        User.findByIdAndUpdate(
+            { _id: req.originalUrl.slice(23) },
+            { [key]: value }, { new: true },
+            (err, user) => {
                 if (err) {
                     res.send(err);
                 }
@@ -75,7 +108,7 @@ export default class UserController {
 
     public deleteUser(req: Request, res: Response) {
         User.remove(
-            { _id: req.params.userId },
+            { _id: req.params.id },
             (err: any) => {
                 if (err) {
                     res.send(err);
@@ -83,6 +116,4 @@ export default class UserController {
                 res.json({ message: 'Successfully deleted user!' });
             });
     }
-
-
 }
