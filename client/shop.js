@@ -71,13 +71,29 @@ function shopInfo(req, res){
                 httpsres.on('data', (d) => {
                     var mydata = JSON.parse(d);
                     var pricedata = mydata.prices;
-                    console.log("this is the shop data" + JSON.stringify(shopdata));
-                    console.log("this is the price data" + pricedata);
-                    res.render('shop_info.ejs', {
-                        shopData: shopdata,
-                        priceData: pricedata,
-                        session: session  
+                    const options2 = {
+                        hostname: 'localhost',
+                        port: 8765,
+                        path: '/observatory/api/products/' + pricedata.productId,
+                        rejectUnauthorized: false,
+                        method: 'GET'
+                    };
+                    const httpsreq2 = https.request(options2, (httpsres) => {
+                        console.log('statuscode', httpsres.statusCode);
+                        httpsres.on('data', (d) => {
+                            var myproductdata = JSON.parse(d);
+                            res.render('shop_info.ejs', {
+                                shopData: shopdata,
+                                priceData: pricedata,
+                                productData: myproductdata,
+                                session: session  
+                            });
+                        });
                     });
+                    httpsreq2.on('error', (e) => {
+                        console.error(e);
+                    });
+                    httpsreq2.end();
                 });
             });
             httpsreq1.on('error', (e) => {
