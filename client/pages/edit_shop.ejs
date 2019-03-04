@@ -1,0 +1,45 @@
+<div id="edit_modal_shop" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit dis shop</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="/shop_info_submit" method="POST">
+                    <div class="form-group">
+                        <label for="shopname">Shop name</label>
+                        <input type="text"  class="form-control" placeholder="Enter shop name" name="shopname" value="<%=parsedShopData.name%>"required>
+                    </div>
+                        <div class="form-group">
+                        <label for="shopaddress">Shop address</label>
+                        <input type="text" class="form-control" placeholder="Enter shop address" name="shopaddress" value="<%=parsedShopData.description%>"required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shoplat">Shop Lat</label>
+                        <input type="text" class="form-control" placeholder="Enter shop Lat" name="shoplat" value="<%=parsedShopData.lat%>"required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shoplng">Shop Lng</label>
+                        <input type="text" class="form-control" placeholder="Enter shop Lng" name="shoplng" value="<%=parsedShopData.lng%>"required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shoptags">Shop tags</label>
+                        <input type="text" class="form-control" placeholder="Enter shop tags seperated with comma" name="shoptags" value="<%=parsedShopData.tags%>"required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" name='productID' value="<%=parsedShopData.id%>">Submit</button>
+                </form>
+                    <form action='/shop_info_delete' method='POST'>
+                    <button type="submit" name='shopID' class="btn btn-danger " value="<%=parsedShopData.id%>">Delete shop</button>
+                </form>                      
+                </div>
+        </div>
+    </div>
+</div>
+    
+    
+    
+    
+    
+      
+     

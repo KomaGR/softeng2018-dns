@@ -1,1 +1,42 @@
-<h1>This is the shop info page</h1>
+<html>
+  <head>
+    <% include navbar.ejs %>
+  </head>
+
+
+  <body>
+    <% include search_bar.ejs %>
+
+
+    <div class="card p-2 m-3">
+    <% var parsedShopData = shopData %>
+    <p class="display-4 ml-2"> Name: <%= parsedShopData.name %> </p>
+
+      <ul>
+        <p class="lead"> Address: <%= parsedShopData.address %> </p>
+        <p class="lead"> Lat: <%= parsedShopData.lat %> </p>
+        <p class="lead"> Lng: <%= parsedShopData.lng %> </p>
+
+        <p class="lead"> Tags: <% for(var tag in parsedShopData.tags){ %>
+            <%= parsedShopData.tags[tag] %>
+            <% } %>
+        </p>
+
+        <p class="lead"> Withdrawn: <%= parsedShopData.withdrawn %> </p>
+
+        </p>
+      </ul>
+  </div>
+  <% if ( session.auth_token ) { %>
+    <a class="btn btn-primary text-white mx-5 mb-3 align-self-md-auto align-self-center"  data-toggle="modal" data-target="#edit_modal_shop" >Edit</a>
+  <% } %>
+
+<% include edit_shop.ejs %>
+
+<% include footer.ejs %>
+
+
+
+
+  </body>
+</html>
