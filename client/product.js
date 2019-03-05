@@ -96,10 +96,10 @@ function productGetInfo(req, res) {
                     console.log('statuscode', httpsres.statusCode);
                     httpsres.on('data', (d) => {
                         var shopData = JSON.parse(d);
-                        res.render('shop_info.ejs', {
+                        res.render('product_info.ejs', {
                             shopData: shopData,
                             priceData: priceData,
-                            productData: productData,
+                            product: productData,
                             session: session  
                         });
                     });
