@@ -18,7 +18,10 @@
                                     <p class="lead "> Price: <%= priceData[i].price %> </p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="lead "> Shop: <%= priceData[i].shopId %></p>
+                                    <p class="lead "> Shop: <%= priceData[i].shopName %></p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="lead "> Shop Address: <%= priceData[i].shopAddress %></p>
                                 </div>
                                 <% if ( session.auth_token ) { %>
                             <form  class="form-group text-center text-md-left" action='/change_price' method='POST'>
