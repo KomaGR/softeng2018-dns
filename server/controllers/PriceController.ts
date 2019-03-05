@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import { Price } from '../models/PriceModel';
 import * as express from 'express';
-import { Shop } from '../models/ShopModel';
+import { Shop, ShopSchema } from '../models/ShopModel';
 import { Product } from '../models/ProductModel';
 var Schema = mongoose.Schema;
 
@@ -67,6 +67,7 @@ export class PriceController {
         let start: number;
         let count: number;
 
+
         // console.log(`Start: ${req.query.start} - Count: ${req.query.count} - 
         // geoDist: ${req.query.geoDist} - geoLng: ${req.query.lng} - geoLat: ${req.query.lat} - 
         // dateFrom: ${req.query.dateFrom} - dateTo: ${req.query.dateTo} - shops: ${req.query.shops} -
@@ -87,7 +88,7 @@ export class PriceController {
             start = Number(req.query.start);
 
         }
-        
+
         if(!(req.query.count)){
             count = 20;
         }
@@ -103,6 +104,7 @@ export class PriceController {
             count = Number(req.query.count);        
 
         }
+
 
         let sorting: any = {};
 
@@ -157,7 +159,8 @@ export class PriceController {
                 }
             }
         }
-
+    
+        }
         // check that either none or both of the date-parameters were defined
         if (req.query.dateFrom ? ! req.query.dateTo : req.query.dateTo ) {
             return(res.status(400).send({ message: "Bad Request" }));
@@ -203,21 +206,41 @@ export class PriceController {
                 return(res.status(400).send({ message: "Bad Request" }));
             }
 
-            shopConditions.location = {
-                $near: {
-                    $geometry: {
-                        type: "Point",
-                        coordinates: [parseFloat(req.query.geoLng), parseFloat(req.query.geoLat)]
-                    },
-                    $maxDistance: 1000*parseFloat(req.query.geoDist)
-                }
-            };
+            // shopConditions.location = {
+            //     $nearSphere: {
+            //         $geometry: {
+            //             type: "Point",
+            //             coordinates: [parseFloat(req.query.geoLng), parseFloat(req.query.geoLat)]
+            //         },
+            //         $maxDistance: 1000*parseFloat(req.query.geoDist)
+            //     }                  
+            // };
         }
 
         // List of Shop ids we are intrested in
+        // shopIdList =
+        //     Shop.find({_id: { $in: req.query.shops }}).near('location', { 
+        //         center: [parseFloat(req.query.geoLng), parseFloat(req.query.geoLat)],
+        //         $maxDistance: parseFloat(req.query.geoDist), spherical: true}); 
         shopIdList =
-        Shop.find(shopConditions,
-        { _id: 1 });
+        Shop.find(shopConditions, (err, res, stats) => {
+            console.log(res); 
+        });
+        let shopGeoList = 
+        Shop.aggregate([{
+            $geoNear: {
+                near: {
+                    type: 'Point',
+                    coordinates: [parseFloat(req.query.geoLng), parseFloat(req.query.geoLat)]
+                },
+                spherical: true,
+                maxDistance: 1000 * parseFloat(req.query.geoDist),
+                distanceField: 'geoDist'
+            }
+        },{$project: {_id: 1, geoDist: 1}
+        }]).exec((err, res) => {
+            console.log(res);
+        })
 
         let productConditions: any = {};
 
@@ -268,6 +291,8 @@ export class PriceController {
         // // Query to get prices as described in restAPI specifications
         // let prices: mongoose.DocumentQuery<mongoose.MongooseDocument[],
         // mongoose.Document, {}> =
+        console.log("Let's...");
+        
         productIdList.exec((err, productIdList) => {
             if (err) {
                 res.send(err);
@@ -283,88 +308,94 @@ export class PriceController {
                                 shopIdListByTag.exec((err, shopIdListByTag) => {
                                     if (err) {
                                         res.send(err);
-                                    } else {                                        
-                                        Price.find({ $and: [
-                                            { date: { $gte: req.query.dateFrom , $lte: req.query.dateTo } },
-                                            { productId: { $in: productIdList } },
-                                            { shopId: { $in: shopIdList } },
-                                            { $or: [
-                                                   { productId: { $in: productIdListByTag } },
-                                                   { shopId: { $in: shopIdListByTag } }
-                                            ]}
-                                            ]})
-                                            //.sort( sorting )
-                                            .where('prices')
-                                            .skip(start)
-                                            .limit(count)                    
-                                            .populate({
-                                                path: 'shopId',
-                                                select: 'name address lng lat tags _id'
-                                            })
-                                            .populate({
-                                                path: 'productId',
-                                                select: 'name tags _id'
-                                            })
-                                            .exec((err, unprices) => {
-                                                if (err) {
-                                                    res.send(err);
-                                                } else {
+                                    } else {
+                                        shopGeoList.exec((err, shopGeoList) => {
 
-                                                    let input_lat = req.query.geoLat;
-                                                    let input_lng = req.query.geoLng;
-
-                                                    function deg2rad(deg) {
-                                                        return deg * (Math.PI / 180)
+                                            Price.find({ $and: [
+                                                { date: { $gte: req.query.dateFrom , $lte: req.query.dateTo } },
+                                                { productId: { $in: productIdList } },
+                                                { shopId: { $in: shopIdList } },
+                                                { $or: [
+                                                       { productId: { $in: productIdListByTag } },
+                                                       { shopId: { $in: shopIdListByTag } }
+                                                ]}
+                                                ]})
+                                                .where('prices')
+                                                .skip(start)
+                                                .limit(count)                    
+                                                .populate({
+                                                    path: 'shopId',
+                                                    select: 'name address lng lat tags _id'
+                                                })
+                                                .populate({
+                                                    path: 'productId',
+                                                    select: 'name tags _id'
+                                                })
+                                                .exec((err, unprices) => {
+                                                    if (err) {
+                                                        res.send(err);
+                                                    } else {
+                                                        let input_lat = req.query.geoLat;
+                                                        let input_lng = req.query.geoLng;
+    
+                                                        function deg2rad(deg) {
+                                                            return deg * (Math.PI / 180)
+                                                        }
+    
+                                                        function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {                                                        
+                                                            let R = 6371; // Radius of the earth in km
+                                                            let dLat = deg2rad(lat2 - lat1);  // deg2rad below
+                                                            let dLon = deg2rad(lon2 - lon1);
+                                                            let a =
+                                                                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                                                                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                                                                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    
+                                                            let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                                                            let d = R * c; // Distance in km
+                                                            return d;
+                                                        }
+    
+    
+                                                        console.log('#########################');
+                                                        
+                                                        // console.log(unprices);
+                                                        
+                                                        function flattenPrice(dl) {
+                                                            var newdl : any = {};
+                                                            newdl.price = dl.price;
+                                                            newdl.date = dl.date;
+                                                            newdl.productTags = dl.productId.tags;
+                                                            newdl.productName = dl.productId.name;
+                                                            newdl.productId = dl.productId.id;
+                                                            newdl.shopTags = dl.shopId.tags;
+                                                            newdl.shopName = dl.shopId.name;
+                                                            newdl.shopAddress = dl.shopId.address;
+                                                            newdl.shopLng = dl.shopId.lng;
+                                                            newdl.shopLat = dl.shopId.lat;
+                                                            newdl.shopId = dl.shopId.id;
+                                                            newdl.shopDist = getDistanceFromLatLonInKm(dl.shopId.lat, 
+                                                                dl.shopId.lng, input_lat, input_lng);
+                                                            return newdl;
+                                                        }
+    
+    
+    
+                                                        var prices = unprices.map(flattenPrice);
+    
+    
+                                                        let total = unprices.length;
+    
+                                                        res.status(200).send({
+                                                            start,
+                                                            count,
+                                                            total,
+                                                            prices
+                                                        });
+    
                                                     }
-
-                                                    function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {                                                        
-                                                        let R = 6371; // Radius of the earth in km
-                                                        let dLat = deg2rad(lat2 - lat1);  // deg2rad below
-                                                        let dLon = deg2rad(lon2 - lon1);
-                                                        let a =
-                                                            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                                                            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-                                                            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-                                                        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                                                        let d = R * c; // Distance in km
-                                                        return d;
-                                                    }
-
-                                                    
-
-                                                    function flattenPrice(dl) {
-                                                        var newdl : any = {};
-                                                        newdl.price = dl.price;
-                                                        newdl.date = dl.date;
-                                                        newdl.productTags = dl.productId.tags;
-                                                        newdl.productName = dl.productId.name;
-                                                        newdl.productId = dl.productId.id;
-                                                        newdl.shopTags = dl.shopId.tags;
-                                                        newdl.shopName = dl.shopId.name;
-                                                        newdl.shopAddress = dl.shopId.address;
-                                                        newdl.shopLng = dl.shopId.lng;
-                                                        newdl.shopLat = dl.shopId.lat;
-                                                        newdl.shopId = dl.shopId.id;
-                                                        newdl.shopDist = getDistanceFromLatLonInKm(dl.shopId.lat, 
-                                                            dl.shopId.lng, input_lat, input_lng);
-                                                        return newdl;
-                                                    }
-
-                                                    var prices = unprices.map(flattenPrice);
-
-
-                                                    let total = unprices.length;
-
-                                                    res.status(200).send({
-                                                        start,
-                                                        count,
-                                                        total,
-                                                        prices
-                                                    });
-
-                                                }
-                                            });
+                                                });
+                                        });                                       
                                     }
                                 });
                             }
@@ -374,6 +405,7 @@ export class PriceController {
             }
         });
     }
+
 
 
 
