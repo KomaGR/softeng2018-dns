@@ -4,18 +4,18 @@
     </head>  
     <body>
     <% include search_bar.ejs %>
-    <div class="card p-2 m-3">
+    <div class="card p-2 mx-3 mt-1 mb-5 col-11 col-md-6">
         <form action="/change_price_real" method="POST">
-            <div class="form-group">
-                <label for="price">Price</label>
+            <div class="form-group" class="lead">
+                <label for="price" class="lead">Price</label>
                 <input type="text"  class="form-control" placeholder="Enter new price" name="price" required>
             </div>
             <div class="form-group">
-                <label for="DateFrom">Date from</label>
+                <label for="DateFrom" class="lead">Date from</label>
                 <input type="date"  class="form-control" placeholder="Enter date from" name="datefrom" required>
             </div>
             <div class="form-group">
-                <label for="DateTo">Date to</label>
+                <label for="DateTo" class="lead">Date to</label>
                 <input type="date"  class="form-control" placeholder="Enter date to" name="dateto" required>
             </div>
             <input type="text"  class="form-control" name="shopId" value="<%=shopId %>" hidden>
