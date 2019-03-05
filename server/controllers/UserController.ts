@@ -44,11 +44,11 @@ export class UserController {
             }
             else {
             
-            console.log(user[0]);
+                console.log(user[0]);
 
-            const auth_token:string = session_manager.NewSession(user[0]);
+                const auth_token:string = session_manager.NewSession(user[0]);
 
-            res.status(200).send({token: auth_token, role: user[0].toObject().role});
+                res.status(200).send({token: auth_token, role: user[0].toObject().role});
             }
         });
 
@@ -59,7 +59,7 @@ export class UserController {
         User.find( {},
             (err, user) => {
                 if (err) {
-                    res.send(err);
+                    res.json(err);
                 }
                 res.json(user);
             }).select('-password');
@@ -70,7 +70,7 @@ export class UserController {
             { _id : req.query.id },
             (err, user) => {
                 if (err) {
-                    res.send(err);
+                    res.json(err);
                 }
                 res.json(user);
             }).select('-password');
@@ -81,9 +81,10 @@ export class UserController {
             { _id: req.query.id },
             req.body, { new: true }, (err, user) => {
                 if (err) {
-                    res.send(err);
+                    res.json(err);
+                } else {
+                    res.json(user);
                 }
-                res.json(user);
             });
     }
 
@@ -96,7 +97,7 @@ export class UserController {
         let value = Object.values(req.body)[0];
 
         User.findByIdAndUpdate(
-            { _id: req.originalUrl.slice(23) },
+            { _id: req.params.id },
             { [key]: value }, { new: true },
             (err, user) => {
                 if (err) {
@@ -111,7 +112,7 @@ export class UserController {
             { _id: req.params.id },
             (err: any) => {
                 if (err) {
-                    res.send(err);
+                    res.json(err);
                 }
                 res.json({ message: 'Successfully deleted user!' });
             });
