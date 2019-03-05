@@ -269,15 +269,15 @@ describe('Test', () => {
             // GET Prices //
             ////////////////
 
-            (results, cb) => {
-                request(server)
-                    .get('/observatory/api/prices')
-                    .set({
-                        'Accept': 'application/json',
-                        'X-OBSERVATORY-AUTH': stoken
-                    })
-                    .expect(200, cb)
-            },
+            // (results, cb) => {
+            //     request(server)
+            //         .get('/observatory/api/prices')
+            //         .set({
+            //             'Accept': 'application/json',
+            //             'X-OBSERVATORY-AUTH': stoken
+            //         })
+            //         .expect(200, cb)
+            // },
 
             ////////////
             // Logout //
