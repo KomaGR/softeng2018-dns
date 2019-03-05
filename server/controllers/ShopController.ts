@@ -66,13 +66,13 @@ export class ShopController {
         }
         else {
 
-            /* check if value given belongs to the set
-            of acceptable values */
-            if((String(req.query.status) != 'ALL') &&
-            (String(req.query.status) != 'ACTIVE') &&
-            (String(req.query.status) != 'WITHDRAWN') ){
-                    return(res.status(400).send({ message: "Bad Request" }));
-            }
+            // /* check if value given belongs to the set
+            // of acceptable values */
+            // if((String(req.query.status) != 'ALL') &&
+            // (String(req.query.status) != 'ACTIVE') &&
+            // (String(req.query.status) != 'WITHDRAWN') ){
+            //         return(res.status(400).send({ message: "Bad Request" }));
+            // }
 
             /* define the condition that will filter our
             shops and return those with the status
@@ -91,7 +91,7 @@ export class ShopController {
                     break; 
                 }
                 default: { 
-                    condition = { withdrawn: false};
+                    return(res.status(400).send({ message: "Bad Request" }));
                     break; 
                 } 
             }
@@ -105,13 +105,13 @@ export class ShopController {
         else{
 
             /* check if value given belongs to the set
-            of acceptable values */
-            if((String(req.query.sort) != 'id|ASC') &&
-            (String(req.query.sort) != 'id|DESC') &&
-            (String(req.query.sort) != 'name|ASC') &&
-            (String(req.query.sort) != 'name|DESC') ){
-                    return(res.status(400).send({ message: "Bad Request" }));
-            }
+            // of acceptable values */
+            // if((String(req.query.sort) != 'id|ASC') &&
+            // (String(req.query.sort) != 'id|DESC') &&
+            // (String(req.query.sort) != 'name|ASC') &&
+            // (String(req.query.sort) != 'name|DESC') ){
+            //         return(res.status(400).send({ message: "Bad Request" }));
+            // }
 
             /* define the condition that will sort our
             shops and return them the way the user 
@@ -134,7 +134,7 @@ export class ShopController {
                     break;
                 }
                 default: {
-                    sorting = { name: -1 };
+                    return(res.status(400).send({ message: "Bad Request" }));
                     break;
                 }
             }
@@ -234,13 +234,14 @@ export class ShopController {
         }
         
         // check that the user passed all fields of shop entity (correctly)
-        if ( !(req.body.name) ||
-        !(req.body.address) ||
-        !(req.body.lng) ||
-        !(req.body.lat) ||
-        !(req.body.tags) ||
-        !(Number(req.body.lng)) ||
-        !(Number(req.body.lat)) ){
+        if ( (req.body.name) &&
+        (req.body.address) &&
+        (req.body.lng) &&
+        (req.body.lat) &&
+        (req.body.tags) &&
+        (typeof req.body.withdrawn === 'boolean') &&
+        (Number(req.body.lng)) &&
+        (Number(req.body.lat)) ){
             return(res.status(400).send({ message: "Bad Request" })); 
         }
 
@@ -274,11 +275,12 @@ export class ShopController {
 
         /* check that the entry given, is one of the
         entries of shop entity */
-        if ( (!(req.body.name) &&
-        !(req.body.address) &&
-        !(req.body.lng) &&
-        !(req.body.lat) &&
-        !(req.body.tags) ) ||
+        if ( ((req.body.name) &&
+        (req.body.address) &&
+        (req.body.lng) &&
+        (req.body.lat) &&
+        (typeof req.body.withdrawn === 'boolean') &&
+        (req.body.tags) ) &&
         (( req.body.lng && !(Number(req.body.lng)))) ||
         (( req.body.lat && !(Number(req.body.lat)))) ){
             return(res.status(400).send({ message: "Bad Request" })); 
@@ -312,22 +314,42 @@ export class ShopController {
             return (res.status(406).send({ message: "Unsupported Media Type" })); 
         }
 
-        Shop.deleteOne({ _id: req.params.id},
-        (err) => {
-            if (err) {
-                res.send(err);
-            }
-        });
-
-        /* cascade on delete (delete all prices with the
-        specific shop id) */
-        Price.deleteMany({ shopId: req.params.id},
-        (err) => {
-            if (err) {
-                res.send(err);
-            } else {
-                res.status(200).send({message : "OK"});
-            }
-        });
+        if( res.locals.privilege == 'admin' ) {
+            
+            Shop.deleteOne(
+            { _id: req.params.id },
+            (err) => {
+                if (err) {
+                    res.send(err);
+                }
+            });
+    
+            /* cascade on delete (delete all prices with the
+            specific shop id) */
+            Price.deleteMany({ shopId: req.params.id },
+            (err) => {
+                if (err) {
+                    res.send(err);
+                }
+                else {
+                    res.status(200).send(
+                    {message : "OK"}
+                );}
+            });
+        }
+        else {
+            Shop.findOneAndUpdate(
+            { _id: req.params.id },
+            { withdrawn: true },
+            (err) => {
+                if (err) {
+                    res.send(err);
+                }
+                else {
+                    res.status(200).send(
+                    {message : "OK"}
+                );}
+            });
+        }
     }
 }
