@@ -65,7 +65,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb);
+                    .expect(201, cb);
             },
             (results, cb) => {
                 request(server)
@@ -75,7 +75,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb);
+                    .expect(201, cb);
             },
             (results, cb) => {
                 request(server)
@@ -85,7 +85,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb);
+                    .expect(201, cb);
             },
             
             //////////////////
@@ -124,7 +124,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb)
+                    .expect(201, cb)
             },
             (results, cb) => {
                 request(server)
@@ -134,7 +134,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb)
+                    .expect(201, cb)
             },
             (results, cb) => {
                 request(server)
@@ -144,7 +144,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb)
+                    .expect(201, cb)
             },
 
             ///////////////
@@ -182,7 +182,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb)
+                    .expect(201, cb)
             },
             (results, cb) => {
                 request(server)
@@ -192,7 +192,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb)
+                    .expect(201, cb)
             },
             (results, cb) => {
                 request(server)
@@ -202,7 +202,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb)
+                    .expect(201, cb)
             },
             (results, cb) => {
                 request(server)
@@ -212,7 +212,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb)
+                    .expect(201, cb)
             },
             (results, cb) => {
                 request(server)
@@ -222,7 +222,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb)
+                    .expect(201, cb)
             },
             (results, cb) => {
                 request(server)
@@ -232,7 +232,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb)
+                    .expect(201, cb)
             },
             (results, cb) => {
                 request(server)
@@ -242,7 +242,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb)
+                    .expect(201, cb)
             },
             (results, cb) => {
                 request(server)
@@ -252,7 +252,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb)
+                    .expect(201, cb)
             },
             (results, cb) => {
                 request(server)
@@ -262,7 +262,7 @@ describe('Test', () => {
                         'Accept': 'application/json',
                         'X-OBSERVATORY-AUTH': stoken
                     })
-                    .expect(200, cb)
+                    .expect(201, cb)
             },
 
             ////////////////
