@@ -26,12 +26,12 @@ export class ShopController {
             return(res.status(400).send({ message: "Bad Request" })); 
         }
 
-        let shop_attributes = req.body;
+        // let shop_attributes = req.body;
         
-        if (shop_attributes.tags)
-            shop_attributes.tags = shop_attributes.tags.split(',').map((s:string) => {return s.trim();});
+        // if (shop_attributes.tags)
+        //     shop_attributes.tags = shop_attributes.tags.split(',').map((s:string) => {return s.trim();});
         
-        let newShop = new Shop(shop_attributes);
+        let newShop = new Shop(req.body);
 
         newShop.set('location', {type: 'Point', coordinates: [req.body.lng, req.body.lat]});
         

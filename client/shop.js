@@ -32,10 +32,10 @@ function shopSubmit(req, res) {
                 res.send(err);
             }
             console.log('#Front# statuscode:', httpsResponse.statusCode);
-            if (httpsResponse.statusCode == 200) {
+            if (httpsResponse.statusCode == 201) {
                 const jsonBody = JSON.parse(body);
                 const session = req.session;
-                res.status(200).render("submit_product.ejs",{
+                res.status(201).render("submit_product.ejs",{
                     shopId: jsonBody.id,
                     session: session  
                 });
