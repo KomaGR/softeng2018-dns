@@ -113,6 +113,10 @@ function signupRoute(req, res) {
             console.log(body.message);
             res.status(200).redirect('/');
         }
+        if (httpsResponse.statusCode == 403) {
+            console.log(body.message);
+            res.status(403).redirect('/?pass=2');
+        }
     });
 }
 
