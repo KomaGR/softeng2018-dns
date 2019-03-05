@@ -35,24 +35,26 @@
         </div>
     </div>
     <% if ( session.auth_token ) { %>
-      <a class="btn btn-primary text-white mx-5 mb-3 align-self-md-auto align-self-center"  data-toggle="modal" data-target="#edit_modal" >Edit</a>
+      <a class="btn btn-primary text-white mx-5 mb-3 mt-4 align-self-md-auto align-self-center"  data-toggle="modal" data-target="#edit_modal" >Edit</a>
       <% include edit_product.ejs %>
     <% } %>
-  
-  <p> Select dates </p>
+  <div class="row mr-5">
+  <div class="col-md-6 col-12 p-2 m-3 ml-5 mr-5">
+  <p class="lead"> Select dates </p>
   <form id="newShop" action='/product_info_final' method="POST">
   <div class="form-group">
-    <label for="DateFrom">Date from</label>
+    <label for="DateFrom" class="lead">Date from</label>
     <input type="date"  class="form-control" placeholder="Enter date from" name="datefrom" required>
   </div>
   <div class="form-group">
-    <label for="DateTo">Date to</label>
+    <label for="DateTo" class="lead">Date to</label>
     <input type="date"  class="form-control" placeholder="Enter date to" name="dateto" required>
   </div>
   <input id="prodId" type="text" name="prodId" value="<%=product.id%>" hidden>
-  <button type="submit" class="btn btn-primary">Ψάξε</button>
+  <button type="submit" class="btn btn-primary ">Ψάξε</button>
   </form>
-  
+</div>
+</div>
   <% include footer.ejs %>
   
   

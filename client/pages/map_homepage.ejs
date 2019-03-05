@@ -27,20 +27,21 @@
 <div id="map"></div>
 
 <input id="confirmShop" type="button" class="btn btn-primary mt-4 mb-3 " value="Επιβεβαίωση επιλογής" onclick="confirmShop();"/>
+<div class=" p-2 m-3 col-11 col-md-6">
 
 <form id="newShop" action='/shop_info' method="POST">
   <input id="shopId" type="text" name="shopId" hidden>
 <div class="form-group">
-    <label for="DateFrom">Date from</label>
+    <label for="DateFrom" class="lead">Date from</label>
     <input type="date"  class="form-control" placeholder="Enter date from" name="datefrom" required>
 </div>
 <div class="form-group">
-    <label for="DateTo">Date to</label>
+    <label for="DateTo" class="lead">Date to</label>
     <input type="date"  class="form-control" placeholder="Enter date to" name="dateto" required>
 </div>
 <button type="submit" class="btn btn-primary">Ψάξε</button>
 </form>
-
+</div>
 
 </body>
 
