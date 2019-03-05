@@ -24,15 +24,15 @@
                                 <div class="col-6">
                                     <p class="lead "> Description: <%= myproducts[i].description %></p>
                                 </div>
-                            </div>
-                            <form  class="form-group text-center text-md-left" action='/product_info' method='GET'>
+                            </div>  
+                            <!-- <form  class="form-group text-center text-md-left" action='/product_info' method='GET'>
                                 <button class="btn btn-outline-secondary" type="submit" name='productID' value="<%=myproducts[i].id%>">Learn more</button>
-                            </form>
-                            <form id="newProduct" action='/product_info' method="POST">
+                            </form> -->
+                            <form  class="form-group text-center text-md-left" id="newProduct" action='/product_info' method="POST">
                                 <input id="<%=myproducts[i].id%>" value = "<%=myproducts[i].id%>" type="text" name="productId" hidden>
                               <div class="form-group">
                                   <label for="DateFrom">Date from</label>
-                                  <input type="date"  class="form-control" placeholder="Enter date from" name="datefrom" required>
+                                  <input type="date"  class="form-control form-inline" placeholder="Enter date from" name="datefrom" required>
                               </div>
                               <div class="form-group">
                                   <label for="DateTo">Date to</label>
