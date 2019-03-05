@@ -32,6 +32,9 @@
                                     if (session.role == 'admin') { %>
                                     <a class="nav-link nav-link-ltr text-white" href="/admin_hub">Admin Hub</a>
                                 <% } %>
+                                <%  if (session.role == 'investor') { %>
+                                    <a class="nav-link nav-link-ltr text-white" href="/partners">Partners Page</a>
+                                <% } %>
                                 <% if ( session.auth_token ) { %>
                                     <a class="nav-link nav-link-ltr text-white" href="/logout">Αποσυνδεση</a>
                                 <% } else{ %>

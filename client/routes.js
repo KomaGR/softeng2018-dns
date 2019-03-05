@@ -68,6 +68,12 @@ function routes(app) {
         res.redirect('/');
      })
 
+     .get("/partners", (req, res) => {
+         res.render("investors.ejs", {
+             session: req.session
+         })
+     })
+
      .get("/search_results", function (req, res) {
         var searchTerm = req.query.search_term;
         
