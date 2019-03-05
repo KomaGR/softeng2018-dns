@@ -48,10 +48,10 @@ function priceComparator(a: Price, b: Price): number {
 }
 
 export default function(start:number, count:number, prices: Price[], sort: string | string[]) {
-    console.log(sort);
+    //console.log(sort);
     if (sort) {
         if (!(typeof sort === 'string')) {
-            console.log('Multiple rules');
+            //console.log('Multiple rules');
                     
             sortlist = [];
             asclist = [];
@@ -64,7 +64,7 @@ export default function(start:number, count:number, prices: Price[], sort: strin
                 // console.log(`${sortlist[i][0]} && ${sortlist[i][1]} &&`);        
             }
         } else {
-            console.log('Single rule');
+            //console.log('Single rule');
             const temp = sort.split('|');
             sortlist[0] = temp[0];
             asclist[0] = temp[1];
