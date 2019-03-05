@@ -3,6 +3,8 @@ import { Price } from '../models/PriceModel';
 import * as express from 'express';
 import { Shop } from '../models/ShopModel';
 import { Product } from '../models/ProductModel';
+import pricesort from './pricesort';
+
 var Schema = mongoose.Schema;
 
 type Request = express.Request;
@@ -126,36 +128,36 @@ export class PriceController {
             /* define the condition that will sort our
             products and return them the way the user 
             requested */
-            switch( String(req.query.sort) ) {
-                case 'price|ASC': {
-                    sorting.price = 1;
-                    break;
-                }
-                case 'price|DESC': {
-                    sorting.price = -1;
-                    break;
-                }
-                case 'date|ASC': {
-                    sorting.date = 1;
-                    break;
-                }
-                case 'date|DESC': {
-                    sorting.date = -1;
-                    break;
-                }
-                case 'geoDist|ASC': {
-                    sorting.geoDist = 1;
-                    break;
-                }
-                case 'geoDist|DESC': {
-                    sorting.geoDist = -1;
-                    break;
-                }
-                default: {
-                    return(res.status(400).send({ message: "Bad Request" }));
-                    break;
-                }
-            }
+            // switch( String(req.query.sort) ) {
+            //     case 'price|ASC': {
+            //         sorting.price = 1;
+            //         break;
+            //     }
+            //     case 'price|DESC': {
+            //         sorting.price = -1;
+            //         break;
+            //     }
+            //     case 'date|ASC': {
+            //         sorting.date = 1;
+            //         break;
+            //     }
+            //     case 'date|DESC': {
+            //         sorting.date = -1;
+            //         break;
+            //     }
+            //     case 'geoDist|ASC': {
+            //         sorting.geoDist = 1;
+            //         break;
+            //     }
+            //     case 'geoDist|DESC': {
+            //         sorting.geoDist = -1;
+            //         break;
+            //     }
+            //     default: {
+            //         return(res.status(400).send({ message: "Bad Request" }));
+            //         break;
+            //     }
+            // }
         }
     }
 
@@ -293,11 +295,7 @@ export class PriceController {
                                                    { productId: { $in: productIdListByTag } },
                                                    { shopId: { $in: shopIdListByTag } }
                                             ]}
-                                            ]})
-                                            //.sort( sorting )
-                                            .where('prices')
-                                            .skip(start)
-                                            .limit(count)                    
+                                            ]})                   
                                             .populate({
                                                 path: 'shopId',
                                                 select: 'name address lng lat tags _id'
@@ -354,7 +352,7 @@ export class PriceController {
 
                                                     var prices = unprices.map(flattenPrice);
 
-
+                                                    let sorted_prices = pricesort(req.query.start, req.query.count, prices, req.query.sort)
                                                     let total = unprices.length;
 
                                                     res.status(200).send({
