@@ -2,7 +2,6 @@ import * as mongoose from 'mongoose';
 import {Product} from '../models/ProductModel';
 import * as express from 'express';
 import { Price } from '../models/PriceModel';
-import { Int32 } from 'bson';
 
 
 type Request = express.Request;
@@ -18,22 +17,25 @@ export class ProductController {
         Any query with format value defined with value different
         from json is not accepted. */
         if( req.query.format != 'json' && req.query.format ) {
-            return(res.status(400).send({ message: "Bad Request" })); 
+            return (res.status(406).send({ message: "Unsupported Media Type" })); 
         }
 
-        let newProduct: any = new Product(req.body);        
+        let product_attributes = req.body;
+        if (product_attributes.tags)
+            product_attributes.tags = product_attributes.tags.split(',').map((item: string) => {return item.trim();});        
+
+        let newProduct = new Product(req.body);      
+          
 
         /* if all required fields were given then
         save new product to database, else throw
         error 400 : Bad Request */
         newProduct.save((err, product) => {
-            if (err && err.name === 'ValidatorError') {
-                res.status(400).send({ message: "Bad Request" });
+            if (err) {
+                res.status(400).json(err);
+            } else {
+                res.status(201).json(product);
             }
-            else if (err) {
-                res.json(err);
-            }
-            res.json(product);
         });
     }
 
@@ -44,8 +46,8 @@ export class ProductController {
         We also accept queries with the format field undefined
         Any query with format value defined with value different
         from json is not accepted. */
-        if( req.query.format != 'json' && req.query.format ) {
-            return(res.status(400).send({ message: "Bad Request" })); 
+        if( req.query.format && req.query.format != 'json') {
+            return (res.status(406).send({ message: "Unsupported Media Typet" })); 
         }
 
         let condition: any;
@@ -55,13 +57,13 @@ export class ProductController {
         }
         else {
 
-            /* check if value given belongs to the set
-            of acceptable values */
-            if((String(req.query.status) != 'ALL') &&
-            (String(req.query.status) != 'ACTIVE') &&
-            (String(req.query.status) != 'WITHDRAWN') ){
-                    return(res.status(400).send({ message: "Bad Request" }));
-            }
+            // /* check if value given belongs to the set
+            // of acceptable values */
+            // if((String(req.query.status) != 'ALL') &&
+            // (String(req.query.status) != 'ACTIVE') &&
+            // (String(req.query.status) != 'WITHDRAWN') ){
+            //         return(res.status(400).send({ message: "Bad Request" }));
+            // }
 
             /* define the condition that will filter our
             products and return those with the status
@@ -80,7 +82,7 @@ export class ProductController {
                     break; 
                 }
                 default: { 
-                    condition = { withdrawn: false};
+                    return(res.status(400).send({ message: "Bad Request" }));
                     break; 
                 } 
             }
@@ -95,12 +97,12 @@ export class ProductController {
 
             /* check if value given belongs to the set
             of acceptable values */
-            if((String(req.query.sort) != 'id|ASC') &&
-            (String(req.query.sort) != 'id|DESC') &&
-            (String(req.query.sort) != 'name|ASC') &&
-            (String(req.query.sort) != 'name|DESC') ){
-                    return(res.status(400).send({ message: "Bad Request" }));
-            }
+            // if((String(req.query.sort) != 'id|ASC') &&
+            // (String(req.query.sort) != 'id|DESC') &&
+            // (String(req.query.sort) != 'name|ASC') &&
+            // (String(req.query.sort) != 'name|DESC') ){
+            //         return(res.status(400).send({ message: "Bad Request" }));
+            // }
 
             /* define the condition that will sort our
             products and return them the way the user 
@@ -123,7 +125,7 @@ export class ProductController {
                     break;
                 }
                 default: {
-                    sorting = { name: -1 };
+                    return(res.status(400).send({ message: "Bad Request" }));
                     break;
                 }
             }
@@ -137,9 +139,10 @@ export class ProductController {
         }
         else {
 
-            // check if start parameter given, are type: Int
+            /* check if start parameter given, is type Int and also
+            if it is greater or equal to zero */
             if ( !(Number.isInteger(Number(req.query.start))) || 
-            Number(req.query.start) <= 0 ){
+            Number(req.query.start) < 0 ){
                 return(res.status(400).send({ message: "Bad Request" }));
             }
 
@@ -152,9 +155,10 @@ export class ProductController {
         }
         else {
         
-            // check if start parameter given, are type: Int
+            /* check if count parameter given, is type Int and also
+            if it is greater or equal to zero */
             if ( !(Number.isInteger(Number(req.query.count))) ||
-            Number(req.query.count) <= 0 ){
+            Number(req.query.count) < 0 ){
                 return(res.status(400).send({ message: "Bad Request" }));
             }
 
@@ -171,19 +175,16 @@ export class ProductController {
         .limit(count)
         .exec((err, products) => {
             if (err) {
-                res.send(err);
+                res.json(err);
+            } else {
+                let total = products.length;
+                res.status(201).send({
+                    start,
+                    count,
+                    total,
+                    products
+                });
             }
-
-            /* determine the total number of products
-            returned */
-            let total = products.length;
-
-            res.status(200).send({
-                start,
-                count,
-                total,
-                products
-            });
         });
 
     }
@@ -195,17 +196,18 @@ export class ProductController {
         We also accept queries with the format field undefined
         Any query with format value defined with value different
         from json is not accepted. */
-        if( req.query.format != 'json' && req.query.format ) {
-            return(res.status(400).send({ message: "Bad Request" })); 
+        if(req.query.format && req.query.format != 'json') {
+            return (res.status(406).send({ message: "Unsupported Media Type" })); 
         }
 
         Product.findById(
-        { _id: req.originalUrl.slice(26)}, 
+        { _id: req.params.id}, 
         (err, product) => {
             if (err) {
-                res.send(err);
+                res.json(err);
+            } else {
+                res.json(product);
             }
-            res.json(product);
         });
     }
 
@@ -216,26 +218,28 @@ export class ProductController {
         We also accept queries with the format field undefined
         Any query with format value defined with value different
         from json is not accepted. */
-        if( req.query.format != 'json' && req.query.format ) {
-            return(res.status(400).send({ message: "Bad Request" })); 
+        if(req.query.format && req.query.format != 'json') {
+            return (res.status(406).send({ message: "Not Acceptable" })); 
         }
 
         // check that the user passed all fields of product entity (correctly)
-        if ( !(req.body.name) ||
-        !(req.body.description) ||
-        !(req.body.category) ||
-        !(req.body.tags) ) {
+        if ( (req.body.name) &&
+        (req.body.description) &&
+        (req.body.category) &&
+        (typeof req.body.withdrawn === 'boolean') &&
+        (req.body.tags) ) {
             return(res.status(400).send({ message: "Bad Request" })); 
         }
 
         Product.findOneAndUpdate(
-        { _id: req.originalUrl.slice(26)}, 
+        { _id: req.params.id}, 
         req.body, { new: true },
         (err, product) => {
             if (err) {
-                res.send(err);
+                res.json(err);
+            } else {
+                res.json(product);
             }
-            res.json(product);
         });
     }
     
@@ -246,8 +250,8 @@ export class ProductController {
         We also accept queries with the format field undefined
         Any query with format value defined with value different
         from json is not accepted. */
-        if( req.query.format != 'json' && req.query.format ) {
-            return(res.status(400).send({ message: "Bad Request" })); 
+        if( req.query.format && req.query.format != 'json') {
+            return (res.status(406).send({ message: "Unsupported Media Type" })); 
         }
 
         // check that user passes exactly one entry
@@ -257,10 +261,11 @@ export class ProductController {
 
         /* check that the entry given, is one of the
         entries of product entity */
-        if ( !(req.body.name) &&
-        !(req.body.description) &&
-        !(req.body.category) &&
-        !(req.body.tags) ) {
+        if ( (req.body.name) &&
+        (req.body.description) &&
+        (req.body.category) &&
+        (typeof req.body.withdrawn === 'boolean') &&
+        (req.body.tags) ) {
             return(res.status(400).send({ message: "Bad Request" })); 
         }
 
@@ -270,13 +275,14 @@ export class ProductController {
         let value = Object.values(req.body)[0];
 
         Product.findByIdAndUpdate(
-        { _id: req.originalUrl.slice(26)}, 
+        { _id: req.params.id}, 
         { [key] : value }, { new: true },
         (err, product) => {
             if (err) {
-                res.send(err);
+                res.json(err);
+            } else {
+                res.json(product);
             }
-            res.json(product);
         });
     }
 
@@ -287,28 +293,44 @@ export class ProductController {
         We also accept queries with the format field undefined
         Any query with format value defined with value different
         from json is not accepted. */
-        if( req.query.format != 'json' && req.query.format ) {
-            return(res.status(400).send({ message: "Bad Request" })); 
+        if(req.query.format && req.query.format != 'json') {
+            return (res.status(406).send({ message: "Unsupported Media Type" })); 
         }
 
-        Product.deleteOne(
-        { _id: req.originalUrl.slice(26)},
-        (err) => {
-            if (err) {
-                res.send(err);
-            }
-        });
-
-        /* cascade on delete (delete all prices with the
-        specific product id) */
-        Price.deleteMany({ productId: req.originalUrl.slice(26)},
-        (err) => {
-            if (err) {
-                res.send(err);
-            }
-            res.status(200).send(
-                {message : "OK"}
-            );
-        });
+        if( res.locals.privilege == 'admin' ) {
+            
+            Product.deleteOne(
+            { _id: req.params.id },
+            (err) => {
+                if (err) {
+                    res.send(err);
+                }
+            });
+    
+            /* cascade on delete (delete all prices with the
+            specific product id) */
+            Price.deleteMany({ productId: req.params.id },
+            (err) => {
+                if (err) {
+                    res.send(err);
+                }
+                else {
+                    res.status(200).send({message : "OK"});
+                }
+            });
+        }
+        else {
+            Product.findOneAndUpdate(
+            { _id: req.params.id },
+            { withdrawn: true },
+            (err) => {
+                if (err) {
+                    res.send(err);
+                }
+                else {
+                    res.status(200).send({message : "OK"});
+                }
+            });
+        }
     }
 }

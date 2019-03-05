@@ -330,6 +330,50 @@ function routes(app) {
             }
  
         })
+    })
+    
+    .post("/change_price", redirectLogin, function(req,res){
+        var prodId = req.body.productId;
+        var shopId = req.body.shopId;
+        const session = req.session;
+
+        res.render("change_price.ejs", {
+            productId: prodId,
+            shopId: shopId,
+            session: session
+        });
+    })
+    
+    .post("/change_price_real", redirectLogin, function(req, res){
+        var prodId = req.body.productId;
+        var shopId = req.body.shopId;
+        var dateTo = req.body.dateto;
+        var dateFrom = req.body.datefrom;
+        var price = req.body.price;
+
+        const options = {
+            url: 'https://localhost:8765/observatory/api/prices',
+            rejectUnauthorized: false,
+            form: {
+                productId: prodId,
+                shopId: shopId,
+                dateTo: dateTo,
+                dateFrom: dateFrom,
+                price: price
+            },
+            headers: {
+                'X-OBSERVATORY-AUTH': req.session.auth_token
+            }
+        };
+        
+        request.post(options, (err, httpsResponse, body) => {
+            if (err) {
+                res.send(err);
+            }
+            if (httpsResponse.statusCode == 200) {                
+                res.status(200).redirect('/');
+            }   
+        })
     });
 
  }
