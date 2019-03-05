@@ -351,7 +351,6 @@ export class PriceController {
                                                     }
 
                                                     var prices = unprices.map(flattenPrice);
-                                                    console.log(prices);
 
                                                     let sorted_prices = pricesort(req.query.start, req.query.count, prices, req.query.sort)
                                                     let total = unprices.length;
