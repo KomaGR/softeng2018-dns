@@ -70,13 +70,35 @@ function productGetInfo(req, res) {
     const httpsreq = https.request(options, (httpsres) => {
         console.log('statuscode', httpsres.statusCode);
         httpsres.on('data', (d) => {
-            var mydata = JSON.parse(d);
+            var productdata = JSON.parse(d);
             const session = req.session;
-            res.render("product_info.ejs", {
-                product: mydata,
-                session: session
-
+            const options1 = {
+                hostname: 'localhost',
+                port: 8765,
+                path: '/observatory/api/prices/?products=' + productid,
+                rejectUnauthorized: false,
+                method: 'GET'
+            };
+        
+            const httpsreq1 = https.request(options1, (httpsres) => {
+                console.log('statuscode', httpsres.statusCode);
+                httpsres.on('data', (d) => {
+                    var pricedata = JSON.parse(d);
+                    var prices = pricedata.prices;
+                    const session = req.session;
+                    res.render("product_info.ejs", {
+                        product: productdata,
+                        prices: prices,
+                        session: session
+                    });
+                });
             });
+        
+            httpsreq1.on('error', (e) => {
+                console.error(e);
+            });
+        
+            httpsreq1.end();
         });
     });
 
