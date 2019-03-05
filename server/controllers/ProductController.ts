@@ -20,9 +20,9 @@ export class ProductController {
             return (res.status(406).send({ message: "Unsupported Media Type" })); 
         }
 
-        let product_attributes = req.body;
-        if (product_attributes.tags)
-            product_attributes.tags = product_attributes.tags.split(',').map((item: string) => {return item.trim();});        
+        // let product_attributes = req.body;
+        // if (product_attributes.tags)
+        //     product_attributes.tags = product_attributes.tags.split(',').map((item: string) => {return item.trim();});        
 
         let newProduct = new Product(req.body);      
           
@@ -178,7 +178,7 @@ export class ProductController {
                 res.json(err);
             } else {
                 let total = products.length;
-                res.status(201).send({
+                res.status(200).send({
                     start,
                     count,
                     total,
