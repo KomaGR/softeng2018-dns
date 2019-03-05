@@ -33,11 +33,15 @@
   
 <div class="col ">
             <% for(var i = 0;i < priceData.length;i++){ %>
+                        <% var event = new Date(priceData[i].date); %>
             <div class="row-6 mb-3 ">
                 <div class="col">
                     <div class="card p-md-2" > 
                         <div class="ml-0">
                             <div class="row">
+                              <div class="col-6">
+                                    <p class="lead "> Date: <%= event.toISOString().toString().slice(0,10) %> </p>
+                                </div>
                                 <div class="col-6">
                                     <p class="lead "> Price: <%= priceData[i].price %> </p>
                                 </div>

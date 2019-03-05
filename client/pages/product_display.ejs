@@ -6,14 +6,17 @@
 
   <body>
     <% include search_bar.ejs %>
-  
 <div class="col ">
             <% for(var i = 0;i < priceData.length;i++){ %>
+            <% var event = new Date(priceData[i].date); %>
             <div class="row-6 mb-3 ">
                 <div class="col">
                     <div class="card p-md-2" > 
                         <div class="ml-0">
                             <div class="row">
+                                <div class="col-6">
+                                    <p class="lead "> Date: <%= event.toISOString().toString().slice(0,10) %> </p>
+                                </div>
                                 <div class="col-6">
                                     <p class="lead "> Price: <%= priceData[i].price %> </p>
                                 </div>
@@ -23,12 +26,17 @@
                                 <div class="col-6">
                                     <p class="lead "> Shop Address: <%= priceData[i].shopAddress %></p>
                                 </div>
+    
                                 <% if ( session.auth_token ) { %>
                             <form  class="form-group text-center text-md-left" action='/change_price' method='POST'>
                                 <input type="text"  class="form-control" name="shopId" value="<%=priceData[i].shopId %>" hidden>
                                 <button class="btn btn-outline-secondary" type="submit" name='productId' value="<%=priceData[i].productId%>">Change Price</button>
                             </form>
                             <% } %>
+                            <form  class="form-group text-center text-md-left" action='/shop_location' method='POST'>
+                                <input type="text"  class="form-control" name="shopLat" value="<%= priceData[i].shopLat %>" hidden>
+                                <button class="btn btn-outline-secondary" type="submit" name='shopLng' value="<%= priceData[i].shopLng %>">Δες το στον χάρτη</button>
+                            </form>
                             </div>
                         </div>
                     </div>
