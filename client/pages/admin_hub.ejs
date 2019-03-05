@@ -22,27 +22,33 @@
                                     <p class="lead "> Username: <%= users[i].username %> </p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="lead "> Email: <%= users[i].email %></p>
+                                    <p class="lead d-md-flex"> Email: <%= users[i].email %></p>
+                                    <!-- <p class="lead small d-md-none"> Email: <%= users[i].email %></p> -->
                                 </div>
                                 <div class="col-6">
                                     <p class="lead "> Role: <%= users[i].role %></p>
                                 </div>
                             </div>
                             <% if ( users[i].role == 'user' ){ %>
-                            <form  class="form-group text-center text-md-left" action='/adminUpgrade' method='POST'>
-                                <button class="btn btn-outline-secondary" type="submit" name='admin' value="<%=users[i].id%>">Upgrade to admin</button>
-                            </form>
-                            <form  class="form-group text-center text-md-left" action='/investorUpgrade' method='POST'>
-                                <button class="btn btn-outline-secondary" type="submit" name='investor' value="<%=users[i].id%>">Upgrade to investor</button>
-                            </form>
+                            <div class="row px-2 justify-content-center justify-content-md-start">
+                                <form  class="form-group text-center text-md-left mx-2" action='/adminUpgrade' method='POST'>
+                                    <button class="btn btn-outline-secondary btn-sm" type="submit" name='admin' value="<%=users[i].id%>">Upgrade to admin</button>
+                                </form>
+                                <form  class="form-group text-center text-md-left mx-2" action='/investorUpgrade' method='POST'>
+                                    <button class="btn btn-outline-secondary btn-sm" type="submit" name='investor' value="<%=users[i].id%>">Upgrade to investor</button>
+                                </form>
+                            </div>
                             <% }else if( users[i].role == 'admin' ){ %>
-                            <form  class="form-group text-center text-md-left" action='/userDowngrade' method='POST'>
-                                <button class="btn btn-outline-secondary" type="submit" name='downgrade' value="<%=users[i].id%>">Downgrade to user</button>
-                            </form>
-                            <form  class="form-group text-center text-md-left" action='/investorUpgrade' method='POST'>
-                                <button class="btn btn-outline-secondary" type="submit" name='investor' value="<%=users[i].id%>">Change to investor</button>
-                            </form>
-                            <% }else if ( users[i].role == 'investor' ){ %>
+                            <div class="row px-2 justify-content-center justify-content-md-start">
+                                <form  class="form-group text-center text-md-left mx-2" action='/userDowngrade' method='POST'>
+                                    <button class="btn btn-outline-secondary btn-sm" type="submit" name='downgrade' value="<%=users[i].id%>">Downgrade to user</button>
+                                </form>
+                                <form  class="form-group text-center text-md-left mx-2  " action='/investorUpgrade' method='POST'>
+                                    <button class="btn btn-outline-secondary btn-sm" type="submit" name='investor' value="<%=users[i].id%>">Change to investor</button>
+                                </form>
+                            </div>
+                                <% }else if ( users[i].role == 'investor' ){ %>
+                            <!-- <div class="row " -->
                             <form  class="form-group text-center text-md-left" action='/userDowngrade' method='POST'>
                                 <button class="btn btn-outline-secondary" type="submit" name='downgrade' value="<%=users[i].id%>">Downgrade to user</button>
                             </form>
@@ -52,11 +58,11 @@
                             <% } %>
                             <% if ( users[i].locked ){ %>
                             <form  class="form-group text-center text-md-left" action='/userUnlock' method='POST'>
-                                <button class="btn btn-outline-secondary" type="submit" name='unlock' value="<%=users[i].id%>">Unlock user</button>
+                                <button class="btn btn-danger" type="submit" name='unlock' value="<%=users[i].id%>">Unlock user</button>
                             </form>
                             <% } else {%>
                             <form  class="form-group text-center text-md-left" action='/userLock' method='POST'>
-                                <button class="btn btn-outline-secondary" type="submit" name='lock' value="<%=users[i].id%>">Lock user</button>
+                                <button class="btn btn-danger" type="submit" name='lock' value="<%=users[i].id%>">Lock user</button>
                             </form>
                             <% } %>
                         </div>

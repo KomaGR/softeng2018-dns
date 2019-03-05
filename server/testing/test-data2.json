@@ -1,0 +1,192 @@
+{
+  "products": [
+    {"name":  "Προϊόν 01", "description":  "Περιγραφή του προϊόντος 01", "category":  "Κατηγορία Πρώτη", "tags": ["Διασκέδαση"]},
+    {"name":  "Προϊόν 02", "description":  "Περιγραφή του προϊόντος 02", "category":  "Κατηγορία Δεύτερη", "tags": ["Μουσική"]},
+    {"name":  "Προϊόν 03", "description":  "Περιγραφή του 03 προϊόντος", "category":  "Κατηγορία Πρώτη", "tags": ["Μουσική", "Διασκέδαση"]},
+    {"name":  "Προϊόν 04", "description":  "Περιγραφή του 04 προϊόντος", "category":  "Κατηγορία Πρώτη", "tags": ["Μουσική", "Διασκέδαση"]},
+    {"name":  "Προϊόν 05", "description":  "Περιγραφή του 05 προϊόντος", "category":  "Κατηγορία Πρώτη", "tags": ["Μουσική", "Υπολογιστές"]},
+    {"name":  "Προϊόν 06", "description":  "Περιγραφή του 06 προϊόντος", "category":  "Κατηγορία Πρώτη", "tags": ["Μουσική", "Διασκέδαση"]},
+    {"name":  "Προϊόν 07", "description":  "Περιγραφή του 06 προϊόντος", "category":  "Κατηγορία Δεύτερη", "tags": ["Διασκέδαση"]},
+    {"name":  "Προϊόν 08", "description":  "Περιγραφή του προϊόντος 08", "category":  "Κατηγορία Πρώτη", "tags": ["Μουσική"]},
+    {"name":  "Προϊόν 09", "description":  "Περιγραφή του προϊόντος 09", "category":  "Κατηγορία Πρώτη", "tags": ["Μουσική", "Διασκέδαση"]},
+    {"name":  "Προϊόν 10", "description":  "Περιγραφή του προϊόντος 10", "category":  "Κατηγορία Πρώτη", "tags": ["Μουσική", "Διασκέδαση", "Υπολογιστές"]},
+    {"name":  "Προϊόν 11", "description":  "Περιγραφή του προϊόντος 11", "category":  "Κατηγορία Τρίτη", "tags": ["Υπολογιστές"]}
+  ],
+
+  "products_queries": [
+    {
+      "start": 0,
+      "count": 10,
+      "status": "ACTIVE",
+      "sort": "name|DESC",
+      "results": [
+        "Προϊόν 11",
+        "Προϊόν 10",
+        "Προϊόν 09",
+        "Προϊόν 08",
+        "Προϊόν 07",
+        "Προϊόν 06",
+        "Προϊόν 05",
+        "Προϊόν 04",
+        "Προϊόν 03",
+        "Προϊόν 02"
+      ]
+    },
+    {
+      "start": 0,
+      "count": 3,
+      "status": "ACTIVE",
+      "sort": "name|ASC",
+      "results": ["Προϊόν 01", "Προϊόν 02", "Προϊόν 03"]
+    }
+  ],
+
+  "shops": [
+    {"name":  "Κατάστημα Χαλκίδας", "address": "Κριεζώτου 14, T.K. 34100, Χαλκίδα", "lat": 38.46361, "lng": 23.59944,
+      "tags": ["Μουσική"]
+    },
+    {"name":  "Κατάστημα Ψυχικού", "address": "Διονυσίου Σολωμού 3, T.K. 15451, Ψυχικό", "lat": 38.01324, "lng": 23.77223,
+      "tags": ["Μουσική", "Υπολογιστές", "Βιβλία"]
+    },
+    {"name":  "Κατάστημα Αγίας Παρασκευής", "address": "Λεωφόρος Μεσογείων 402, T.K. 15342, Αγία Παρασκευή", "lat": 38.01667, "lng": 23.83333,
+      "tags": ["Κινητά", "Βιβλία"]
+    },
+    {"name":  "Κατάστημα Κορίνθου", "address": "Δαμασκηνού 45, T.K. 20100, Κόρινθος", "lat": 37.94007, "lng": 22.9513,
+      "tags": ["Κινητά", "Υπολογιστές"]
+    },
+    {"name":  "Κατάστημα Πατρών", "address": "Ερμού 55, T.K. 26221, Πάτρα", "lat": 38.24444, "lng": 21.73444,
+      "tags": ["Κινητά", "Βιβλία"]
+    },
+    {"name":  "Κατάστημα Λαμίας", "address": "Πλατεία Πάρκου 11-13, T.K. 35100, Λαμία", "lat": 38.9, "lng": 22.43333,
+      "tags": ["Υπολογιστές", "Βιβλία"]
+    }
+  ],
+
+  "shops_queries": [
+    {
+      "start": 0,
+      "count": 3,
+      "status": "ALL",
+      "sort": "name|ASC",
+      "results": ["Κατάστημα Αγίας Παρασκευής", "Κατάστημα Κορίνθου", "Κατάστημα Λαμίας"]
+    },
+    {
+      "start": 0,
+      "count": 10,
+      "status": "ACTIVE",
+      "sort": "name|ASC",
+      "results": [
+        "Κατάστημα Αγίας Παρασκευής",
+        "Κατάστημα Κορίνθου",
+        "Κατάστημα Λαμίας",
+        "Κατάστημα Πατρών",
+        "Κατάστημα Χαλκίδας",
+        "Κατάστημα Ψυχικού"
+      ]
+    }
+  ],
+
+  "prices": [
+    {"price": 20.00, "dateFrom":  "2019-03-01", "dateTo":  "2019-03-04", "shopIndex": 0, "productIndex": 0},
+    {"price": 21.20, "dateFrom":  "2019-03-01", "dateTo":  "2019-03-04", "shopIndex": 1, "productIndex": 0},
+    {"price": 20.45, "dateFrom":  "2019-03-01", "dateTo":  "2019-03-04", "shopIndex": 2, "productIndex": 0},
+    {"price": 42.99, "dateFrom":  "2019-03-01", "dateTo":  "2019-03-04", "shopIndex": 0, "productIndex": 1},
+    {"price": 33.89, "dateFrom":  "2019-03-01", "dateTo":  "2019-03-04", "shopIndex": 1, "productIndex": 1},
+    {"price": 41.10, "dateFrom":  "2019-03-01", "dateTo":  "2019-03-04", "shopIndex": 2, "productIndex": 1},
+    {"price": 67.30, "dateFrom":  "2019-03-01", "dateTo":  "2019-03-04", "shopIndex": 0, "productIndex": 2},
+    {"price": 66.90, "dateFrom":  "2019-03-01", "dateTo":  "2019-03-04", "shopIndex": 1, "productIndex": 2},
+    {"price": 60.00, "dateFrom":  "2019-03-01", "dateTo":  "2019-03-04", "shopIndex": 2, "productIndex": 2},
+    {"price": 50.00, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 0, "productIndex": 4},
+    {"price": 51.00, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 1, "productIndex": 4},
+    {"price": 50.50, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 2, "productIndex": 4},
+    {"price": 51.50, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 3, "productIndex": 4},
+    {"price": 49.90, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 5, "productIndex": 4},
+    {"price": 20.20, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 0, "productIndex": 8},
+    {"price": 19.00, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 1, "productIndex": 8},
+    {"price": 20.50, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 2, "productIndex": 8},
+    {"price": 21.50, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 3, "productIndex": 8},
+    {"price": 19.90, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 5, "productIndex": 8},
+    {"price": 60.00, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 0, "productIndex": 9},
+    {"price": 61.00, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 1, "productIndex": 9},
+    {"price": 60.50, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 2, "productIndex": 9},
+    {"price": 61.50, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 3, "productIndex": 9},
+    {"price": 59.90, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 5, "productIndex": 9}
+  ],
+
+  "prices_queries": [
+    {
+      "start": 0,
+      "count": 10,
+      "geoDist": null,
+      "geoLng": null,
+      "geoLat": null,
+      "dateFrom": "2019-03-02",
+      "dateTo": "2019-03-02",
+      "shopIndexes": [0],
+      "productIndexes": [0, 1, 2],
+      "tags": null,
+      "sort": ["price|ASC"],
+      "results": {
+        "start": 0,
+        "count": 10,
+        "total": 3,
+        "prices": [
+          {"price": 20.00, "date":  "2019-03-02", "shopIndex": 0, "productIndex":  0},
+          {"price": 42.99, "date":  "2019-03-02", "shopIndex": 0, "productIndex":  1},
+          {"price": 67.30, "date":  "2019-03-02", "shopIndex": 0, "productIndex":  2}
+        ]
+      }
+    },
+    {
+      "start": 0,
+      "count": 10,
+      "geoDist": 5,
+      "geoLng": 23.774008,
+      "geoLat": 37.980291,
+      "dateFrom": "2019-03-02",
+      "dateTo": "2019-03-02",
+      "shopIndexes": [],
+      "productIndexes": [4, 8, 9],
+      "tags": [],
+      "sort": [],
+      "results": {
+        "start": 0,
+        "count": 10,
+        "total": 6,
+        "prices": [
+          {"price": 19.00, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 1, "productIndex": 8},
+          {"price": 20.50, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 2, "productIndex": 8},
+          {"price": 50.50, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 2, "productIndex": 4},
+          {"price": 51.00, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 1, "productIndex": 4},
+          {"price": 60.50, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 2, "productIndex": 9},
+          {"price": 61.00, "dateFrom":  "2019-03-02", "dateTo":  "2019-03-02", "shopIndex": 1, "productIndex": 9}
+        ]
+      }
+    },
+    {
+      "start": 0,
+      "count": 5,
+      "geoDist": null,
+      "geoLng": null,
+      "geoLat": null,
+      "dateFrom": "2019-03-02",
+      "dateTo": "2019-03-02",
+      "shopIndexes": [],
+      "productIndexes": [],
+      "tags": ["Υπολογιστές"],
+      "sort": ["price|ASC"],
+      "results": {
+        "start": 0,
+        "count": 5,
+        "total": 16,
+        "prices": [
+          {"price": 19.00, "date":  "2019-03-02", "shopIndex": 1, "productIndex": 8},
+          {"price": 19.90, "date":  "2019-03-02", "shopIndex": 5, "productIndex": 8},
+          {"price": 21.20, "date":  "2019-03-02", "shopIndex": 1, "productIndex": 0},
+          {"price": 21.50, "date":  "2019-03-02", "shopIndex": 3, "productIndex": 8},
+          {"price": 33.89, "date":  "2019-03-02", "shopIndex": 1, "productIndex": 1}
+        ]
+      }
+    }
+  ]
+}
