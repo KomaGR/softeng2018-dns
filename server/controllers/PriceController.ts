@@ -55,7 +55,7 @@ export class PriceController {
 
                     pricestable[i] = price;
 
-                    if (i == diff) {res.send(pricestable)};
+                    if (i == diff) {res.status(201).send(pricestable)};
                 }
             });
         }
@@ -255,9 +255,13 @@ export class PriceController {
                                                 } else {
 
                                                     let input_lat = req.query.geoLat;
-                                                    let input_lng = req.query.geong;
+                                                    let input_lng = req.query.geoLng;
 
-                                                    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+                                                    function deg2rad(deg) {
+                                                        return deg * (Math.PI / 180)
+                                                    }
+
+                                                    function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {                                                        
                                                         let R = 6371; // Radius of the earth in km
                                                         let dLat = deg2rad(lat2 - lat1);  // deg2rad below
                                                         let dLon = deg2rad(lon2 - lon1);
@@ -271,12 +275,12 @@ export class PriceController {
                                                         return d;
                                                     }
 
-                                                    function deg2rad(deg) {
-                                                        return deg * (Math.PI / 180)
-                                                    }
+                                                    
 
                                                     function flattenPrice(dl) {
                                                         var newdl : any = {};
+                                                        newdl.price = dl.price;
+                                                        newdl.date = dl.date;
                                                         newdl.productTags = dl.productId.tags;
                                                         newdl.productName = dl.productId.name;
                                                         newdl.productId = dl.productId.id;
@@ -286,7 +290,8 @@ export class PriceController {
                                                         newdl.shopLng = dl.shopId.lng;
                                                         newdl.shopLat = dl.shopId.lat;
                                                         newdl.shopId = dl.shopId.id;
-                                                        newdl.shopDist = getDistanceFromLatLonInKm(dl.shopId.lat, dl.shopId.lng, input_lat, input_lng)
+                                                        newdl.shopDist = getDistanceFromLatLonInKm(dl.shopId.lat, 
+                                                            dl.shopId.lng, input_lat, input_lng);
                                                         return newdl;
                                                     }
 
