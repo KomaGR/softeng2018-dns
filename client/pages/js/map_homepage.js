@@ -10,6 +10,10 @@ var shops = JSON.parse(script_tag.getAttribute("name"));
 var id;
 var ismarker = false;
 
+function hideButton() {
+    document.getElementById("newShop").style.visibility = "hidden";
+}
+
 function newMarker(e) {
     var mylatlng = new L.LatLng(e.lat,e.lng);
     id = e.id;
@@ -33,6 +37,7 @@ function newMarker(e) {
 function confirmShop() {
     if (ismarker) {
         document.getElementById("shopId").value = markerdata.shopId;
+        document.getElementById("newShop").style.visibility = "visible";
     } else {
         console.error("Error: No marker selected.")
     }
@@ -62,4 +67,5 @@ function myMap() {
 /* This method is called when the page loads */
 function onLoad() {
     myMap();
+    hideButton();
 }
