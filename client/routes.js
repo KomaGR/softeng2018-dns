@@ -361,13 +361,45 @@ function routes(app) {
         };
         
         request.post(options, (err, httpsResponse, body) => {
+            console.log(httpsResponse.statusCode);
             if (err) {
                 res.send(err);
             }
-            if (httpsResponse.statusCode == 200) {                
-                res.status(200).redirect('/');
+            if (httpsResponse.statusCode == 201) {                
+                res.status(201).redirect('/');
             }   
         })
+    })
+    
+    .post("/product_info_final", function(req,res){
+        var price = req.body.prices;
+        var dateTo = req.body.dateto;
+        var dateFrom = req.body.datefrom;
+        var productId = req.body.prodId;
+        console.log("The product id is: " + productId);
+
+        const options1 = {
+            hostname: 'localhost',
+            port: 8765,
+            path: '/observatory/api/prices/?products=' + productId + "&dateFrom=" + dateFrom + "&dateTo=" + dateTo,
+            rejectUnauthorized: false,
+            method: 'GET'
+        };
+        const httpsreq1 = https.request(options1, (httpsres) => {
+            httpsres.on('data', (d) => {
+                var mydata = JSON.parse(d);
+                var real_prices = mydata.prices;
+                const session = req.session;
+                res.render("product_display.ejs", {
+                    priceData: real_prices,
+                    session: session  
+                });
+            });
+        });
+        httpsreq1.on('error', (e) => {
+            console.error(e);
+        });
+        httpsreq1.end();
     });
 
  }
