@@ -22,7 +22,7 @@ function productSubmitRoute(req, res) {
             res.send(err);
         }
         console.log('#Front# statuscode:', httpsResponse.statusCode);
-        if (httpsResponse.statusCode == 200) {
+        if (httpsResponse.statusCode == 201) {
             const jsonBody = JSON.parse(body);
             var prodId = jsonBody.id;
 
@@ -46,8 +46,8 @@ function productSubmitRoute(req, res) {
                 }
                 console.log('stelios');
                 console.log('#Front# statuscode:', httpsResponse.statusCode);
-                if (httpsResponse.statusCode == 200) {
-                    res.status(200).redirect('/');
+                if (httpsResponse.statusCode == 201) {
+                    res.status(201).redirect('/');
                 }
             })
         }
@@ -57,7 +57,7 @@ function productSubmitRoute(req, res) {
 function productGetInfo(req, res) {
 
     var productid = req.query.productID;
-    console.log(productid);
+    console.log("###############" + productid);
 
     const options = {
         hostname: 'localhost',
@@ -70,15 +70,14 @@ function productGetInfo(req, res) {
     const httpsreq = https.request(options, (httpsres) => {
         console.log('statuscode', httpsres.statusCode);
         httpsres.on('data', (d) => {
-            var mydata = JSON.parse(d);
+            var productdata = JSON.parse(d);
             const session = req.session;
-            res.render("product_info.ejs", {
-                product: mydata,
-                session: session
-
+                    res.render("product_info.ejs", {
+                        product: productdata,
+                        session: session
+                    });
+                });
             });
-        });
-    });
 
     httpsreq.on('error', (e) => {
         console.error(e);
