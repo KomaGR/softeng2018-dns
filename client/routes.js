@@ -140,7 +140,9 @@ function routes(app) {
     .post("/submit_product", redirectLogin, product.submit)
     
     .get("/product_info", product.getInfo)
-    
+
+    .post("/product_info", product.getInfo)
+        
     .post("/product_info_submit", product.putInfo)
     
     .post("/product_info_delete", product.deleteInfo)

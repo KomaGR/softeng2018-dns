@@ -56,7 +56,10 @@ function productSubmitRoute(req, res) {
 
 function productGetInfo(req, res) {
 
-    var productId = req.query.productID;
+    var productId = req.body.productID;
+    var dateTo = req.body.dateto;
+    var dateFrom = req.body.datefrom;
+    // var shopId = req.body.shopId;
     const session = req.session;
     console.log(productId);
 
@@ -75,7 +78,7 @@ function productGetInfo(req, res) {
             const options1 = {
                 hostname: 'localhost',
                 port: 8765,
-                path: '/observatory/api/prices/?products=' + productId,
+                path: '/observatory/api/prices/?products=' + productId + "&dateFrom=" + dateFrom + "&dateTo=" + dateTo,
                 rejectUnauthorized: false,
                 method: 'GET'
             };
@@ -85,6 +88,7 @@ function productGetInfo(req, res) {
             httpsres.on('data', (d) => {
                 var mydata = JSON.parse(d);
                 var priceData = mydata.prices;
+                console.log('this is my data', mydata);
                 const options2 = {
                     hostname: 'localhost',
                     port: 8765,
