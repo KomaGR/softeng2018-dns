@@ -67,11 +67,11 @@ function productGetInfo(req, res) {
         rejectUnauthorized: false,
         method: 'GET'
     };
-
+    var productData;
     const httpsreq = https.request(options, (httpsres) => {
         console.log('statuscode', httpsres.statusCode);
         httpsres.on('data', (d) => {
-            var mydata = JSON.parse(d);
+            productData = JSON.parse(d);
             const options1 = {
                 hostname: 'localhost',
                 port: 8765,
@@ -83,8 +83,8 @@ function productGetInfo(req, res) {
         const httpsreqPrices = https.request(options1, (httpsres) => {
             console.log('statuscodde:', httpsres.statusCode);
             httpsres.on('data', (d) => {
-                var productData = JSON.parse(d);
-                var priceData = productData.prices;
+                var mydata = JSON.parse(d);
+                var priceData = mydata.prices;
                 const options2 = {
                     hostname: 'localhost',
                     port: 8765,
