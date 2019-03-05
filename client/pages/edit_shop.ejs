@@ -13,7 +13,7 @@
                     </div>
                         <div class="form-group">
                         <label for="shopaddress">Shop address</label>
-                        <input type="text" class="form-control" placeholder="Enter shop address" name="shopaddress" value="<%=parsedShopData.description%>"required>
+                        <input type="text" class="form-control" placeholder="Enter shop address" name="shopaddress" value="<%=parsedShopData.address%>"required>
                     </div>
                     <div class="form-group">
                         <label for="shoplat">Shop Lat</label>
@@ -27,7 +27,7 @@
                         <label for="shoptags">Shop tags</label>
                         <input type="text" class="form-control" placeholder="Enter shop tags seperated with comma" name="shoptags" value="<%=parsedShopData.tags%>"required>
                     </div>
-                    <button type="submit" class="btn btn-primary" name='productID' value="<%=parsedShopData.id%>">Submit</button>
+                    <button type="submit" class="btn btn-primary" name='shopID' value="<%=parsedShopData.id%>">Submit</button>
                 </form>
                     <form action='/shop_info_delete' method='POST'>
                     <button type="submit" name='shopID' class="btn btn-danger " value="<%=parsedShopData.id%>">Delete shop</button>
