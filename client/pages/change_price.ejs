@@ -1,0 +1,15 @@
+<form action="/change_price_real" method="POST">
+<div class="form-group">
+    <label for="price">Price</label>
+    <input type="text"  class="form-control" placeholder="Enter new price" name="price" required>
+</div>
+<div class="form-group">
+    <label for="DateFrom">Date from</label>
+    <input type="date"  class="form-control" placeholder="Enter date from" name="datefrom" required>
+</div>
+<div class="form-group">
+    <label for="DateTo">Date to</label>
+    <input type="date"  class="form-control" placeholder="Enter date to" name="dateto" required>
+</div>
+<input type="text"  class="form-control" name="shopId" value="<%=shopId %>" hidden>
+<button type="submit" class="btn btn-primary" name='productId' value="<%=productId %>">Submit</button>                    
