@@ -1,11 +1,5 @@
-import * as mongoose from 'mongoose';
-import { ProductSchema } from './ProductModel';
-import { ShopSchema } from './ShopModel';
-
-const Schema = mongoose.Schema;
-
-const Shop = mongoose.model('Shop', ShopSchema);
-const Product = mongoose.model('Product', ProductSchema);
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 export const PriceSchema = new Schema({
     price: {

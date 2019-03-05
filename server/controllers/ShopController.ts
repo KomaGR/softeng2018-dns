@@ -17,8 +17,8 @@ export class ShopController {
         We also accept queries with the format field undefined
         Any query with format value defined with value different
         from json is not accepted. */
-        if( req.query.format != 'json' && req.query.format ) {
-            return(res.status(400).send({ message: "Bad Request" })); 
+        if (req.query.format && req.query.format != 'json') {
+            return(res.status(406).send({ message: "Unsupported Media Type" })); 
         }
 
         if (!(Number(req.body.lng)) ||
@@ -26,24 +26,24 @@ export class ShopController {
             return(res.status(400).send({ message: "Bad Request" })); 
         }
 
-        // req.body.location.coordinates = [Number(req.body.lng), Number(req.body.lat)];
-        // req.body.location.coordinates = Number ();
+        let shop_attributes = req.body;
         
-        let newShop = new Shop(req.body);
-        // req.body.
+        if (shop_attributes.tags)
+            shop_attributes.tags = shop_attributes.tags.split(',').map((s:string) => {return s.trim();});
+        
+        let newShop = new Shop(shop_attributes);
+
         newShop.set('location', {type: 'Point', coordinates: [req.body.lng, req.body.lat]});
+        
         /* if all required fields were given then
         save new product to database, else throw
         error 400 : Bad Request */
         newShop.save((err, shop) => {
-            if (err && err.name === 'ValidatorError') {
-                res.status(400).send({ message: "Bad Request" });
+            if (err) {
+                res.status(400).json(err);
             }
-            else if (err) {
-                res.json(err);
-            } 
             else {   
-                res.json(shop);
+                res.status(201).json(shop);
             }
         });
     }
@@ -55,8 +55,8 @@ export class ShopController {
         We also accept queries with the format field undefined
         Any query with format value defined with value different
         from json is not accepted. */
-        if( req.query.format != 'json' && req.query.format ) {
-            return(res.status(400).send({ message: "Bad Request" })); 
+        if (req.query.format && req.query.format != 'json') {
+            return (res.status(406).send({ message: "Unsupported Media Type" })); 
         }
         
         let condition: any;
@@ -161,8 +161,7 @@ export class ShopController {
         
         if(!(req.query.count)){
             count = 20;
-        }
-        else {
+        } else {
         
             /* check if count parameter given, is type Int and also
             if it is greater or equal to zero */
@@ -185,18 +184,18 @@ export class ShopController {
         .exec((err, shops) => {
             if (err) {
                 res.send(err);
+            } else {                
+                /* determine the total number of shops
+                returned */
+                let total = shops.length;
+                
+                res.status(200).send({
+                    start,
+                    count,
+                    total,
+                    shops
+                });
             }
-
-            /* determine the total number of shops
-            returned */
-            let total = shops.length;
-
-            res.status(200).send({
-                start,
-                count,
-                total,
-                shops
-            });
         });
 
     }
@@ -208,17 +207,18 @@ export class ShopController {
         We also accept queries with the format field undefined
         Any query with format value defined with value different
         from json is not accepted. */
-        if( req.query.format != 'json' && req.query.format ) {
-            return(res.status(400).send({ message: "Bad Request" })); 
+        if (req.query.format && req.query.format != 'json') {
+            return (res.status(406).send({ message: "Unsupported Media Type" })); 
         }
 
         Shop.findById(
-        { _id: req.originalUrl.slice(23)}, 
+        { _id: req.params.id}, 
         (err, shop) => {
             if (err) {
                 res.send(err);
+            } else {
+                res.json(shop);                
             }
-            res.json(shop);
         });
     }
 
@@ -230,7 +230,7 @@ export class ShopController {
         Any query with format value defined with value different
         from json is not accepted. */
         if( req.query.format != 'json' && req.query.format ) {
-            return(res.status(400).send({ message: "Bad Request" })); 
+            return (res.status(406).send({ message: "Unsupported Media Type" })); 
         }
         
         // check that the user passed all fields of shop entity (correctly)
@@ -245,13 +245,14 @@ export class ShopController {
         }
 
         Shop.findOneAndUpdate(
-        { _id: req.originalUrl.slice(23)}, 
+        { _id: req.params.id}, 
         req.body, { new: true },
         (err, shop) => {
             if (err) {
                 res.send(err);
+            } else {
+                res.json(shop);
             }
-            res.json(shop);
         });
     }
 
@@ -263,7 +264,7 @@ export class ShopController {
         Any query with format value defined with value different
         from json is not accepted. */
         if( req.query.format != 'json' && req.query.format ) {
-            return(res.status(400).send({ message: "Bad Request" })); 
+            return (res.status(406).send({ message: "Unsupported Media Type" })); 
         }
 
         // check that user passes exactly one entry
@@ -289,14 +290,14 @@ export class ShopController {
         let value = Object.values(req.body)[0];
 
         Shop.findByIdAndUpdate(
-        { _id: req.originalUrl.slice(23)}, 
+        { _id: req.params.id}, 
         { [key] : value }, { new: true },
         (err, shop) => {
-
             if (err) {
                 res.send(err);
+            } else {
+                res.json(shop);
             }
-            res.json(shop);
         });
     }
 
@@ -308,11 +309,10 @@ export class ShopController {
         Any query with format value defined with value different
         from json is not accepted. */
         if( req.query.format != 'json' && req.query.format ) {
-            return(res.status(400).send({ message: "Bad Request" })); 
+            return (res.status(406).send({ message: "Unsupported Media Type" })); 
         }
 
-        Shop.deleteOne(
-        { _id: req.originalUrl.slice(23)},
+        Shop.deleteOne({ _id: req.params.id},
         (err) => {
             if (err) {
                 res.send(err);
@@ -321,14 +321,13 @@ export class ShopController {
 
         /* cascade on delete (delete all prices with the
         specific shop id) */
-        Price.deleteMany({ shopId: req.originalUrl.slice(23)},
+        Price.deleteMany({ shopId: req.params.id},
         (err) => {
             if (err) {
                 res.send(err);
+            } else {
+                res.status(200).send({message : "OK"});
             }
-            res.status(200).send(
-                {message : "OK"}
-            );
         });
     }
 }
