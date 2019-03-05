@@ -2,11 +2,8 @@ import * as mongoose from 'mongoose';
 import { Price } from '../models/PriceModel';
 import * as express from 'express';
 import { Shop } from '../models/ShopModel';
-import { json } from 'body-parser';
-import { ShopController } from './ShopController';
-import { Db } from 'mongodb';
 import { Product } from '../models/ProductModel';
-import { equal } from 'assert';
+var Schema = mongoose.Schema;
 
 type Request = express.Request;
 type Response = express.Response;
@@ -20,6 +17,14 @@ function dateDiffInDays(a, b) {
     const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
     return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+}
+
+
+
+
+function flatten(prices, inputLng, inputLat) {
+    
+    return prices;
 }
 
 
@@ -224,31 +229,80 @@ export class PriceController {
                                         res.send(err);
                                     } else {                                        
                                         Price.find({ $and: [
-                                                    { date: { $gte: req.query.dateFrom , $lte: req.query.dateTo } },
-                                                    { productId: { $in: productIdList } },
-                                                    { shopId: { $in: shopIdList } },
-                                                    { $or: [
-                                                           { productId: { $in: productIdListByTag } },
-                                                           { shopId: { $in: shopIdListByTag } }
-                                                    ]}
-                                                    ]})
-                                                    //.sort( sorting )
-                                                    .where('prices')
-                                                    .skip(start)
-                                                    .limit(count)
-                                                    .exec((err, prices) => {
-                                                        if (err) {
-                                                           res.send(err);
-                                                        } else {
-                                                            let total = prices.length;
-                                                            res.status(200).send({
-                                                                start,
-                                                                count,
-                                                                total,
-                                                                prices
-                                                            });
-                                                        }
+                                            { date: { $gte: req.query.dateFrom , $lte: req.query.dateTo } },
+                                            { productId: { $in: productIdList } },
+                                            { shopId: { $in: shopIdList } },
+                                            { $or: [
+                                                   { productId: { $in: productIdListByTag } },
+                                                   { shopId: { $in: shopIdListByTag } }
+                                            ]}
+                                            ]})
+                                            //.sort( sorting )
+                                            .where('prices')
+                                            .skip(start)
+                                            .limit(count)                    
+                                            .populate({
+                                                path: 'shopId',
+                                                select: 'name address lng lat tags _id'
+                                            })
+                                            .populate({
+                                                path: 'productId',
+                                                select: 'name tags _id'
+                                            })
+                                            .exec((err, unprices) => {
+                                                if (err) {
+                                                    res.send(err);
+                                                } else {
+
+                                                    let input_lat = req.query.geoLat;
+                                                    let input_lng = req.query.geong;
+
+                                                    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+                                                        let R = 6371; // Radius of the earth in km
+                                                        let dLat = deg2rad(lat2 - lat1);  // deg2rad below
+                                                        let dLon = deg2rad(lon2 - lon1);
+                                                        let a =
+                                                            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                                                            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                                                            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+                                                        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                                                        let d = R * c; // Distance in km
+                                                        return d;
+                                                    }
+
+                                                    function deg2rad(deg) {
+                                                        return deg * (Math.PI / 180)
+                                                    }
+
+                                                    function flattenPrice(dl) {
+                                                        var newdl : any = {};
+                                                        newdl.productTags = dl.productId.tags;
+                                                        newdl.productName = dl.productId.name;
+                                                        newdl.productId = dl.productId.id;
+                                                        newdl.shopTags = dl.shopId.tags;
+                                                        newdl.shopName = dl.shopId.name;
+                                                        newdl.shopAddress = dl.shopId.address;
+                                                        newdl.shopLng = dl.shopId.lng;
+                                                        newdl.shopLat = dl.shopId.lat;
+                                                        newdl.shopId = dl.shopId.id;
+                                                        newdl.shopDist = getDistanceFromLatLonInKm(dl.shopId.lat, dl.shopId.lng, input_lat, input_lng)
+                                                        return newdl;
+                                                    }
+
+                                                    var prices = unprices.map(flattenPrice);
+
+
+                                                    let total = unprices.length;
+
+                                                    res.status(200).send({
+                                                        start,
+                                                        count,
+                                                        total,
+                                                        prices
                                                     });
+                                                }
+                                            });
                                     }
                                 });
                             }
@@ -258,6 +312,8 @@ export class PriceController {
             }
         });
     }
+
+
 
     public getPriceWithID(req: Request, res: Response) {
         Price.findById(
