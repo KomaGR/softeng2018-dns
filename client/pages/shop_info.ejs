@@ -42,7 +42,10 @@
                                     <p class="lead "> Price: <%= priceData[i].price %> </p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="lead "> Product: <%= priceData[i].productId %></p>
+                                    <p class="lead "> Product: <%= priceData[i].productName %></p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="lead "> Product Tags: <%= priceData[i].productTags %></p>
                                 </div>
                             </div>
                             <% if ( session.auth_token ) { %>

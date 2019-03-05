@@ -372,7 +372,6 @@ function routes(app) {
     })
     
     .post("/product_info_final", function(req,res){
-        var price = req.body.prices;
         var dateTo = req.body.dateto;
         var dateFrom = req.body.datefrom;
         var productId = req.body.prodId;

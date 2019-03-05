@@ -22,7 +22,7 @@ function productSubmitRoute(req, res) {
             res.send(err);
         }
         console.log('#Front# statuscode:', httpsResponse.statusCode);
-        if (httpsResponse.statusCode == 200) {
+        if (httpsResponse.statusCode == 201) {
             const jsonBody = JSON.parse(body);
             var prodId = jsonBody.id;
 
@@ -46,8 +46,8 @@ function productSubmitRoute(req, res) {
                 }
                 console.log('stelios');
                 console.log('#Front# statuscode:', httpsResponse.statusCode);
-                if (httpsResponse.statusCode == 200) {
-                    res.status(200).redirect('/');
+                if (httpsResponse.statusCode == 201) {
+                    res.status(201).redirect('/');
                 }
             })
         }
@@ -57,7 +57,7 @@ function productSubmitRoute(req, res) {
 function productGetInfo(req, res) {
 
     var productid = req.query.productID;
-    console.log(productid);
+    console.log("###############" + productid);
 
     const options = {
         hostname: 'localhost',
@@ -72,35 +72,12 @@ function productGetInfo(req, res) {
         httpsres.on('data', (d) => {
             var productdata = JSON.parse(d);
             const session = req.session;
-            const options1 = {
-                hostname: 'localhost',
-                port: 8765,
-                path: '/observatory/api/prices/?products=' + productid,
-                rejectUnauthorized: false,
-                method: 'GET'
-            };
-        
-            const httpsreq1 = https.request(options1, (httpsres) => {
-                console.log('statuscode', httpsres.statusCode);
-                httpsres.on('data', (d) => {
-                    var pricedata = JSON.parse(d);
-                    var prices = pricedata.prices;
-                    const session = req.session;
                     res.render("product_info.ejs", {
                         product: productdata,
-                        prices: prices,
                         session: session
                     });
                 });
             });
-        
-            httpsreq1.on('error', (e) => {
-                console.error(e);
-            });
-        
-            httpsreq1.end();
-        });
-    });
 
     httpsreq.on('error', (e) => {
         console.error(e);
