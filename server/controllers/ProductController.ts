@@ -31,11 +31,8 @@ export class ProductController {
         save new product to database, else throw
         error 400 : Bad Request */
         newProduct.save((err, product) => {
-            if (err && err.code === 11000) {
-                res.status(400).send({ message: "Bad Request" });
-            }
-            else if (err) {
-                res.json(err);
+            if (err) {
+                res.status(400).json(err);
             } else {
                 res.status(201).json(product);
             }
