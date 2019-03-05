@@ -54,10 +54,9 @@ ShopSchema.set('toJSON', {
 
 // Error handler (error message customization)
 ShopSchema.post('save', function(error, doc, next) {
-    if (error.name === 'ValidatorError' && error.code === 11000) {
+    if (error) {
         next(error);
     } else {
-
         next();
     }
 });
