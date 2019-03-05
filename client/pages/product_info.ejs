@@ -13,10 +13,12 @@
   
         <!-- <h2 class=" display-4">this is information about a product</h2> -->
         <div class='p-3'>
-          <p class="lead mark"><b> Name:</b> <%= product.name %> </p>
+
+          <p class="lead"><b> Name:</b> <%= product.name %> </p>
   
           <!-- <p > ID: <%= product.id %> </p> -->
           <p class="lead "> <b> Description:</b> <%= product.description %> </p>
+
           <p class="lead"><b> Category:</b> <%= product.category %> </p>
   
           <p class="lead"> <b>Tags:</b> <% for(var tag in product.tags){ %>
@@ -37,7 +39,19 @@
       <% include edit_product.ejs %>
     <% } %>
   
-  
+  <p> Select dates </p>
+  <form id="newShop" action='/product_info_final' method="POST">
+  <div class="form-group">
+    <label for="DateFrom">Date from</label>
+    <input type="date"  class="form-control" placeholder="Enter date from" name="datefrom" required>
+  </div>
+  <div class="form-group">
+    <label for="DateTo">Date to</label>
+    <input type="date"  class="form-control" placeholder="Enter date to" name="dateto" required>
+  </div>
+  <input id="prodId" type="text" name="prodId" value="<%=prices[0].productId%>" hidden>
+  <button type="submit" class="btn btn-primary">Ψάξε</button>
+  </form>
   
   <% include footer.ejs %>
   
