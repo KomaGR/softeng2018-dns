@@ -57,13 +57,13 @@ export class ProductController {
         }
         else {
 
-            /* check if value given belongs to the set
-            of acceptable values */
-            if((String(req.query.status) != 'ALL') &&
-            (String(req.query.status) != 'ACTIVE') &&
-            (String(req.query.status) != 'WITHDRAWN') ){
-                    return(res.status(400).send({ message: "Bad Request" }));
-            }
+            // /* check if value given belongs to the set
+            // of acceptable values */
+            // if((String(req.query.status) != 'ALL') &&
+            // (String(req.query.status) != 'ACTIVE') &&
+            // (String(req.query.status) != 'WITHDRAWN') ){
+            //         return(res.status(400).send({ message: "Bad Request" }));
+            // }
 
             /* define the condition that will filter our
             products and return those with the status
@@ -82,7 +82,7 @@ export class ProductController {
                     break; 
                 }
                 default: { 
-                    condition = { withdrawn: false};
+                    return(res.status(400).send({ message: "Bad Request" }));
                     break; 
                 } 
             }
@@ -97,12 +97,12 @@ export class ProductController {
 
             /* check if value given belongs to the set
             of acceptable values */
-            if((String(req.query.sort) != 'id|ASC') &&
-            (String(req.query.sort) != 'id|DESC') &&
-            (String(req.query.sort) != 'name|ASC') &&
-            (String(req.query.sort) != 'name|DESC') ){
-                    return(res.status(400).send({ message: "Bad Request" }));
-            }
+            // if((String(req.query.sort) != 'id|ASC') &&
+            // (String(req.query.sort) != 'id|DESC') &&
+            // (String(req.query.sort) != 'name|ASC') &&
+            // (String(req.query.sort) != 'name|DESC') ){
+            //         return(res.status(400).send({ message: "Bad Request" }));
+            // }
 
             /* define the condition that will sort our
             products and return them the way the user 
@@ -125,7 +125,7 @@ export class ProductController {
                     break;
                 }
                 default: {
-                    sorting = { name: -1 };
+                    return(res.status(400).send({ message: "Bad Request" }));
                     break;
                 }
             }
@@ -219,14 +219,15 @@ export class ProductController {
         Any query with format value defined with value different
         from json is not accepted. */
         if(req.query.format && req.query.format != 'json') {
-            return (res.status(406).send({ message: "Unsupported Media Type" })); 
+            return (res.status(406).send({ message: "Not Acceptable" })); 
         }
 
         // check that the user passed all fields of product entity (correctly)
-        if ( !(req.body.name) ||
-        !(req.body.description) ||
-        !(req.body.category) ||
-        !(req.body.tags) ) {
+        if ( (req.body.name) &&
+        (req.body.description) &&
+        (req.body.category) &&
+        (typeof req.body.withdrawn === 'boolean') &&
+        (req.body.tags) ) {
             return(res.status(400).send({ message: "Bad Request" })); 
         }
 
@@ -260,10 +261,11 @@ export class ProductController {
 
         /* check that the entry given, is one of the
         entries of product entity */
-        if ( !(req.body.name) &&
-        !(req.body.description) &&
-        !(req.body.category) &&
-        !(req.body.tags) ) {
+        if ( (req.body.name) &&
+        (req.body.description) &&
+        (req.body.category) &&
+        (typeof req.body.withdrawn === 'boolean') &&
+        (req.body.tags) ) {
             return(res.status(400).send({ message: "Bad Request" })); 
         }
 
@@ -295,23 +297,40 @@ export class ProductController {
             return (res.status(406).send({ message: "Unsupported Media Type" })); 
         }
 
-        Product.deleteOne(
-        { _id: req.params.id},
-        (err) => {
-            if (err) {
-                res.send(err);
-            }
-        });
-
-        /* cascade on delete (delete all prices with the
-        specific product id) */
-        Price.deleteMany({ productId: req.params.id},
-        (err) => {
-            if (err) {
-                res.json(err);
-            } else {
-                res.status(200).send({message : "OK"});
-            }
-        });
+        if( res.locals.privilege == 'admin' ) {
+            
+            Product.deleteOne(
+            { _id: req.params.id },
+            (err) => {
+                if (err) {
+                    res.send(err);
+                }
+            });
+    
+            /* cascade on delete (delete all prices with the
+            specific product id) */
+            Price.deleteMany({ productId: req.params.id },
+            (err) => {
+                if (err) {
+                    res.send(err);
+                }
+                else {
+                    res.status(200).send({message : "OK"});
+                }
+            });
+        }
+        else {
+            Product.findOneAndUpdate(
+            { _id: req.params.id },
+            { withdrawn: true },
+            (err) => {
+                if (err) {
+                    res.send(err);
+                }
+                else {
+                    res.status(200).send({message : "OK"});
+                }
+            });
+        }
     }
 }

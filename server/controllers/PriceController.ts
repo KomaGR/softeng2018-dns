@@ -104,6 +104,59 @@ export class PriceController {
 
         }
 
+        let sorting: any = {};
+
+        if( !(req.query.sort)) {
+            sorting.price = 1;
+        }
+        else{
+            for(var sortfilter in req.query.sort) {
+
+            /* check if value given belongs to the set
+            of acceptable values */
+            // if(sortfilter != 'price|ASC' &&
+            //    sortfilter != 'price|DESC' &&
+            //    sortfilter != 'date|ASC' &&
+            //    sortfilter != 'date|DESC' &&
+            //    sortfilter != 'geoDist|ASC' &&
+            //    sortfilter != 'geoDist|DESC' ){
+            //         return(res.status(400).send({ message: "Bad Request" }));
+            // }
+
+            /* define the condition that will sort our
+            products and return them the way the user 
+            requested */
+            switch( String(req.query.sort) ) {
+                case 'price|ASC': {
+                    sorting.price = 1;
+                    break;
+                }
+                case 'price|DESC': {
+                    sorting.price = -1;
+                    break;
+                }
+                case 'date|ASC': {
+                    sorting.date = 1;
+                    break;
+                }
+                case 'date|DESC': {
+                    sorting.date = -1;
+                    break;
+                }
+                case 'geoDist|ASC': {
+                    sorting.geoDist = 1;
+                    break;
+                }
+                case 'geoDist|DESC': {
+                    sorting.geoDist = -1;
+                    break;
+                }
+                default: {
+                    return(res.status(400).send({ message: "Bad Request" }));
+                    break;
+                }
+            }
+        }
 
         // check that either none or both of the date-parameters were defined
         if (req.query.dateFrom ? ! req.query.dateTo : req.query.dateTo ) {
@@ -112,6 +165,9 @@ export class PriceController {
         else if ( ! req.query.dateFrom && ! req.query.dateTo) {
             let today = new Date();
             req.query.dateFrom = req.query.dateTo = today.toISOString().slice(0, 10);
+        }
+        else if ( req.query.dateFrom > req.query.dateTo ) {
+            return(res.status(400).send({ message: "Bad Request" }));
         }
 
         let shopConditions: any = {};
@@ -301,6 +357,7 @@ export class PriceController {
                                                         total,
                                                         prices
                                                     });
+
                                                 }
                                             });
                                     }
