@@ -61,6 +61,8 @@ ShopSchema.post('save', function(error, doc, next) {
     }
 });
 
+ShopSchema.index({location: '2dsphere'});
+
 // ShopSchema.methods.setCoordinates = function(doc) {
 
 // }

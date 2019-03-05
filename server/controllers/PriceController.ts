@@ -157,6 +157,7 @@ export class PriceController {
                 }
             }
         }
+    }
 
         // check that either none or both of the date-parameters were defined
         if (req.query.dateFrom ? ! req.query.dateTo : req.query.dateTo ) {
