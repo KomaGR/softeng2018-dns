@@ -46,6 +46,8 @@ function shopSubmit(req, res) {
 
 function shopInfo(req, res){
     var shopId = req.body.shopId;
+    var dateTo = req.body.dateto;
+    var dateFrom = req.body.datefrom;
     const session = req.session;
     const options = {
         hostname: 'localhost',
@@ -62,7 +64,7 @@ function shopInfo(req, res){
             const options1 = {
                 hostname: 'localhost',
                 port: 8765,
-                path: '/observatory/api/prices/?shops=' + shopId,
+                path: '/observatory/api/prices/?shops=' + shopId + "&dateFrom=" + dateFrom + "&dateTo=" + dateTo,
                 rejectUnauthorized: false,
                 method: 'GET'
             };
@@ -71,7 +73,6 @@ function shopInfo(req, res){
                 httpsres.on('data', (d) => {
                     var mydata = JSON.parse(d);
                     var pricedata = mydata.prices;
-                    console.log("this is the price data" + pricedata);
                     const options2 = {
                         hostname: 'localhost',
                         port: 8765,
@@ -117,10 +118,12 @@ function shopPutInfo(req, res) {
         url: 'https://localhost:8765/observatory/api/shops/' + shopid,
         rejectUnauthorized: false,
         form: {
-            name: req.body.productname,
-            description: req.body.productdescription,
-            category: req.body.productcategory,
-            tags: req.body.producttags
+            id: shopid,
+            name: req.body.shopname,
+            address: req.body.shopaddress,
+            lng: req.body.shoplng,
+            lat: req.body.shoplat,
+            tags: req.body.shoptags
         },
         headers: {
             'X-OBSERVATORY-AUTH': req.session.auth_token
@@ -130,11 +133,7 @@ function shopPutInfo(req, res) {
     request.put(options, (err, httpsResponse, body) =>{
        
         if (httpsResponse.statusCode == 200){
-            const data = JSON.parse(body); 
-            res.render("shop_info.ejs", {
-                shopData: data,
-                session: req.session
-            })
+            res.redirect('/');
         }
     });
 }
