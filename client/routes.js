@@ -399,6 +399,18 @@ function routes(app) {
             console.error(e);
         });
         httpsreq1.end();
+    })
+    
+    .post("/shop_location", function(req,res){
+        var lat = req.body.shopLat;
+        var lng = req.body.shopLng;
+        const session = req.session;
+
+        res.render("shop_location.ejs",{
+            shopLat: lat,
+            shopLng: lng,
+            session: session
+        })
     });
 
  }
