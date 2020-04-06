@@ -20,7 +20,7 @@
     "jquery": "^3.4.0",
     "jsonwebtoken": "^8.5.0",
     "mongodb": "^3.1.13",
-    "mongoose": "^5.4.17",
+    "mongoose": "^5.7.5",
     "nodemon": "^1.18.10",
     "popper.js": "^1.14.7",
     "request": "^2.88.0",
